@@ -1,0 +1,20 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+<script>
+    config();
+    function config(){
+    var formData = new FormData();
+    $.ajax(
+        {
+            url: '@Url.Action("config", "Home")',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (result) {
+            }
+        });
+    }
+</script>

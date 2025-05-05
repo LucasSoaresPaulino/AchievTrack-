@@ -1,0 +1,292 @@
+﻿
+
+        <div>
+            @if (ViewBag.plataform == null)
+            {
+                <div style="width:130px; height:130px;background-size:cover;position:absolute;background-image:url('data:image /png;base64,@ViewBag.Profile.avatar');transform:translate(-1.7rem,13%);box-shadow:rgba(140, 180, 255, 1) 0px 0px 12px;border:1px solid #8cb4ff;border-radius:5px"></div>
+            }
+            else
+            {
+                <div  style="width:130px; height:130px;background-size:cover;position:absolute;background-image:url('@ViewBag.Profile.avatar');transform:translate(-1.7rem,13%);box-shadow:rgba(140, 180, 255, 1) 0px 0px 12px;border:1px solid #8cb4ff;border-radius:5px"></div>
+            }
+        </div>
+        <div style="width:85%; height:170px;margin-left:170px">
+            <div style="width:100%;border-bottom:1px solid">
+                <div class="justify-content-center" style="width:100%;display:inline-flex; margin-top:15px ;border-bottom:1px solid;margin-left:6rem;">
+                    <p onclick="GamesCompletism('@ViewBag.Statics.porcentagem')" style="color:white; font-size:18px;font-weight:bold;cursor:pointer"><i class="fa fa-percent" onclick="GamesCompletism('@ViewBag.Statics.porcentagem')" style="cursor:pointer"></i>  @ViewBag.Statics.porcentagem%</p>
+                    @if (ViewBag.plataform == 0 || ViewBag.plataform == null)
+                    {
+                        <p style="color:white; font-size:18px;font-weight:bold;margin-left:30px"><i class="fa fa-clock"></i>  @ViewBag.Statics.timeGame h</p>
+                    }
+                    <p onclick="RareAchiev()" style="color:white; font-size:18px;font-weight:bold;margin-left:30px;cursor:pointer"><i class="fa fa-award"></i>  @ViewBag.Statics.allAchievements</p>
+                    <p onclick="GamesCompletism('@ViewBag.Statics.porcentagem')" style="color:white; font-size:18px;font-weight:bold;margin-left:30px;cursor:pointer"><i class="fa fa-gamepad" onclick="GamesCompletism('@ViewBag.Statics.porcentagem')" style="cursor:pointer"></i>  @ViewBag.Statics.allGames</p>
+                    <p onclick="GamesCompletism('100')" style="color:white; font-size:18px;font-weight:bold;margin-left:30px;cursor:pointer"><i class="fa fa-gamepad" onclick="GamesCompletism('100')" style="color:yellow;cursor:pointer"></i>  @ViewBag.Statics.allPlatinas</p>
+                    <i class="fa fa-list Ggrid" onclick="loadGridGames(0)" style="height:26px;margin-left:30%"></i>
+                    <i class="fa fa-grip Ggrid" onclick="loadGridGames(1)" style="height:26px;margin-left:4%"></i>
+                </div>
+            </div>
+            <br />
+            <div style="display:inline-flex;margin-top:15px">
+                <div style="margin-right:15px;">
+                    <div class="input-group">
+                        <div class="form-outline" style="margin-top:0px; margin-left:0px">
+                    <input type="search" class="form-control" id="id_searchGamesList" placeholder="Pesquisar" style="height:40px;border-radius:5px;background-color:rgba(0,0,2,9);border:none;box-shadow: rgba(0, 0, 0, 1.9) 0px 0px 13px;color:white;border:2px solid black" />
+                            <label class="form-label" for="form1"></label>
+                        </div>
+                        <button type="button" class="btn" onclick="searchListGames('@ViewBag.plataform')" style="height:40px; margin-top:0px;margin-left:-35px">
+                    <i class="fas fa-search" style="margin-left:-14%;color:#8cb4ff"></i>
+                        </button>
+                    </div>
+                </div>
+                <div style="display:inline-flex">
+            <select id="id_slcCategList" onclick="categListGames('@ViewBag.plataform')" style="width:350%;height:40px;border-radius:5px;background-color:rgba(0,0,2.9);box-shadow: rgba(0, 0, 0, 1.9) 0px 0px 8px;color:white;border:none">
+                        <option>Selecionar</option>
+                        @foreach (var item in ViewBag.categoria)
+                        {
+                            if (item.categoria != "")
+                            {
+                                <option value="@item.categoria">@item.categoria</option>
+                            }
+                        }
+                    </select>
+            <select id="id_slcFilterList" onchange="filtragemList()" style="width:320%;height:40px;border-radius:5px;margin-left:15px;background-color:rgba(0,0,2.9);box-shadow: rgba(0, 0, 0, 1.9) 0px 0px 8px;color:white;border:none">
+                        <option>Selecionar</option>
+                        <option value="0">Platinados</option>
+                        <option value="1">Jogos incompletos</option>
+                        <option value="2">Mais jogados</option>
+                        <option value="3">Ordem alfabetica</option>
+                        <option value="4">Ordem randomica</option>
+                        <option value="5">Jogos ocultos</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+<script>
+    function settingsPlataform(tipo, grid) {
+        var formData = new FormData();
+        formData.append("plataform", tipo);
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialSeetingsIndex", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $('#idSettingIndex').fadeOut(300, function () {
+                        $(this).html(result).fadeIn(300).addClass('blink');
+                    });
+                }
+            });
+        if (grid == 0) {
+            typePlataformListIndex(tipo);
+        } else {
+            backhome();
+        }
+    }
+    function typePlataformListIndex(tipo) {
+        var typeIndex = $("#id_slcGrid").val();
+        var UrlController;
+        if (typeIndex == 0 || typeIndex == null) {
+            UrlController = '@Url.Action("_PartialListaGamesIndex", "Games")';
+        } else {
+            UrlController = '@Url.Action("_PartialCatalogGameIndex", "Games")';
+        }
+        document.querySelector("#id_loaded").style.display = "block"
+        var formData = new FormData();
+        formData.append("plataform", tipo);
+        $.ajax(
+            {
+                url: UrlController,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    if (typeIndex == 0 || typeIndex == null) {
+                        $('#id_partialListGame').fadeOut(300, function () {
+                            $(this).html(result).fadeIn(300).addClass('blink');
+                        });
+                    } else {
+                        $('#id_partialGamesGrid').fadeOut(300, function () {
+                            $(this).html(result).fadeIn(300).addClass('blink');
+                        });
+                    }
+                }
+            });
+        document.querySelector("#id_loaded").style.display = "none"
+        document.querySelector("#id_homeIndex").style.display = "block"
+    }
+    function loadGridGames(tipo) {
+        var UrlController;
+        if (tipo == 0) {
+            UrlController = '@Url.Action("_PartialListaGamesIndex", "Games")';
+            skeletonLoading(0);
+        } else {
+            UrlController = '@Url.Action("_PartialCatalogGameIndex", "Games")';
+            skeletonLoading(1);
+        }
+        document.querySelector("#id_skeleton").style.display = "block";
+        document.querySelector("#id_loaded").style.display = "block"
+        var formData = new FormData();
+        $.ajax({
+            url: UrlController,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (result) {
+                document.querySelector("#id_skeleton").style.display = "none";
+                if (tipo == 0) {                   
+                    $("#id_partialListGame").html(result);
+                    document.getElementById("id_partialGameIndex").style.display = "block"; // Exibe o elemento
+                    document.getElementById("id_partialGamesGrid").style.visibility = "hidden"; // Oculta o elemento
+                } else {
+                    $("#id_partialGamesGrid").html(result);
+                    document.getElementById("id_partialGameIndex").style.display = "none"; // Oculta o elemento
+                    document.getElementById("id_partialGamesGrid").style.visibility = "visible"; // Exibe o elemento
+                }
+                document.querySelector("#id_loaded").style.display = "none"
+            }
+        });
+        $("#id_slcGrid").val(tipo);
+    }
+    function backhome() {
+        document.querySelector("#id_loaded").style.display = "block";
+
+        var typeIndex = $("#id_slcGrid").val();
+        var UrlController;
+        if (typeIndex == 0 || typeIndex == null) {
+            UrlController = '@Url.Action("_PartialListaGamesIndex", "Games")';
+            skeletonLoading(0);
+        } else {
+            UrlController = '@Url.Action("_PartialCatalogGameIndex", "Games")';
+            skeletonLoading(1);
+        }
+        document.querySelector("#id_skeleton").style.display = "block";
+        var formData = new FormData();
+        $.ajax({
+            url: UrlController,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (result) {
+                if (typeIndex == 0 || typeIndex == null) {
+                    document.querySelector("#id_skeleton").style.display = "none";
+                    $("#id_partialListGame").html(result);
+                }
+                else {
+                    document.querySelector("#id_skeleton").style.display = "none";
+                    $("#id_partialGamesGrid").html(result);
+                }
+                document.querySelector("#id_loaded").style.display = "none"
+            }
+        });
+        document.querySelector("#id_homeIndex").style.display = "none"
+    }
+
+    function searchListGames(plataform) {
+        var search = $("#id_searchGamesList").val();
+        var typeIndex = $("#id_slcGrid").val();
+        var UrlController;
+        if (typeIndex == 0 || typeIndex == null) {
+            UrlController = '@Url.Action("_PartialListaGamesIndex", "Games")';
+        } else {
+            UrlController = '@Url.Action("_PartialCatalogGameIndex", "Games")';
+        }
+        var formData = new FormData();
+        formData.append("search", search);
+        formData.append("plataform", plataform);
+        $.ajax(
+            {
+                url: UrlController,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    if (typeIndex == 0 || typeIndex == null) {
+                        $("#id_partialListGame").html(result);
+                    } else {
+                        $("#id_partialGamesGrid").html(result);
+                    }
+                }
+            });
+        document.querySelector("#id_homeIndex").style.display = "block"
+    }
+    function categListGames(plataform) {
+        var categ = $("#id_slcCategList").val();
+        var typeIndex = $("#id_slcGrid").val();
+        var UrlController;
+        if (typeIndex == 0 || typeIndex == null) {
+            UrlController = '@Url.Action("_PartialListaGamesIndex", "Games")';
+        } else {
+            UrlController = '@Url.Action("_PartialCatalogGameIndex", "Games")';
+        }
+        if (categ != "Selecionar") {
+            var formData = new FormData();
+            formData.append("categ", categ);
+            formData.append("plataform", plataform);
+            $.ajax(
+                {
+                    url: UrlController,
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                        if (typeIndex == 0 || typeIndex == null) {
+                            $("#id_partialListGame").html(result);
+                        } else {
+                            $("#id_partialGamesGrid").html(result);
+                        }
+                    }
+                });
+            document.querySelector("#id_homeIndex").style.display = "block"
+        }
+    }
+    function filtragemList() {
+        document.querySelector("#id_loaded").style.display = "block"
+
+        var filter = $("#id_slcFilterList").val();
+        var typeIndex = $("#id_slcGrid").val();
+        var UrlController;
+        if (typeIndex == 0 || typeIndex == null) {
+            UrlController = '@Url.Action("_PartialListaGamesIndex", "Games")';
+            skeletonLoading(0);
+        } else {
+            UrlController = '@Url.Action("_PartialCatalogGameIndex", "Games")';
+            skeletonLoading(1);
+        }
+        document.querySelector("#id_skeleton").style.display = "block"
+        var formData = new FormData();
+        formData.append("tipo", filter);
+        $.ajax(
+            {
+                url: UrlController,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    document.querySelector("#id_skeleton").style.display = "none"
+
+                    if (typeIndex == 0 || typeIndex == null) {
+                        $("#id_partialListGame").html(result);
+                    } else {
+                        $("#id_partialGamesGrid").html(result);
+                    }
+                    document.querySelector("#id_loaded").style.display = "none"
+                }
+            });
+        document.querySelector("#id_homeIndex").style.display = "block"
+    }
+    var elem = document.getElementById("id_searchGamesList");
+    elem.onkeyup = function (e) {
+        if (e.keyCode == 13) {
+            searchListGames();
+        }
+    }
+</script>

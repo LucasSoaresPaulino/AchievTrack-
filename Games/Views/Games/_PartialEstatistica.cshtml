@@ -1,0 +1,145 @@
+﻿@model ProjectGames.DTO.GamesEstatisticas
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+@using DotNet.Highcharts;
+@using DotNet.Highcharts.Helpers;
+@using DotNet.Highcharts.Options;
+@using DotNet.Highcharts.Enums;
+@using DotNet.Highcharts.Attributes;
+@{
+    int id = 0;  
+}
+<div class="card-header" style="width:10rem;height:2.6rem;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;"><b style="color:white;">Ultimos jogados</b></div>
+
+ <div style="display:inline-flex;margin-left:4rem;margin-top:2%">
+    @for (int i = 1; i <= 4; )
+    {
+        <div class="box" style="background-color:rgba(0,0,0,.1);width:120px;height:45px;margin-left:30px;border-top-left-radius:4px;border-top-right-radius:4px;box-shadow: inset 0px -8px 10px rgba(0, 0, 0, 0.7);box-shadow: rgba(0, 0, 0, 3.2) 0px 0px 15px;padding:0;">
+            @if (Model.listLP[i].imgCustom == null)
+            {
+                <img src="@Model.listLP[i].imagem" title="@Model.listLP[i].nome" style="object-fit:cover;width:120px;height:40px;border-top-left-radius:4px;border-top-right-radius:4px;box-shadow: inset 0px -8px 10px rgba(0, 0, 0, 1.7);">
+            }
+            else
+            {
+                <img src="data:image /png;base64,@Model.listLP[i].imgCustom" title="@Model.listLP[i].nome" style="object-fit:cover;width:120px;height:42px;border-top-left-radius:4px;border-top-right-radius:4px;box-shadow: inset 0px -8px 10px rgba(0, 0, 0, 1.7);" />
+            }
+        </div>
+        i++;
+    }
+</div> 
+
+<div style="width:60%;height:19rem;margin-bottom:4%;border-left:5px solid #f1af09;border-radius:3px;margin-top:-0.4%;background-color:rgba(0,0,0,.4);box-shadow: rgba(0, 0, 0, 2.2) 0px 0px 14px;padding:0;">
+    <div style="width:100%;height:4rem;background-color:rgba(0,0,0,.5);border-top-left-radius:3px;border-top-right-radius:3px;margin:0;padding:0;">
+        <img src="@Model.imgProfile" width="7%" height="85%" style="margin-top:0.7%;margin-left:3%;border-right:2px solid #8cb4ff;border-radius:2px;object-fit:cover">
+        <div style="width:80%;margin-left:3%;display:inline-flex;">
+            <div style="display:block;transform:translate(0%,-14%);margin-left:-3%;height:68px">
+                <p style="font-weight:bold;color:white;font-size:18px;">@Model.nameProfile</p>
+                <p style="color:white;font-size:14px;margin-top:-13px;white-space:nowrap">Ultimos jogados</p>
+            </div>
+        </div>
+    </div>
+    <div style="display:inline-flex;width:100%;height:273px;margin-top:-0.9%">
+        <div onclick="PageGame(@Model.listLP[id].idGame)" style="width:25%;height:60%;margin-left:3%;margin-top:3%">
+            @if (Model.listLP[id].imgCustom == null)
+            {
+                <img src="@Model.listLP[id].imagem" width="165px" height="203px" style="object-fit:cover;border-radius:2px">
+            }
+            else
+            {
+                <img src="data:image /png;base64,@Model.listLP[id].imgCustom" width="165px" height="203px" style="border-radius:2px;object-fit:cover" />
+            }
+        </div>
+        <div style="width:72%;height:203px; background-color:rgba(0,0,0,.5);margin-left:-2.5%;margin-top:3%">
+            <div style=" width:100%;margin-top:1%;margin-left:2%">
+                <p class="nameGame" onclick="PageGame(@Model.listLP[id].idGame)" title="@Model.listLP[id].nome" style="font-weight:bold; font-size:18px;white-space:nowrap;max-width:31ch;text-overflow: ellipsis;overflow: hidden;">@Model.listLP[id].nome</p>
+            </div>
+            <div style="width:100%;height:78%;display:inline-flex">
+                <div style="width:50%;height:100%;margin-left:2%;margin-top:-3%">
+                    <div style="margin-left:1%;margin-top:15%;display:inline-flex">
+                        @if (Model.plataformInt == 0)
+                        {
+                            <img src="@Model.listLP[id].imgAchiev" width="50" height="50" style="border:2px solid #bf930d" />
+                        }
+                        else
+                        {
+                            <img src="https://retroachievements.org/Badge/@Model.listLP[id].imgAchiev" title="https://retroachievements.org/Badge/@Model.listLP[id].imgAchiev" width="50" height="50" style="border:2px solid #bf930d">
+                        }
+                        <p style="font-weight:bold;color:white;font-size:14px;margin-left:4.5%">@Model.listLP[id].nameAchiev</p>
+                    </div>
+                    <div style="margin-left:1%;margin-top:14%;display:inline-flex">
+                        <div class="progress" style="width:160px;height:14px;">
+                            @if (Model.listLP[id].progress != 100)
+                            {
+                                <div class="progress-bar bg-info" role="progressbar" style="width:@Model.listLP[id].progress%" aria-valuenow="@Model.listLP[id].progress" aria-valuemin="0" aria-valuemax="100"></div>
+                            }
+                            else
+                            {
+                                <div class="progress-bar" role="progressbar" style="width:@Model.listLP[id].progress%;background-color:#bf930d" aria-valuenow="@Model.listLP[id].progress" aria-valuemin="0" aria-valuemax="100"></div>
+                            }
+                        </div>
+                        <p style="font-weight:bold; color:white;margin-top:-3%;margin-left:2%">@Model.listLP[id].progress%</p>
+                    </div>
+                </div>
+                <div style="width:100px;height:36px;border-radius:4px;display:inline-flex;background-color:cornflowerblue;margin-left:9rem;margin-top:-1.8rem">
+                    @if (Model.plataformInt == 0)
+                    {
+                        <img src="~/img/Games/img/steamBlack.png" width="27px" height="27px" style="margin-top:3%;margin-left:5%">
+                        <p style="color:white;font-weight:bold;margin-top:3%;margin-left:6%">@Model.plataformName</p>
+                    }
+                    else
+                    {
+                        <img src="~/img/Games/img/RetroAchiev.png" width="27px" height="27px" style="margin-top:3%;margin-left:5%">
+                        <p style="color:white;font-weight:bold;margin-top:3%;margin-left:6%">@Model.plataformName</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card-header" style="width:7rem;height:2.6rem;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;"><b style="color:white;">Indice</b></div>
+<div style="margin-top:2%; ">
+    <i class="fa fa-calendar-days" style="height:25px;width:25px; color:white;position:absolute;margin-left:41rem;margin-top:0.5rem"></i>
+    <div id="grafico" style="width: 710px; height: 400px;box-shadow: rgba(0, 0, 0, 2.2) 0px 0px 14px"></div>
+</div>
+
+<script>
+    graficoColuna();
+    function graficoColuna(){
+        Highcharts.chart('grafico', {
+            chart: {
+                type: 'column',
+                backgroundColor: 'rgba(0,0,0,.5)',
+                borderRadius: '2px'
+            },
+            title: {
+                text: 'Indice de completismo @Model.listInd[0].year',
+                style: {
+                    color: '#ffffff', // branco
+                    fontSize: '18px'
+                }
+            },
+            xAxis: {
+            categories: @Html.Raw(Json.Serialize(Model.listInd.Select(x => x.nmMonth))),
+
+            gridLineWidth: 0 // <- se quiser tirar as linhas verticais também
+            },
+            yAxis: {
+                title: {
+                    text: null // remove o "Valores em R$"
+                },
+                labels: {
+                    enabled: true, // remove os números da esquerda
+                    style: {
+                        color: '#ffffff', // branco
+                    }
+                },
+                gridLineWidth: 0 // remove as linhas horizontais
+            },
+            series: [{
+                name: 'Platinas',
+                data: @Html.Raw(Json.Serialize(Model.listInd.Select(x => x.num)))
+            }]
+        });
+    }
+</script>

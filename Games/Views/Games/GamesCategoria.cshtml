@@ -1,0 +1,123 @@
+﻿@model ProjectGames.DTO.GamesDTO
+
+<body style="background-color:#222222">
+    <!--Corpo-->
+    <div class="row">
+        <div style="position:fixed; top:60%;transform:translate(4202%,0%);max-width:32px">
+            <i class="fa fa-circle-arrow-right" id="chev-right" onclick="openModalityCateg(1)" title="Franquias" style="color:white; height:50px;cursor:pointer;"></i>
+        </div>
+        <div style="position:fixed; top:60%;transform:translate(-450%,0%);max-width:32px">
+            <i class="fa fa-circle-arrow-left" id="chev-left" onclick="openModalityCateg(2)" title="Categorias" style="color:white; height:50px;cursor:pointer"></i>
+        </div>
+
+        <div id="id_CategGames" style="margin-top:9%">
+
+        </div>
+    </div>
+    <aside class="sidebar" id="id_sidebar" style="z-index:100000">
+
+    </aside>
+    <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+</body>
+
+<script>
+    $(document).ready(function () {
+        var formData = new FormData();
+        
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialCategGames", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $("#id_CategGames").html(result);
+                    document.querySelector("#chev-left").style.display = "none"
+                    document.querySelector("#id_loaded").style.display = "none"
+                }
+            });
+        loadSidebar();
+    });
+
+    function openModalityCateg(tipo){
+        if(tipo == 1){
+            var formData = new FormData();
+            $.ajax(
+                {
+                    url: '@Url.Action("_PartialFranchiseGames", "Games")',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                        $('#id_CategGames').animate({ marginLeft: '-500%' }, 300, function () {
+                            $(this).html(result).css('margin-left', '0%').animate({ marginLeft: '0%' }, 300);
+                        });
+                        document.querySelector("#chev-left").style.display = "block"
+                        document.querySelector("#chev-right").style.display = "none"
+                    }
+                });
+        }
+        else{
+            var formData = new FormData();
+            $.ajax(
+                {
+                    url: '@Url.Action("_PartialCategGames", "Games")',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                        $('#id_CategGames').animate({ marginLeft: '500%' }, 300, function () {
+                            $(this).html(result).css('margin-left', '0%').animate({ marginLeft: '0%' }, 300);
+                        });
+                        document.querySelector("#chev-right").style.display = "block"
+                        document.querySelector("#chev-left").style.display = "none"
+
+                    }
+                });
+        }
+    }
+    
+</script>
+
+<style>
+    .hamburger {
+        width: 2rem;
+        height: 3rem;
+        position: absolute;
+        z-index: 5;
+        left: 2rem;
+        top: 0.7rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        cursor: pointer;
+        transition: all .8s;
+    }
+
+    .show-menu .hamburger {
+        left: 10rem;
+        z-index: 10000000000;
+    }
+
+    .sidebar {
+        width: 27rem;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: -27rem;
+        z-index: 5;
+        overflow-x: hidden;
+        overflow-y: auto;
+        transition: all .8s;
+        box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.582);
+        background-color: #222222;
+    }
+
+    .show-menu .sidebar {
+        left: 0;
+    }
+</style>
+

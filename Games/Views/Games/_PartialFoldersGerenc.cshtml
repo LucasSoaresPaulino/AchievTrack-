@@ -1,0 +1,57 @@
+﻿@model ProjectGames.DTO.GamesDTO
+
+<div class="row" style="margin-top:-4rem;margin-bottom:4rem">
+@foreach(var item in Model.listFolder)
+{
+    string idDiv = "div_" + item.id;
+    string idBox = "box_" + item.id;
+
+    <div style="margin-top:3rem;height:200px; width:200px;margin-left:10%;transform:translate(30%,0%)">
+        <img id="@idDiv" src="~/img/Games/img/pngwing.com.png" height="200px" width="200px" onclick="openScreenFolder('@item.id')" style="cursor:pointer;z-index:2">
+        <img id="@idBox" src="data:image /png;base64,@item.imagens" height="110px" width="180px" onclick="openScreenFolder('@item.id')" onmouseover="openEffects('@idDiv','@idBox')" onmouseleave="exitEffects('@idDiv','@idBox')" style="cursor:pointer;position:absolute;top:31%;left:22px;border-radius:6px">
+        <p style="color:white;text-align:center;margin-left:20px">@item.nome</p>
+    </div>
+}
+</div>
+<script>
+    function openScreenFolder(id){
+        var formData = new FormData();
+        formData.append("tipo", 1);
+        formData.append("idFolder", id);
+
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialScreenshotGerenc", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $("#id_PartialGerScreen").html(result);
+                }
+            });
+    }
+    function openEffects(id,id2){
+        var elemento = document.querySelector("#" + id + "");
+        var elemento2 = document.querySelector("#" + id2 + "");
+
+        elemento.style.webkitTransform = "scale(1.1)"; elemento.style.msTransform = "scale(1.1)"; elemento.style.transform = "scale(1.1)";
+        elemento2.style.webkitTransform = "scale(1.1)";elemento2.style.msTransform = "scale(1.1)";elemento2.style.transform = "scale(1.1)";
+    }
+    function exitEffects(id,id2){
+        var elemento = document.querySelector("#" + id + "");
+        var elemento2 = document.querySelector("#" + id2 + "");
+
+        elemento.style.webkitTransform = "scale(1)";elemento.style.msTransform = "scale(1)";elemento.style.transform = "scale(1)";
+        elemento2.style.webkitTransform = "scale(1)";elemento2.style.msTransform = "scale(1)";elemento2.style.transform = "scale(1)";
+    }
+</script>
+
+<style>
+    .box:hover {
+        cursor: pointer;
+        -webkit-transform: scale(1.1);
+        -ms-transform: scale(1.1);
+        transform: scale(1.1);
+    }
+</style>

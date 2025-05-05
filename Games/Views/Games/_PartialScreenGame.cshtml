@@ -1,0 +1,21 @@
+﻿@model ProjectGames.DTO.GamesDTO
+
+<div class="row gap-3" style="display:flex;margin-top:15px;margin-left:20px;height:20rem">
+    @foreach(var item in Model.listScreen)
+    {
+        <div style="width:130px;height:88px;background-image:url('data:image /png;base64,@item.imagens');background-size:100% 100%;background-repeat:no-repeat;-webkit-filter: grayscale(50%);border:2px solid #8cb4ff"></div>
+    }
+</div>
+
+<div style="width:100%;height:50px;background-color:rgba(0,0,0,.4);margin-top:0.3rem;border-bottom-left-radius:5px;border-bottom-right-radius:5px;border-top:1px solid black">
+    @if (@Model.listScreen[0].quantidade >= 0)
+    {
+        <h3 onclick="openScreenGame(@Model.listScreen[0].idGame)" style="color:white;margin-left:15px;margin-top:5px;cursor:pointer;">Total +@Model.listScreen[0].quantidade</h3>
+    }
+</div>
+
+<script>
+    function openScreenGame(id){
+        window.location.href = '@Url.Action("GamesScreenshot", "Games")?id=' + id;
+    }
+</script>

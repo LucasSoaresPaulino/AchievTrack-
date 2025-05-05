@@ -1,0 +1,121 @@
+﻿@model ProjectGames.DTO.GamesDTO
+<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="..."></script>
+
+<body style="background-color:#222222;overflow-x: hidden;overflow-y: auto;">
+    <div class="divBody">
+        <div id="id_partialBanner" style="z-index:-9999">
+        </div>
+        <div class="row justify-content-center" id="id_divList" style="margin-top:30.1%; z-index:-1; display:inline-flex;width:100%">
+            <div class="row justify-content-center" style="margin-bottom:90px;background-color:#22252C;width:100%;box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 45px;padding:0">                
+                <div class="row justify-content-center" style="width:180%;height:170px;z-index:9;padding:0;margin:0;">
+                    <div class="row justify-content-center" style="width:20%;height:48px;background-color:#141519;z-index:99;margin-top:-37px;display:inline-flex;border-top-left-radius:5px;border-top-right-radius:5px;border:2px solid #8cb4ff;border-bottom:none">
+                        <div onclick="settingsPlataform(0,0)" onmouseover="changeSteamlogo(0)" onmouseout="changeSteamlogo(1)" style="width:50%;border-right:1px solid black">
+                            <img src="~/img/Games/img/SteamLogo.png" id="steamLogo" style="width:30px;height:30px;margin-left:23px;margin-top:5px" />
+                        </div>
+                        <div onclick="settingsPlataform(1,0)" onmouseover="changeRAlogo(0)" onmouseout="changeRAlogo(1)" style="width:50%;">
+                            <img src="~/img/Games/img/RAcolor.png" id="RAlogo" style="width:30px;height:30px;margin-left:33px;margin-top:5px" />
+                        </div>
+                    </div>
+                    <div class="row justify-content-center" id="id_Profile" style="padding:0;margin:0;background-color:#141519;z-index:9;border-top:2px solid #8cb4ff;box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;border-top-left-radius:7px;border-top-right-radius:7px;">
+                        <i class="fa fa-circle-arrow-left" id="id_homeIndex" onclick="settingsPlataform(null,1)" title="home" style="height:40px;position:absolute;margin-left:-75rem;margin-top:12px;display:none"></i>
+                        <div class="row justify-content-center" id="idSettingIndex" style="width:950px; height:170px;">
+                            <!--SettingIndex-->
+                        </div>
+                        <input type="hidden" id="id_slcGrid" />
+                    </div>
+                </div>
+                <div id="id_skeleton">
+
+                </div>
+                <div id="id_partialListGame" style="min-height:30rem;">
+                    <!--PartialGamesList-->
+                </div>
+                <div class="row gap-4" id="id_partialGamesGrid" style="visibility:hidden;width:100%;margin-top:-23rem;margin-left:1.1%">
+                    <!--PartialCatalogGameIndex-->
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        loadBanner();
+
+        var formData = new FormData();
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialSeetingsIndex", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $("#idSettingIndex").html(result);
+                }
+            });
+    });
+    function loadBanner(plataform) {
+        var formData = new FormData();
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialBanner", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $('#id_partialBanner').html(result)
+                }
+            });
+    }
+    function skeletonLoading(tipo) {
+            var formData = new FormData();
+            formData.append("tipo", tipo);
+            $.ajax(
+                {
+                    url: '@Url.Action("_PartialSkeleton", "Games")',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                        $("#id_skeleton").html(result);
+                    }
+                });
+    }
+    function loadGamesIndex() {
+        skeletonLoading(0);
+        document.querySelector("#id_skeleton").style.display = "block"
+        document.querySelector("#id_loaded").style.display = "block"
+        var formData = new FormData();       
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialListaGamesIndex", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    document.querySelector("#id_skeleton").style.display = "none"
+                    $("#id_partialListGame").html(result);
+                    document.querySelector("#id_loaded").style.display = "none"
+                    document.querySelector("#id_homeIndex").style.display = "none"
+                }
+            });
+    }
+    loadGamesIndex();
+    
+    function showHide() {
+        var div = document.querySelector("#searchGame");
+        if (div.style.display === "none") {
+            div.style.display = "inline-flex"
+        }
+        else {
+            div.style.display = "none"
+        }
+    }
+</script>
+

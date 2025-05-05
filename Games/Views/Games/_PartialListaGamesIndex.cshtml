@@ -1,0 +1,384 @@
+﻿@model ProjectGames.DTO.GamesDTO
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<div id="id_partialGameIndex" style="display:block;margin-top:3%;padding-bottom:3rem">
+    <div style="width:9rem;height:40px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;margin-left:12.4%;margin-top:4%"><p style="color:white;font-weight:bold;margin-left:0.8%;margin-top:6px;position:absolute;text-align:center;white-space:nowrap">Lista de jogos</p></div>
+    @foreach (var item in Model.listJogosList)
+    {
+        if (item.ativo == 1)
+        {
+            string id = "partial_GameId_" + item.id;
+            string idDrag = "idDrop_" + item.id;
+            string idValDrag = "idValD_" + item.id;
+            string idTextDrag = "idText_" + item.id;
+            string idDiv = "idDiv_" + item.id;
+            string idCard = "idCard_" + item.id;
+            string idFav = "idFav_" + item.id;
+            string idGame = "idGame_" + item.id;
+            string idDragAux = "idDragAux_" + item.id;
+            <div class="row justify-content-center " id="@idDiv" style="z-index:-99999;margin-top:2%;">
+                @if (ViewBag.layout == 1)
+                {
+                    <div id="@idDragAux" style="width:4%;height:100%;background-color:#292929;display:block;border-right:4px solid aquamarine;box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 8px;">
+                        <div class="divDrag" id="@idDrag" draggable="true" ondragend="ConfigMove(this.id,event)" ondragstart="moveStart(event,this.id)" ondrag="moveDiv(this.id,event)" ondragover="scrollMove(event)" ondragenter="scroolSettingMove(event)" style="margin-top:6.5rem;  flex-wrap: nowrap;">
+                            <img src="~/img/Games/img/drag.png" style="height:25px">
+                        </div>
+                        <p id="@idTextDrag" style="color:white;margin-top:5rem;text-align:center">@item.ordenagem</p>
+                        <input type="hidden" id="@idValDrag" value="@item.ordenagem" />
+                    </div>
+                }
+                <div class="card" id="@idCard" style="width:950px;margin-bottom:20px; background-color:#292929;box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 8px;">
+                    <div onmouseover="DivEditFavGame('@item.id',0,'@item.porcentagem','@item.favoritos')" onmouseleave="DivEditFavGame('@item.id',1,'@item.porcentagem','@item.favoritos')" style="display:inline-flex;">
+                        @if (item.imgCustom == null)
+                        {
+                            <div class="box" id="@idGame" onclick="PageGame(@item.id)" style="background-image:url(@item.imagem);background-size:cover;width:280px; height:130px;margin-left:15px; margin-top:17px;cursor:pointer;border-radius:4px;border:1px solid;"></div>
+                        }
+                        else
+                        {
+                            <div class="box" id="@idGame" onclick="PageGame(@item.id)" style="background-image:url('data:image /png;base64,@item.imgCustom');background-size:cover;width:280px; height:130px;margin-left:15px; margin-top:17px;cursor:pointer;border-radius:4px;border:1px solid;"></div>
+                        }
+                        <div class="card-header" style="width:3rem;height:40px;margin-left:87.9%;margin-top:6.5%;position:absolute;">
+                            <i class="fa fa-pen-to-square" onclick="openModalEdit(@item.id)" style="width:50px;height:30px;color:white;cursor:pointer;transform:translate(-1rem,-0.3rem)"></i>
+                        </div>
+                        <i class="fa fa-star" id="@idFav" onclick="favoriteGame(@item.id,0,@item.Intplataforma)" style="position:absolute; width:25px; height:25px ;left:4%; top:9.5%; color:#ffd700;display:none;cursor:pointer"></i>
+
+                        <div style="display:block;margin-left:18px;margin-top:20px; max-width:20ch">
+                            <b class="nameGame" onclick="PageGame(@item.id)" style="cursor:pointer">@item.nome</b>
+
+                            @if (item.Intplataforma == 0)
+                            {
+                                <p style="margin-top:5px;color:white;"><i class="fa-regular fa-clock" style="color:#8cb4ff"></i>  @item.timeGame h</p>
+                            }
+                            <div class="bg-primary" style="width:92px;height:35px;border-radius:5px;margin-top:2%;">
+                                <div style="display:inline-flex">
+                                    @if (item.Intplataforma == 0)
+                                    {
+                                        <img src="~/img/Games/img/steamBlack.png" style="width:25px;height:25px;margin-left:8px;margin-top:5px" />
+                                    }
+                                    else
+                                    {
+                                        <img src="~/img/Games/img/RetroAchiev.png" style="width:25px;height:25px;margin-left:8px;margin-top:5px" />
+                                    }
+                                    <p style="color:white; font-weight:bold; margin-top:4px;margin-left:7px">@item.plataforma</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display:inline-flex;position:absolute;left:56%">
+                            <div style="display:block;">
+                                <p style="margin-top:30px;color:white"><i class="fa fa-trophy" style="color:#8cb4ff"></i>  @item.numAchievememtUnlock/@item.numAllAchievements</p>
+                                <div class="progress" style="width:200px;margin-top:-15px;background-color:#d3d3d3">
+                                    @if (item.porcentagem != 100)
+                                    {
+                                        <div class="progress-bar bg-info" role="progressbar" style="width: @item.porcentagem%;" aria-valuenow="@item.porcentagem" aria-valuemin="0" aria-valuemax="100"></div>
+                                    }
+                                    else
+                                    {
+                                        <div class="progress-bar" role="progressbar" style="width: @item.porcentagem%; background-color:#f1af09" aria-valuenow="@item.porcentagem" aria-valuemin="0" aria-valuemax="100"></div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display:inline-flex;">
+                        <div style="display:block;margin-left:15px">
+                            <p class="position-absolute" title="@item.dateLastAchievement.ToString("dd/MM/yyyy")" style="left:87%;top:10%;color:white"><i class="fa-regular fa-calendar-check" style="color:#8cb4ff"></i>  @item.dateLastAchievement.ToString("dd' de' MMM", new System.Globalization.CultureInfo("pt-BR"))</p>
+                        </div>
+                    </div>
+                    <div onload="achievements()" id="@id" style="width:950px;height:86px;margin-left:-13px;margin-top:2%;border-top:1px solid black">
+                    </div>
+                </div>
+            </div>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+            <script>
+                function loadConfigs() {
+                    var id = "@item.id";
+                    var divGame = document.querySelector("#idGame_" + id + "");
+                    var porcent = "@item.porcentagem";
+                    var plataform = "@item.Intplataforma"
+                    if (porcent == "100") {
+                        divGame.style.boxShadow = 'rgba(241, 175, 9, 1.0) 0px 0px 10px';
+                        divGame.style.borderColor = '#f1af09';
+                    } else {
+                        divGame.style.boxShadow = 'rgba(140, 180, 255, 1) 0px 0px 10px';
+                        divGame.style.borderColor = '#8cb4ff';
+                    }
+                    var layout = "@ViewBag.layout";
+                    var divCard = document.querySelector("#idCard_" + id + "");
+                    if(layout == 1){
+                        divCard.style.border = 'none';
+                    }else{
+                        if (porcent == "100") {
+                            divCard.style.borderLeft = '4px solid #f1af09';
+                        }else{
+                            divCard.style.borderLeft = '4px solid #8cb4ff';
+                        }
+                        
+                    }
+
+                }
+                loadConfigs();
+                function achievements() {
+                    var identificador = "@item.id";
+                    var plataform = "@item.Intplataforma";
+                    var id = "@id";
+                    var div = document.querySelector("#" + id + "");
+
+                    var formData = new FormData();
+                    formData.append("id", identificador);
+                    formData.append("plataform", plataform);
+
+                    $.ajax(
+                        {
+                            url: '@Url.Action("_PartialLoadAchievements", "Games")',
+                            type: 'POST',
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            success: function (result) {
+                                $("#" + id + "").html(result);
+                            }
+                        });
+                }
+                achievements();
+
+                function DivEditFavGame(id, tipo, porcent, fav) {
+                    var div = document.querySelector("#idFav_" + id + "");
+                    if (tipo == 0) {
+                        if (porcent == "100") {
+                            if (div.style.display === "none") {
+                                div.style.display = "inline-flex"
+                                if (fav == "0") {
+                                    document.querySelector("#idFav_" + id + "").classList.toggle("fa-regular");
+                                } else {
+                                    document.querySelector("#idFav_" + id + "").classList.toggle("fa");
+                                }
+                            }
+                        }
+                    } if (tipo == 1) {
+                        if (div.style.display === "inline-flex") {
+                            div.style.display = "none"
+                        }
+                    }
+                }
+            </script>
+        }
+    }
+</div>
+<script>
+    let startY = 0;
+    let startTop = 0;
+    let backtop = 0;
+    function moveStart(event, id) {
+        const dragDiv = document.getElementById(id);
+        event.dataTransfer.setData('text/plain', ''); // Adiciona dados ao arrasto
+        event.dataTransfer.effectAllowed = 'move'; // Permite o movimento
+
+        if (!id.includes("idDiv_")) {
+            id = id.replace(/\D/g, '');
+            id = "idDiv_" + id;
+        }
+        const div = document.getElementById(id);
+        if (window.getComputedStyle(div).transform != "none") {
+            const transform = window.getComputedStyle(div).transform;
+            const matrixValues = transform.match(/matrix.*\((.+)\)/)[1].split(', ');
+            let translateY = parseFloat(matrixValues[5]);
+            backtop = translateY;
+        } else {
+            backtop = 0;
+        }
+        startY = event.clientY;
+        startTop = dragDiv.getBoundingClientRect().top;
+    }
+    function moveDiv(id, event) {
+        if (!id.includes("idDiv_")) {
+            id = id.replace(/\D/g, '');
+            id = "idDiv_" + id;
+        }
+        const container = document.getElementById(id);
+        var idAlvo = document.elementFromPoint(event.clientX, event.clientY).id;
+        if (!idAlvo.includes("idDiv_")) {
+            idAlvo = id.replace(/\D/g, '');
+            idAlvo = "idDiv_" + idAlvo;
+        }
+        const containerAlvo = document.getElementById(idAlvo);
+
+        container.style.zIndex = "999999";
+        containerAlvo.style.zIndex = "-999999";
+        const newY = (event.clientY - startY) + (startTop - startTop);
+        container.style.transform = `translate(0px, ${backtop + newY}px)`;
+    }
+    function scrollMove(e) {
+        e.dataTransfer.dropEffect = "move";
+        e.preventDefault()
+    }
+    function scroolSettingMove(e) {
+        e.preventDefault()
+    }
+    function ConfigMove(id, event) {
+        if (!id.includes("idDiv_")) {
+            id = id.replace(/\D/g, '');
+            id = "idDiv_" + id;
+        }
+        const element = document.getElementById(id);
+        element.style.transform = '';
+        element.style.transform = `translate(0px, ${backtop}px)`;
+
+        id = id.replace(/\D/g, '');
+        testeMove(id);
+    }
+
+    arrayIdAlvo = [];
+    function testeMove(id) {
+        var idValDragArras;
+        var idValDragAlvo;
+        var identArrast;
+        var identAlvo;
+
+        if (!id.includes("idDiv_")) {
+            id = id.replace(/\D/g, '');
+            identArrast = "idText_" + id;
+            idValDragArras = document.getElementById("idValD_" + id + "");
+            id = "idDiv_" + id;
+        }
+        const elementoArrastado = document.getElementById(id);
+
+        var idAlvo = document.elementFromPoint(event.clientX, event.clientY).id;
+        if (!idAlvo.includes("idDiv_")) {
+            idAlvo = idAlvo.replace(/\D/g, '');
+            identAlvo = "idText_" + idAlvo;
+            idValDragAlvo = document.getElementById("idValD_" + idAlvo + "");
+            idAlvo = "idDiv_" + idAlvo;
+        }
+        const elementoAlvo = document.getElementById(idAlvo);
+        arrayIdAlvo.push(idAlvo);
+
+        saveDraginDrop(idValDragArras, idValDragAlvo, identArrast, identAlvo);
+
+        if (id === idAlvo) {
+            elementoArrastado.style.transform = 'translate(0px, 0px)';
+            return;
+        }
+        const rectArrastado = elementoArrastado.getBoundingClientRect();
+        const rectAlvo = elementoAlvo.getBoundingClientRect();
+
+        let arrastado = rectArrastado.top - rectAlvo.top;
+        let alvo = rectAlvo.top - rectArrastado.top;
+
+        const transform = window.getComputedStyle(elementoArrastado).transform;
+        const transformX = window.getComputedStyle(elementoAlvo).transform;
+        let translateY = 0;
+        let translateX = 0;
+
+        if (transformX && transformX !== "none") {
+            const matrixValuesX = transformX.match(/matrix.*\((.+)\)/)[1].split(', ');
+            translateX = parseFloat(matrixValuesX[5]); // Obtém o valor de translateY a partir da matriz
+        } if (transform && transform !== "none") {
+            const matrixValues = transform.match(/matrix.*\((.+)\)/)[1].split(', ');
+            translateY = parseFloat(matrixValues[5]);
+        }
+
+        if (!arrastado.toString().includes("-")) {
+            if (arrayIdAlvo.includes(id)) {
+                for (let i = 0; i < arrayIdAlvo.length; i++) {
+                    if (id == arrayIdAlvo[i]) {
+                        arrastado = arrastado + translateX;
+                        alvo = alvo + translateY;
+                        elementoArrastado.style.transform = `translate(0px, ${alvo}px)`;
+                        elementoAlvo.style.transform = `translate(0px, ${arrastado}px)`;
+                        return;
+                    }
+                }
+            } else {
+                alvo = alvo + translateY;
+                arrastado = arrastado + translateX;
+                elementoArrastado.style.transform = `translate(0px, ${alvo}px)`;
+                elementoAlvo.style.transform = `translate(0px, ${arrastado}px)`;
+            }
+            elementoArrastado.style.transform = `translate(0px, ${alvo}px)`;
+            elementoAlvo.style.transform = `translate(0px, ${arrastado}px)`;
+        } else {
+            if (arrayIdAlvo.includes(id)) {
+                for (let i = 0; i < arrayIdAlvo.length; i++) {
+                    if (id == arrayIdAlvo[i]) {
+                        arrastado = arrastado + translateX;
+                        alvo = alvo + translateY;
+                        elementoArrastado.style.transform = `translate(0px, ${alvo}px)`;
+                        elementoAlvo.style.transform = `translate(0px, ${arrastado}px)`;
+                        return;
+
+                    }
+                }
+            } else {
+                alvo = alvo + translateY;
+                arrastado = arrastado + translateX;
+                elementoArrastado.style.transform = `translate(0px, ${alvo}px)`;
+                elementoAlvo.style.transform = `translate(0px, ${arrastado}px)`;
+            }
+        }
+    }
+    function saveDraginDrop(arrastadoDrag, alvoDrop, idArras, idAlvo) {
+        var aux;
+        if (arrastadoDrag.value != null && alvoDrop.value != null) {
+            var formData = new FormData();
+            formData.append("arrastado", arrastadoDrag.value);
+            formData.append("alvo", alvoDrop.value);
+            $.ajax(
+                {
+                    url: '@Url.Action("SaveDraginDrop", "Games")',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                        aux = arrastadoDrag.value;
+                        arrastadoDrag.value = alvoDrop.value;
+                        alvoDrop.value = aux;
+
+                        document.getElementById(idArras).innerText = arrastadoDrag.value;
+                        document.getElementById(idAlvo).innerText = alvoDrop.value;
+                    }
+                });
+        }
+    }
+</script>
+
+<style>
+    
+    .nameGame{
+        color:white
+    }
+
+        .nameGame:hover{
+            color: #8cb4ff;
+        }
+    #steamLogo:hover {
+        color: darkblue;
+    }
+
+    .divDrag {
+        cursor: move;
+    }
+
+    .fa-circle-arrow-left {
+        color: white;
+        cursor: pointer
+    }
+
+        .fa-circle-arrow-left:hover {
+            color: #8cb4ff
+        }
+
+    .Ggrid {
+        color: white;
+        cursor: pointer;
+    }
+
+        .Ggrid:hover {
+            color: #8cb4ff;
+        }
+</style>
+
+

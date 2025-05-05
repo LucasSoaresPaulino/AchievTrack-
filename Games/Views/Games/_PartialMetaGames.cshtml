@@ -1,0 +1,110 @@
+﻿@model ProjectGames.DTO.GamesDTO
+
+@if (Model.listGames != null)
+{
+    @foreach (var item in Model.listGames)
+    {
+        string id = "idDelMeta_" + item.id;
+
+        <div class="" style="display:block;width:150px;height:190px;margin-left:28px;margin-top:25px;box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 11px;padding:0;margin-bottom:15px">
+            @if (item.imagemCustom == null)
+            {
+                <img src="@item.imagem" style="object-fit:cover;width:100%;height:100%;">
+            }
+            else
+            {
+                <img src="data:image /png;base64,@item.imagemCustom" style="object-fit:cover;width:100%;height:100%;">
+            }
+            <div style="display:inline-flex;margin-top:10px;margin-left:4rem">
+                @if(item.porcentagem != 100)
+                {
+                    <i class="fa-regular fa-circle-xmark fafa" id="@id" onclick="deleteitem('@item.id')" style="height:20px"></i>
+                }
+                else
+                {
+                    <i class="fa-regular fa-circle-check" style="color:#6eaa5e;height:20px;"></i>
+                }
+            </div>
+        </div>
+    }
+}
+<div class="row justify-content-center" onclick="$('#modalEditMeta').modal('show')" style="width:150px;height:190px;border:1px dashed #d3d3d3;margin-left:28px;margin-top:25px;box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 11px;align-items:center;cursor:pointer">
+    <i class="fa fa-plus" onclick="$('#modalEditMeta').modal('show')" style="color:#8cb4ff;height:35px"></i>
+</div>
+
+<div class="modal" id="modalEditMeta" role="dialog" data-backdrop="static" style="margin-top:8%;scrollbar-width: thin; scrollbar-color: #f1f1f1 #222222;">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width:35rem">
+            <div class="modal-header" style="background-color:#222222; border-color:black">
+                <span class="glyphicon glyphicon-pencil"></span>
+                <label class="modal-title" style="margin-left:-63%;"><b style="color:white">Adicionar meta</b></label>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="border:none;background-color:#222222">
+                    <span aria-hidden="true" onclick="$('#modalEditMeta').modal('hide')" style="background-color:transparent; color:white"><i class="fa fa-x"></i></span>
+                </button>
+            </div>
+            <div class="modal-body" style="height:30.5vh; overflow-y: auto;background-color:#222222">
+                <div style="margin-left:2%">
+                    <div class="card-header" style="width:11rem;height:40px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;"><p style="color:white;font-weight:bold;">Adicionar jogo</p></div>
+                    <div class="form-outline" style="margin-left:60%;margin-top:-2.4rem">
+                        <input type="search" class="form-control" id="id_searchGamesList" placeholder="Pesquisar" style="height:40px;width:11rem;background-color:rgba(0,0,0,.9);border:none;box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 10px;color:white" />
+                        <label class="form-label" for="form1"></label>
+                    </div>
+                    <button type="button" class="btn " onclick="searchListGames()" style="height:30px;width:30px;border-radius:50px;margin-left:87.5%;margin-top:-7.2rem;background-color:#2c2c2c ">
+                        <i class="fas fa-search" style="transform:translate(-30%,-20%);color:rgba(255,255,255,0.2)"></i>
+                    </button>
+                    <div class="row" id="idGameSearch" style="margin-top:2%">
+                        <!--_PartialResultSearchGames-->
+                    </div>
+                    <div class="card-header" style="width:6rem;height:40px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;"><p style="color:white;font-weight:bold;">Ano</p></div>
+                    <input type="text" id="idValueYear" value="@Model.metaGames.ano" style="height:35px;width:6rem;background-color:rgba(0,0,0,.8);color:white;border:1px solid  rgba(0,0,0,.2);border-radius:3px ;margin-top:3%" />
+                    
+                    <div class="card-header" style="width:6rem;height:40px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff; margin-top:5%"><p style="color:white;font-weight:bold;">Mês</p></div>
+                    <input type="text" id="idValueMonth" value="@Model.metaGames.mes" style="height:35px;width:6rem;background-color:rgba(0,0,0,.8);color:white;border:1px solid  rgba(0,0,0,.2);border-radius:3px ;margin-top:3%" />
+                </div>
+            </div>
+            <div class="modal-footer" style="background-color:#222222;border-color:black">
+                <button type="button" class="btn btn-primary" onclick="savedGame(0)"><b>Salvar</b></button>
+                <button type="button" class="btn btn-secondary" onclick="$('#modalEditMeta').modal('hide')" data-dismiss="modal"><b>Fechar</b></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function searchListGames() {
+        var pesquisa = $("#id_searchGamesList").val();
+        var formData = new FormData();
+        formData.append("pesquisa", pesquisa);
+
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialResultSearchGames", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $("#idGameSearch").html(result);
+                }
+            });
+    }
+    searchListGames();
+
+    
+</script>
+
+<style>
+    .box:hover {
+        cursor: pointer;
+        -webkit - transform: scale(1.1);
+        -ms - transform: scale(1.1);
+        transform: scale(1.1);
+    }
+    .fafa{
+        color: white;
+    }
+    .fafa:hover {
+        cursor:pointer;
+        color: #e61919;
+    }
+</style>

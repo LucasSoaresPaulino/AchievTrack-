@@ -1,0 +1,137 @@
+﻿@model ProjectGames.DTO.ScreenshotDTO
+
+<i class="fa fa-circle-chevron-left" onclick="imgModal('@Model.id',2)" style="height:40px;width:40px;color:white; position:absolute;left:-6%;top:40%"></i>
+<i class="fa fa-circle-chevron-right" onclick="imgModal('@Model.id',1)" style="height:40px;width:40px;color:white; position:absolute;left:103%;top:40%"></i>
+
+<div onclick="testeiimg()" onmouseover="openIconGame()" onmouseleave="exitIconGame()" style="width:934px;height:525px;">
+    <img src="data:image /png;base64,@Model.imagens" style="width:60rem;height:525px;object-fit:cover;border-radius:7px;box-shadow: rgba(0, 0, 0, 1.9) 0px 0px 15px" />
+</div>
+<img class="box" src="@Model.icon" id="id_iconGame" onclick="PageGame('@Model.idGame')" onmouseover="openIconGame()" onmouseleave="exitIconGame()" style="position:absolute;left:2.5%;width:40px;height:40px;margin-top:5px;display:none;" />
+@if(Model.favorito == 1)
+{
+    <i class="fa fa-star" onclick="favoritarImg('@Model.id',0)" id="id_star" style="color:yellow;position:absolute;left:77%;width:40px;height:30px;margin-top:5px;display:none"></i>
+}
+else
+{
+    <i class="fa-regular fa-star" onclick="favoritarImg('@Model.id',1)" id="id_star" style="color:yellow;position:absolute;left:77%;width:40px;height:30px;margin-top:5px;display:none"></i>
+}
+
+<div style="margin-left:50px">
+    <div class="card-header" style="width:6rem;height:30px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;"><h6 style="color:white;margin-top:-7%;margin-left:-15%">Titulo</h6></div>
+    <textarea onchange="saveAltScreenshot(0,'@Model.id')" id="id_tituloScreen" style="background-color: rgba(0,0,0,.3); height:auto; width:90%; border-radius:6px; margin-top:9px;margin-bottom:15px;resize:none;color:white;border-color:balck;">@Model.nome</textarea>
+    <div class="card-header" style="width:7rem;height:30px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;"><h6 style="color:white;margin-top:-7%;margin-left:-15%">Descrição</h6></div>
+    <textarea onchange="saveAltScreenshot(1,'@Model.id')" id="id_descScreen" style="background-color: rgba(0,0,0,.3); height:143px; width:90%; border-radius:6px; margin-top:9px;margin-bottom:15px;color:white;border-color:balck">@Model.descricao</textarea>
+    <div class="card-header" style="width:7rem;height:30px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;"><h6 style="color:white;margin-top:-7%;margin-left:-15%">Categoria</h6></div>
+    <select onchange="saveAltScreenshot(2,'@Model.id')" id="id_categScreen" style="background-color: rgba(0,0,0,.4);height:37px;width:90%; border-radius:6px; margin-top:9px;margin-bottom:15px;color:white">
+        <option selected>Selecionar jogo</option>
+        @foreach (var item in ViewBag.Games)
+        {
+            <option value="@item.id">@item.nome</option>
+        }
+    </select>
+    <div class="card-header" style="width:6rem;height:30px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;"><h6 style="color:white;margin-top:-7%;margin-left:-15%">Pasta</h6></div>
+    <select onchange="saveAltScreenshot(3,'@Model.id')" id="id_folderScreen" style="background-color: rgba(0,0,0,.4);height:37px;width:90%; border-radius:6px; margin-top:9px;color:white">
+        <option selected>Selecionar pasta</option>
+        @foreach (var item in ViewBag.Folder)
+        {
+            <option value="@item.id">@item.nome</option>
+        }
+    </select>
+    <div style="display:none">
+        <i class="fa fa-circle-xmark" id="id_X" style="height:40px;color:red;margin-left:72px;margin-top:30px"></i>
+        <i class="fa fa-circle-check" id="id_check" style="height:40px;color:lightgreen;margin-left:72px;margin-top:30px;display:none;"></i>
+    </div>
+</div>
+
+<div class="modal" id="id_modalFullScreen" role="dialog" data-backdrop="block" style="margin-top:9.5rem;">
+    <div class="modal-dialog" id="id_modalDialog">
+        <img src="data:image /png;base64,@Model.imagens" id="id_Fullscreen" style="height:45rem; width:90%;margin-left:4.8%;box-shadow: rgba(0, 0, 0, 10.9) 170px 170px 170px" />
+    </div>
+</div>
+
+<script>
+    function openIconGame() {
+        var div = document.querySelector("#id_iconGame");
+        var star = document.querySelector("#id_star");
+        if (div.style.display === "none") {
+            div.style.display = "inline-flex"
+            star.style.display = "inline-flex"
+        }
+    }
+    function exitIconGame() {
+        var div = document.querySelector("#id_iconGame");
+        var star = document.querySelector("#id_star");
+        if (div.style.display === "inline-flex") {
+            div.style.display = "none"
+            star.style.display = "none"
+        }
+    }
+     
+    function favoritarImg(id,tipo) {
+        var formData = new FormData();
+        formData.append("id", id);
+
+        $.ajax(
+            {
+                url: '@Url.Action("favoritarImg", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    if(tipo == 0){
+                        document.querySelector("#id_star").classList.toggle("fa-regular");
+                    }else{
+                        document.querySelector("#id_starNotSave").classList.toggle("fa");
+                    }
+                }
+            });
+    }
+
+    function saveAltScreenshot(tipo,id){
+        var mensagem = ""
+        if(tipo == 0){
+            mensagem = $("#id_tituloScreen").val();
+        }if(tipo == 1){
+            mensagem = $("#id_descScreen").val();
+        }if(tipo == 2){
+            mensagem = $("#id_categScreen").val();
+        }if(tipo == 3){
+            mensagem = $("#id_folderScreen").val();
+        }
+
+        var formData = new FormData();
+        formData.append("id", id);
+        formData.append("tipo", tipo);
+        formData.append("mensagem", mensagem);
+        formData.append("plataform", '@Model.plataform');
+
+        $.ajax(
+            {
+                url: '@Url.Action("saveAltScreenshot", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    var x = document.querySelector("#id_X");
+                    var check = document.querySelector("#id_check");
+                    x.style.display = "none";
+                    check.style.display = "block"
+                }
+            });
+    }
+    function exitFullScreen(){
+        $("#id_modalteste").modal('hide');
+        $("#id_modalFullScreen").modal('hide')
+    }
+</script>
+
+<style>
+    .box:hover {
+        cursor: pointer;
+        -webkit-transform: scale(1.1);
+        -ms-transform: scale(1.1);
+        transform: scale(1.1);
+    }
+</style>

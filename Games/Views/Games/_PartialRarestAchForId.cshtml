@@ -1,0 +1,19 @@
+﻿@model ProjectGames.DTO.GamesDTO
+
+@foreach(var item in Model.listRarest)
+{
+    <div style="padding:15px;border-bottom:1px solid black">
+        @if (ViewBag.plataform == 0)
+        {
+            <img src="@item.icon" width="64px" height="64px;" style="border: 1px solid #ffea00" />
+        }
+        else
+        {
+            <img src="https://retroachievements.org/Badge/@item.icon" width="64px" height="64px;" style="border: 1px solid #ffea00" />
+        }
+        <div style="display:inline-flex;">
+            <p style="color:white;font-size:15px;margin-left:3px;white-space:nowrap;max-width:18ch;text-overflow: ellipsis;overflow: hidden;">@item.nome</p>
+            <p style="color:white;margin-top:30px;margin-left:15%;color:#8cb4ff;font-weight:bold;text-align:right;position:absolute">@item.porcentagem%</p>
+        </div>
+    </div>
+}

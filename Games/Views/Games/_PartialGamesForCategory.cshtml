@@ -1,0 +1,18 @@
+﻿@model ProjectGames.DTO.GamesDTO
+@{
+    Layout = null;
+}
+
+@foreach (var item in Model.listGames)
+{
+    <div style="margin-left:5%;display:inline-flex;margin-top:5px;margin-bottom:-30px">
+        <img src="@item.icon" height="25px" style="border:1px solid transparent">
+        <p class="id_nome" onclick="PageGame(@item.id)" style="color:white;margin-left:3px;cursor:pointer;font-size:13px">@item.nome</p>
+    </div>
+}
+
+<style>
+    .id_nome:hover {
+        color: #8cb4ff
+    }
+</style>

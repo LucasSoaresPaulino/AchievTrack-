@@ -1,0 +1,186 @@
+﻿@model ProjectGames.DTO.GamesDTO
+
+<div class="row" id="mainContent" style="">
+@if(ViewBag.tipo == 1)
+{
+    <i class="fa fa-circle-chevron-left" onclick="backScreen('@ViewBag.idGame')" style="width:40px; height:40px;margin-bottom:10px;margin-top:7px;margin-left:3%"></i>
+
+    <div class="row justify-content-center" style="display:inline-flex;margin-top:6%">
+        <h1 style="color:white;text-align:center;margin-top:-89px">@Model.listScreen[0].nomeGame</h1>
+    </div>
+}
+    <div class="row justify-content-center" style="margin-top:1%;margin-left:-0.5%">
+    @foreach (var item in Model.listScreen)
+    {
+        string id = "id_Imagem" + item.id;
+        string idImg = "id_imgScreen_" + item.id;
+
+            <div class="card images" onmouseover="OpenSpecImg('@item.id',0)" onmouseleave="OpenSpecImg('@item.id',1)" style="width:355px; height:400px;margin-left:15px; margin-bottom:30px;box-shadow: rgba(0, 0, 0, 0.9) 0px 5px 8px; border:none;padding:0;border-radius:11px;">
+                <img src="data:image /png;base64,@item.imagens" id="@idImg" style="object-fit:cover;width:100%;height:100%;border-radius:9px">
+                <div id="@id" style="position:absolute;width:100%;height:0px;background-color:rgba(0,0,0,.8);display:inline-flex;opacity:0">
+                    @if (item.icon != "")
+                    {
+                        <img src="@item.icon" style="width:40px;height:40px; margin-left:1rem;margin-top:0.6rem;border-right:2px solid aquamarine;box-shadow:rgba(140, 180, 255, 3) 0px 0px 8px">
+                    }
+                    <div style="display:block;margin-left:2%;margin-top:1.5%">
+                        <p style="color:white;font-size:15px;white-space:nowrap;max-width:21ch;text-overflow: ellipsis;overflow: hidden;">@item.nomeGame</p>
+                        <p style="color:white;font-size:11px;white-space:nowrap;margin-top:-0.9rem">@item.categoriaGame</p>
+                    </div>
+                    <div style="margin-left:83%;position:absolute">
+                        <i class="fa fa-ban" onclick="SelectRemove(@item.id,'@idImg')" style="width:25px; height:25px;margin-top:6px;color:white;cursor:pointer;margin-left:26px"></i>
+                    </div>
+
+                </div>
+            <div onclick="imgModal('@item.id',null,'@item.plataform')" onclick="efectsModal()" style="min-width:415px; min-height:292px; position:absolute; top:60px; left:0px;"></div>
+        </div>
+    }
+    </div>
+</div>
+
+<div class="modal" id="id_modalteste" role="dialog" data-backdrop="static" style="margin-top:9.5rem;" onclick="outsideClick(event)">
+    <div class="modal-dialog" style="min-width:1200px;">
+        <div class="modal-content" style="background-color:#222222">
+            <div class="modal-header" style="border-color:black;height:45px">
+                <label class="modal-title" style="text-align:center;"><b style="color:white">Captura de tela</b></label>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="border:none;background-color:transparent">
+                    <span aria-hidden="true" onclick="outsideClick(event)" style="background-color:transparent; color:white"><i class="fa fa-x"></i></span>
+                </button>
+            </div>
+            <div class="modal-body" style="height:60.5vh;">
+                <div id="id_PartialScreenshot" style="display:inline-flex;margin-top:0.7%">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function OpenSpecImg(id, tipo) {
+            var div = document.querySelector("#id_Imagem" + id + "");
+            if(tipo == 0){
+                if (div.style.opacity === "0") {
+                    div.style.opacity = "1";
+                    div.style.height = "59px";
+                    div.style.transition = "height 1s ease, opacity 1s ease"
+                    document.querySelector("#id_imgScreen_" + id + "").style.webkitFilter = "grayscale(70%)";
+
+                }
+            }else{
+                if (div.style.opacity === "1") {
+                div.style.opacity = "0";
+                div.style.height = "0px";
+                div.style.transition = "height 1s ease, opacity 1s ease"
+                document.querySelector("#id_imgScreen_" + id + "").style.webkitFilter = "grayscale(0%)";
+            }
+        }
+    }
+
+    function openModalEdit(id) {
+        $("#id_modalEditScreen").modal('show')
+
+        var formData = new FormData();
+        formData.append("id", id);
+
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialEditScreen", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $("#id_partialEditScreeen").html(result);
+                }
+            });
+    }
+
+    var listaIds = [];
+
+    function SelectRemove(id, idImg) {
+        listaIds.push(id);
+        document.querySelector("#" + idImg + "").style.webkitFilter = "grayscale(100%)";
+        document.querySelector("#id_deleteImg").style.display = "block";
+
+        // Aplicar o filtro ao elemento
+
+    }
+    function testeScreenchot() {
+        $("#modal_remover").modal('show');
+
+    }
+    function deleteitem() {
+        var formData = new FormData();
+        formData.append("screen", listaIds);
+
+        $.ajax(
+            {
+                url: '@Url.Action("removeScreenshot", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    window.location.reload();
+                }
+            });
+    }
+    function imgModal(id,tipo,plataform) {
+        document.querySelector("#id_loadedJ").style.display = "block"
+        document.querySelector("#id_imgScreen_" + id + "").style.webkitFilter = 'grayscale(100%)';
+        var formData = new FormData();
+        formData.append("id", id);
+        formData.append("tipo", tipo);
+        formData.append("tipoGame", '@ViewBag.tipo');
+        formData.append("idGame", '@ViewBag.idGame');
+        formData.append("plataform", plataform);
+
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialScreenshot", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    if(tipo == null){
+                    $("#id_PartialScreenshot").html(result);
+                    }if(tipo == 1){
+                        $('#id_modalteste').animate({ marginLeft: '-500%' }, 300, function () {
+                            $('#id_modalteste').css('margin-left', '0%').animate({ marginLeft: '0%' }, 300);
+                            $("#id_PartialScreenshot").html(result);
+                        });
+                    }if(tipo == 2){
+                        $('#id_modalteste').animate({ marginLeft: '500%' }, 300, function () {
+                            $('#id_modalteste').css('margin-left', '0%').animate({ marginLeft: '0%' }, 300);
+                            $("#id_PartialScreenshot").html(result);
+                        });
+                    }
+                    $("#id_modalteste").modal('show');
+                    document.querySelector("#id_imgScreen_" + id + "").style.webkitFilter = 'grayscale(0%)';
+                    document.querySelector("#id_loadedJ").style.display = "none"
+                }
+            });
+    }
+</script>
+
+<style>
+    .fa-circle-chevron-left{
+        color: white;
+    }
+
+    .fa-circle-chevron-left:hover{
+        color:#8cb4ff;
+    }
+    .fa-house{
+        color: white;
+    }
+
+    .fa-house:hover{
+        color:#8cb4ff;
+    }
+
+    .modal-backdrop {
+        -webkit-filter: blur(50px);
+        filter: blur(50px);
+    }
+</style>

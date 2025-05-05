@@ -1,0 +1,92 @@
+﻿@model ProjectGames.DTO.GamesDTO
+
+<div>
+    <audio id="idSound">
+        @*@foreach (var item in Model.listMusicas)
+        {
+            <source src="data:audio/mp3;base64,@item.sound" class="music" type="audio/mp3">
+        }*@
+
+        @foreach(var item in Model.listMusicas)
+        {
+            <source src="@item.sound" class="music" type="audio/mp3">
+        }
+    </audio>
+    <div class="row justify-content-center" style="margin-top:7%">
+        <div id="volumeControl" onmouseover="visibleRange(0)" onmouseout="visibleRange(1)" style="width:20px;height:30px;margin-left:-11rem;margin-top:-13px">
+            <i id="volumeIcon" class="fa fa-volume-high" alt="Volume" style="width:18px;cursor: pointer;color:white;position:absolute;margin-left:-0.5rem"></i>
+            <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1" style="transform: rotate(-90deg); width: 80px; height: 10px;position:absolute;margin-left:-2.5rem;margin-top:3.4rem;visibility:hidden">
+      </div>
+        <i class="fa fa-backward boxM" id="next" onclick="loadPrevSong()" style="color:white;width:25px;height:25px;cursor:pointer;margin-left:-5.5rem;margin-top:2px;position:absolute"></i>
+        <i class="fa fa-circle-play boxM" id="play" onclick="playSong(0)" style="color:white;width:30px;height:30px;cursor:pointer;position:absolute"></i>
+        <i class="fa fa-circle-pause boxM" id="pause" onclick="playSong(1)" style="color:white;width:30px;height:30px;visibility:hidden;cursor:pointer;position:absolute"></i>
+        <i class="fa fa-forward boxM" id="next" onclick="loadNextSong()" style="color:white;width:25px;height:25px;cursor:pointer;margin-left:5.5rem;margin-top:2px;position:absolute"></i>
+    </div>
+</div>
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+<script>
+    function start(){
+        musicTrack();
+    }
+    start();
+    setTimeout(start, 5000);
+    function visibleRange(tipo){
+        if(tipo == 0){
+            document.getElementById("volumeSlider").style.visibility = "visible";
+        }if(tipo == 1){
+            document.getElementById("volumeSlider").style.visibility = "hidden";
+        }
+    }
+    const volumeSlider = document.getElementById('volumeSlider');
+    volumeSlider.addEventListener('input', function () {
+        const audioElement = document.getElementById('idSound');
+        audioElement.volume = volumeSlider.value; // Ajusta o volume do áudio com base no slider
+        updateVolumeIcon();
+    });
+
+    function playSong(tipo){
+        let x = document.getElementById("idSound");
+        if(tipo == 0){
+            x.play();
+            document.getElementById("play").style.visibility = "hidden";
+            document.getElementById("pause").style.visibility = "visible";
+        }if(tipo == 1){
+            x.pause();
+            document.getElementById("pause").style.visibility = "hidden";
+            document.getElementById("play").style.visibility = "visible";
+        }
+    }
+    const audioElement = document.getElementById('idSound');
+    const sources = document.querySelectorAll('#idSound source');
+    let currentSourceIndex = 0;
+
+    // Função para carregar a música
+    function loadSong(index) {
+        currentSourceIndex = index;
+        if (currentSourceIndex < 0) {
+            currentSourceIndex = sources.length - 1; // Vai para a última música se ultrapassar o início
+        } else if (currentSourceIndex >= sources.length) {
+            currentSourceIndex = 0; // Vai para a primeira música se ultrapassar o final
+        }
+        audioElement.src = sources[currentSourceIndex].src; // Atualiza a fonte do áudio
+        audioElement.load(); // Recarrega o áudio
+        audioElement.play(); // Começa a tocar a música
+    }
+
+    // Função para ir para a próxima música
+    function loadNextSong() {
+        loadSong(currentSourceIndex + 1);
+    }
+
+    // Função para ir para a música anterior
+    function loadPrevSong() {
+        loadSong(currentSourceIndex - 1);
+    }
+</script>
+
+<style>
+    .boxM:hover{
+        transform: scale(1.1);
+    }
+</style>

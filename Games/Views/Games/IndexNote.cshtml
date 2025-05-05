@@ -1,0 +1,99 @@
+﻿@model ProjectGames.DTO.GamesDTO
+<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="..."></script>
+
+<body style="background-color:#222222;overflow-x: hidden;overflow-y: auto;">
+    <!--Corpo-->
+
+    <div class="row justify-content-center" style="width:100%;">
+        <div class="card-header" style="width:15rem;height:50px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;margin-top:10rem;margin-left:-42rem;position:absolute"><h4 style="color:white">Ultimas anotações</h4></div>
+        <div class="row justify-content-center" id="id_indexHistoric" style="border-radius:7px;width:70%;height:45rem;margin-top:18%;background-color:#2f343f;overflow-y:scroll;scrollbar-width:thin;scrollbar-color:#f1f1f1 #393e49">
+            <div class="row justify-content-center" style="padding:0;padding-top:30px">
+                @foreach (var item in Model.listFeed)
+                {
+                    string id = "idMainFeed" + item.id;
+                    <div id="@id" style="width:90%;height:19rem;margin-bottom:4%;border-radius:3px;margin-top:1%;background-color:rgba(0,0,0,.4);box-shadow: rgba(0, 0, 0, 2.2) 0px 0px 14px;padding:0;">
+                        <div style="width:100%;height:4rem;background-color:rgba(0,0,0,.5);border-top-left-radius:3px;border-top-right-radius:3px;margin:0;padding:0;">
+                            <img src="@item.icon" width="7%" height="80%" style="margin-top:0.7%;margin-left:3%;border-right:2px solid #8cb4ff;border-radius:2px;object-fit:cover">
+                            <div style="width:80%;margin-left:3%;display:inline-flex;">
+                                <div style="display:block;transform:translate(0%,-14%);margin-left:-3%;height:68px">
+                                    <p style="font-weight:bold;color:white;font-size:18px;">@item.nome</p>
+                                </div>
+                            </div>
+                            <p style="color:white;font-size:14px;white-space:nowrap;text-align:right;margin-top:-4rem;transform:translate(-4%,0%)">@item.timeElapsed <i class="fa fa-calendar-check" style="color:#8cb4ff;transform:translate(30%,0%)"></i></p>
+                        </div>
+                        <div style="display:inline-flex;width:100%;height:273px;margin-top:-0.9%">
+                            <div onclick="PageGame(@item.idGame)" style="width:25%;height:60%;margin-left:3%;margin-top:3%">
+                                @if (item.imgCustom == null)
+                                {
+                                    <img src="@item.Imagem" width="165px" height="203px" style="object-fit:cover;border-radius:2px">
+                                }
+                                else
+                                {
+                                    <img src="data:image /png;base64,@item.imgCustom" width="165px" height="203px" style="border-radius:2px;object-fit:cover" />
+                                }
+                            </div>
+                            <div style="width:72%;height:203px; background-color:rgba(0,0,0,.5);margin-left:-2.5%;margin-top:3%">
+                                <div style="margin-left:2%;margin-top:2%">
+                                    <textarea style="width:95%;height:33px;resize:none;background-color:#373636;border:none;color:white;border-top-left-radius:4px;border-top-right-radius:4px;" readonly>@Html.Raw(" "+item.titulo)</textarea>
+                                    <textarea style="width:95%;height:140px;background-color:#373636;border:none;border-bottom-left-radius:4px;border-bottom-right-radius:4px;color:white;padding-left:7px;resize:none;overflow-y:scroll;scrollbar-width:thin;scrollbar-color:#f1f1f1 #393e49" readonly>@Html.Raw(item.mensagem)</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div> 
+        </div>
+        <div style="margin-top:1%">
+            <div style="margin-left:3.3%">
+                <div class="card-header" style="width:13rem;height:50px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;margin-top:2.5rem;margin-left:0rem;"><h4 style="color:white">Todos os jogos</h4></div>
+                <div id="id_GamesList" style="margin-top:2%;display:inline-block">
+                    <div style="background-color:rgba(0,0,0,.3);box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 12px;padding-left:10px;padding-top:5rem;border-radius:4px">
+                        <div style="display:inline-flex;position:absolute;margin-left:57.7rem;margin-top:-3.8rem">
+                            <div class="form-outline">
+                                <input type="search" class="form-control" id="id_searchNewGames" placeholder="Pesquisar" style="height:48px;width:17rem;border-radius:9px;background-color:rgba(0,0,0,.9);border:none;box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 13px;color:white" />
+                                <label class="form-label" for="form1"></label>
+                            </div>
+                            <button type="button" class="btn " onclick="searchNewGame()" style="height:37px;width:37px;border-radius:50px;margin-left:-45px;margin-top:2%;background-color:#2c2c2c;">
+                                <i class="fas fa-search" style="margin-left:-15%;color:rgba(255,255,255,0.2)"></i>
+                            </button>
+                        </div>
+                        @foreach (var item in Model.listGames)
+                        {
+                            <div class="row" style="display:inline-flex;padding:10px;">
+                                <img class="box" onclick="openNoteGame('@item.id','@item.nome')" src="https://cdn.cloudflare.steamstatic.com/steam/apps/@item.id/header.jpg" width="260px" height="130px" style="border-radius:4px;">
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    function openGames() {
+        var div = document.querySelector("#id_GamesList");
+        if (div.style.display === "inline-block") {
+            div.style.display = "none";
+            document.querySelector(".fa-chevron-up").classList.toggle("fa-chevron-down");
+
+        } else {
+            div.style.display = "inline-block";
+            document.querySelector(".fa-chevron-down").classList.toggle("fa-chevron-up");
+        }
+    }
+    function openNoteGame(idGame, nome) {
+        window.location.href = '@Url.Action("GamesAnotacoes", "Games")?idGame=' + idGame + '&nome=' + nome;
+    }
+</script>
+
+<style>
+    .box:hover {
+        cursor: pointer;
+        -webkit - transform: scale(1.1);
+        -ms - transform: scale(1.1);
+        transform: scale(1.1);
+    }
+</style>
+
+

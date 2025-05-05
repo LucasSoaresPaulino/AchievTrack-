@@ -1,0 +1,359 @@
+﻿@model ProjectGames.DTO.JogosDTO
+
+<div class="card" id="divCard" style="width:100.13%;background-color:#393e49;transform:translate(-0.92%,171%);padding:10px;background-color:#393e49;display:block;border-top:3px solid;border-top-left-radius:10px;border-top-right-radius:10px;">
+    <div class="" style=" width:100%;height:230px;display:inline-flex;margin-left:0.7%">
+        <div style="width:15%;height:100%;">
+            @if (Model.imagemCustom == null)
+            {
+                <img src="@Model.imagem" id="id_imgGridGame" width="100%" height="100%" style="object-fit:cover;" />
+            }
+            else
+            {
+                <img src="data:image /png;base64,@Model.imagemCustom" id="id_imgGridGame" width="100%" height="100%" style="object-fit:cover;" />
+            }
+        </div>
+        <div style="margin-left:1.5%;">
+            <h3 style="color:white;white-space:nowrap;">@Model.nome</h3>
+            <p onclick="openCateg('@Model.categoria')" style="color:white;white-space:nowrap;font-size:17px;cursor:pointer">@Model.categoria</p>
+        </div>
+        <div style="background-color:rgba(0,0,0,.6);width:8.5%;height:2.5rem;margin-left:2%;border-radius:5px;display:inline-flex">
+            @if (Model.plataforma == 0)
+            {
+                <img src="~/img/Games/img/SteamLogo.png" width="30%" height="80%" style="margin-left:3%;margin-top:3%" />
+            }
+            else
+            {
+                <img src="~/img/Games/img/RAcolor.png" width="30%" height="80%" style="margin-left:3%;margin-top:3%" />
+            }
+            <p style="color:white;text-align:center;font-size:16.5px;margin-top:6%;margin-left:5%;font-weight:bold">@Model.plataformaG</p>
+        </div>
+        <div class="row justify-content-center" style="position:absolute; left:26%">
+            <div style="display:block">
+                @if (Model.porcentagem == 100)
+                {
+                    <i class="fa-regular fa-star" onclick="openModalEdit('@Model.id')" style="color:white; margin-left:825%;height:32px;margin-top:10px;cursor:pointer"></i>
+                    <i class="fa fa-pen-to-square" onclick="openModalEdit('@Model.id')" style="color:white; margin-left:825%;height:32px;margin-top:30px;cursor:pointer"></i>
+                    <i class="fa fa-arrows-spin" onclick="reRunAchievementsGames(@Model.id)" style="color:aquamarine; margin-left:825%;height:32px;margin-top:35px;cursor:pointer"></i>
+                }
+                else
+                {
+                    <i class="fa fa-pen-to-square" onclick="openModalEdit('@Model.id')" style="color:white; margin-left:1300%;height:32px;margin-top:10px;cursor:pointer"></i>
+                    <i class="fa fa-arrows-spin" onclick="reRunAchievementsGames(@Model.id)" style="color:aquamarine; margin-left:1300%;height:32px;margin-top:30px;cursor:pointer"></i>
+                }
+            </div>
+        </div>
+        <div class="" style="display:inline-flex; margin-top:14%;height:43px; margin-left:29%;position:absolute">
+            <button class="btn" onclick="OpenAchievements(null)" style="background-color:rgba(0,0,0,.4);border-left:5px solid aquamarine;"><b style="color:white">Todas conquistas</b></button>
+            <button class="btn" onclick="OpenAchievements(1)" style="margin-left:10px; background-color:rgba(0,0,0,.4);border-left:5px solid aquamarine;"><b style="color:white">conquistas desbloqueadas</b></button>
+            <button class="btn" onclick="OpenAchievements(0)" style="margin-left:10px; background-color:rgba(0,0,0,.4);border-left:5px solid aquamarine;"><b style="color:white">conquistas bloqueadas</b></button>
+        </div>
+    </div>
+</div>
+<div style="background-color:#393e49;margin-top:33.5%;margin-left:-1%;position:relative; border-bottom-left-radius:15px; border-bottom-right-radius:15px;width:100%;box-shadow: rgba(0, 0, 0, 0.70) 0px 50px 60px -50px inset, rgba(0, 0, 0, 0.70) 0px 8px 0px -8px inset;height:100%;">
+    <div style="display:inline-flex">
+        <div style="display:block;margin-top:5%;width:55rem">
+            <div class="" style="width:100%;height:200px;margin-left:2%">
+                <div style="width:100%;display:block;">
+                    <div class="card-header" style="width:10rem;height:38px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;"><p style="color:white;font-size:20px;font-weight:bold;margin-top:-4%;margin-left:-6%">Descrição</p></div>
+                    <div style="width:98%;height:110px;margin-top:1.5%;background-color:rgba(0,0,0,.7);display:inline-flex;border-radius:5px;box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 15px;">
+                        <div style="min-width:291px;min-height:110px;">
+                            <img src="@Model.imgHeader" style="width:100%;height:100%;border-top-left-radius:3px;border-bottom-left-radius:4px;border-right:4px solid aquamarine;object-fit:cover" />
+                        </div>
+                        <div style="padding-right:7px;max-height:110px">
+                            @if (Model.plataforma == 0)
+                            {
+                                <p style="color:white;margin-left:1%;margin-top:1%">@Model.descricao</p>
+                            }
+                            else
+                            {
+                                <p style="color:white;margin-left:1%;margin-top:1%">@Model.nome game do genero @Model.categoria, foi desenvolvido por @Model.developer e publicado por @Model.publisher para plataforma @Model.plataformaG</p>
+                            }
+                        </div>
+                    </div>
+                </div>                
+            </div>
+            @if (Model.screenshotGame.Count != 0)
+            {
+                <div style="width:100%;margin-left:2%">
+                    <div class="card-header" style="width:12rem;height:38px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;margin-bottom:1.5%"><p style="color:white;font-size:20px;font-weight:bold;margin-top:-4%;margin-left:-6%">Capturas de tela</p></div>
+                    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel" style="width:90%;">
+                        <div class="carousel-indicators">
+                            @for (int i = 0; i <= Model.screenshotGame.Count - 1; i++)
+                            {
+                                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="@i" class="active" aria-current="true" aria-label="Slide '@i'"></button>
+
+                            }
+                        </div>
+                        <div class="carousel-inner" style="box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 15px;">
+                            <div class="carousel-item active">
+                                <img src="data:image /png;base64,@Model.screenshotGame[0].imagens" class="d-block w-100" style="border-radius:5px;height:390px;object-fit:cover">
+                            </div>
+                            @for (int i = 1; i <= Model.screenshotGame.Count - 1; i++)
+                            {
+                                <div class="carousel-item">
+                                    <img src="data:image /png;base64,@Model.screenshotGame[i].imagens" class="d-block w-100" style="border-radius:5px;height:390px;object-fit:cover">
+                                </div>
+                            }
+                        </div>
+                        <div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                                <span class="fa fa-circle-chevron-left" style="height:30px;margin-top:-2rem"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                                <span class="fa fa-circle-chevron-right" style="height:30px;margin-top:-2rem"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div style="display:inline-flex;margin-left:2%;margin-top:3%">
+                <div class="card-header" style="width:11rem;height:40px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;"><h5 style="color:white;margin-top:-1%">Conquistas</h5></div>
+                <div class="card-header" onclick="newPage('@Model.id','@Model.plataforma')" style="width:4rem;height:40px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;margin-left:87.9%;position:absolute;border-top-right-radius:5px;border-bottom-right-radius:5px;cursor:pointer"><i class="fa fa-arrow-up-right-from-square" style="width:25px;height:25px; color:white;"></i></div>
+            </div>           
+            <div class="row" id="partialAchiev" style="background-color:#222222; border-radius:5px;width:100%;display:inline-flex; margin-top:1.5%; margin-left:2%;margin-bottom:20px;position:relative">
+                <!--PartialAchiev-->
+            </div>
+        </div>
+        <div style="display:block;margin-top:9.3%;margin-left:7%">
+            <div style="background-color:rgba(0,0,0,.4);width:340px;height:285px;border-radius:5px;">
+                <div class="card-header" style="height:60px;width:338px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff">
+                    <h4 style="color:white;font-weight:bold;text-align:center">Progresso</h4>
+                </div>
+                <div style="display:inline-flex;">
+                    <div class="box" style="margin-left:28%;margin-top:12%">
+                        <div>
+                            <svg>
+                                <circle cx="70" cy="70" r="70"></circle>
+                                <circle id="circleProgress" cx="70" cy="70" r="70"></circle>
+                            </svg>
+                        </div>
+                        <div class="number" style="position:absolute;width:9.2rem;margin-top:-6rem;margin-left:0.5%">
+                            <h3 style="text-align:center;color:white">@Model.porcentagem%</h3>
+                            <input type="hidden" id="numberProgress" value="@Model.porcentagem" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="background-color:rgba(0,0,0,.4);width:340px;height:450px;border-radius:5px;margin-top:3rem">
+                <div class="card-header" style="height:60px;width:338px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff">
+                    <h4 style="color:white;font-weight:bold;text-align:center">Dados</h4>
+                </div>
+                <div style="margin-left:3%">
+                    <div style="display:inline-flex; margin-top:15px;">
+                        <i class="fa fa-fingerprint" style="color:#8cb4ff;margin-top:5px; margin-right:5px"></i><p style="color:white">Id:</p>
+                        <p style="color:#8cb4ff; margin-left:7px">@Model.id</p>
+                    </div>
+                    <br />
+                    <div style="display:inline-flex; margin-top:10px;">
+                        <i class="fa fa-signature" style="color:#8cb4ff;margin-top:5px; margin-right:5px"></i><p style="color:white">Nome:</p>
+                        <p style="color:#8cb4ff; margin-left:7px;white-space:nowrap;white-space:nowrap;max-width:28ch;text-overflow: ellipsis;overflow: hidden;">@Model.nome</p>
+                    </div>
+                    <br />
+                    @if (Model.plataforma == 0)
+                    {
+                        <div style="display:inline-flex; margin-top:10px;">
+                            <i class="fa fa-hourglass-start" style="color:#8cb4ff;margin-top:5px; margin-right:5px"></i><p style="color:white">Tempo de jogo:</p>
+                            <p style="color:#8cb4ff; margin-left:7px">@Model.timeGame h</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div style="display:inline-flex; margin-top:10px;">
+                            <i class="fa fa-database" style="color:#8cb4ff;margin-top:5px; margin-right:5px"></i><p style="color:white">Desenvolvedor:</p>
+                            <p style="color:#8cb4ff; margin-left:7px;white-space:nowrap;white-space:nowrap;max-width:23ch;text-overflow: ellipsis;overflow: hidden;">@Model.developer/@Model.publisher</p>
+                        </div>
+                    }
+                    <br />
+                    <div style="display:inline-flex; margin-top:10px;">
+                        <i class="fa fa-trophy" style="color:#8cb4ff;margin-top:5px; margin-right:5px"></i><p style="color:white">Total de conquistas:</p>
+                        <p style="color:#8cb4ff; margin-left:7px">@Model.numAchievememtUnlock/@Model.numAllAchievements</p>
+                    </div>
+                    <br />
+                    <div style="display:inline-flex; margin-top:10px;">
+                        <i class="fa fa-calendar-check" style="color:#8cb4ff;margin-top:5px; margin-right:5px"></i><p style="color:white">Data ultima conquista:</p>
+                        <p style="color:#8cb4ff; margin-left:7px">@Convert.ToDateTime(Model.dtObtido).ToString("dd/MM/yyyy HH:mm")</p>
+                    </div>
+                </div>
+                <br />
+                <div style="display:inline-flex; margin-top:13px;margin-left:35%">
+                    @if (Model.plataforma == 0)
+                    {
+                        <img src="@Model.icon" width="64px" height="64px;" title="Ultima Conquista" style="z-index:1;margin-top:-8%;margin-left:10%" />
+                    }
+                    else
+                    {
+                        <img src="https://retroachievements.org/Badge/@Model.icon" width="64px" height="64px" title="Ultima Conquista" style="z-index:1;margin-top:-8%;margin-left:10%" />
+                    }
+                    <img src="~/img/Games/img/goldGif.gif" width="78px" height="78px" style="position:absolute; z-index:0;margin-top:-1%" />
+                </div>
+            </div>
+
+            <div style="background-color:rgba(0,0,0,.4);max-width:340px; min-height:500px;border-radius:5px;margin-top:3rem">
+                <div class="card-header" style="height:60px;width:338px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff">
+                    <h4 style="color:white;font-weight:bold;text-align:center">Conquistas raras</h4>
+                </div>
+                <div id="id_partialRarest">
+                </div>
+            </div>
+
+            <div style="background-color:rgba(0,0,0,.4);max-width:340px; height:450px;border-radius:5px;margin-top:3rem">
+                <div class="card-header" style="height:60px;width:338px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff ">
+                    <h4 style="color:white;font-weight:bold;text-align:center">Capturas de tela</h4>
+                </div>
+                <div id="id_partialScreenGame">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    loadConfigs();
+    function loadConfigs() {
+        var porcent = "@Model.porcentagem";
+        if (porcent == "100") {
+            document.getElementById("id_imgGridGame").style.boxShadow = 'rgba(241, 175, 9, 0.25) 0px 54px 55px, rgba(241, 175, 9, 0.12) 0px -12px 30px, rgba(241, 175, 9, 0.12) 0px 4px 6px, rgba(241, 175, 9, 0.17) 0px 12px 13px, rgba(241, 175, 9, 0.09) 0px -3px 5px';
+            document.getElementById("divCard").style.borderTopColor = '#f1af09';
+        } else {
+            document.getElementById("id_imgGridGame").style.boxShadow = 'rgba(140, 180, 255, 0.25) 0px 54px 55px, rgba(140, 180, 255, 0.12) 0px -12px 30px, rgba(140, 180, 255, 0.12) 0px 4px 6px, rgba(140, 180, 255, 0.17) 0px 12px 13px, rgba(140, 180, 255, 0.09) 0px -3px 5px';
+            document.getElementById("divCard").style.borderTopColor = '#8cb4ff';
+        }
+    }
+    function openCateg(categoria) {
+        window.location.href = '@Url.Action("jogosCateg", "Games")?categoria=' + categoria;
+    }
+    function newPage(id,plataform){
+        var formData = new FormData();
+        formData.append("id", id);
+        formData.append("plataform", plataform);
+        formData.append("tipo", 1);
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialPageNewGame", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (resp) {
+                    $('#id_newPage').fadeOut(500, function () {
+                        $(this).html(resp).fadeIn(500).addClass('blink');
+                    });
+                }
+            });
+    }
+
+    var ativo;
+    function OpenAchievements(ativo) {
+        var formData = new FormData();
+        var id = "@Model.id"
+        var plataform = "@Model.plataforma"
+        formData.append("idGame", id);
+        formData.append("ativo", ativo);
+        formData.append("plataform", plataform);
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialAchievementsPage", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $('#partialAchiev').fadeOut(300, function () {
+                        $(this).html(result).fadeIn(300).addClass('blink');
+                    });
+                }
+            });
+    }
+
+    OpenAchievements();
+
+    $(document).ready(function () {
+        var circle = document.querySelector("#circleProgress");
+        var number = document.querySelector("#numberProgress").value;
+
+        circle.style.strokeDashoffset = 440 - (440 * number) / 100;
+
+        if (number == 100) {
+            circle.style.stroke = '#bf930d';
+        }
+
+        var formData = new FormData();
+        var id = "@Model.id"
+        formData.append("idGame", id);
+
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialScreenGame", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $("#id_partialScreenGame").html(result);
+                }
+            });
+
+        var formData = new FormData();
+        var id = "@Model.id";
+        var plataform = "@Model.plataforma";
+        formData.append("idGame", id);
+        formData.append("plataform", plataform);
+
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialRarestAchForId", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (resp) {
+                    $("#id_partialRarest").html(resp);
+                }
+            });
+        loadSidebar();
+    });
+
+    function reRunAchievementsGames(id) {
+        var formData = new FormData();
+        formData.append("idGame", id);
+
+        $.ajax(
+            {
+                url: '@Url.Action("reRunAchievements", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    window.location.reload()
+                }
+            });
+    }
+</script>
+
+<style>
+    .box-circle svg {
+        width: 150px;
+        height: 350px;
+        position: absolute;
+    }
+
+    circle {
+        fill: none;
+        stroke: aquamarine;
+        stroke-width: 11;
+        transform: translate(9px,5px);
+        stroke-dasharray: 440;
+        stroke-dashoffset: 440;
+    }
+
+        circle:nth-child(1) {
+            stroke-dashoffset: 0;
+            stroke: rgb(102,102,102);
+        }
+
+        circle:nth-child(2) {
+            stroke: aquamarine;
+            transition: stroke-dashoffset 2s;
+        }
+</style>

@@ -1,0 +1,138 @@
+﻿@model ProjectGames.DTO.GamesDTO
+
+@foreach (var item in Model.listFeed)
+{
+    @if (item.tipo == 1 || item.tipo == 2)
+    {
+        string id = "idMainFeed" + item.id;
+        <div id="@id" style="width:93%;height:16rem;margin-bottom:4%;border-left:5px solid ;border-radius:3px;margin-top:3%;background-color:rgba(0,0,0,.4);box-shadow: rgba(0, 0, 0, 2.2) 0px 0px 14px">
+            <div style="width:100%;height:4rem;background-color:rgba(0,0,0,.6);border-top-left-radius:3px;border-top-right-radius:3px">
+                <img src="@item.avatar" width="9%" height="85%" style="margin-top:0.7%;margin-left:3%;border-right:2px solid #8cb4ff;border-radius:2px">
+                <div style="width:80%;margin-left:3%;display:inline-flex;">
+                    <div style="display:block;transform:translate(0%,-14%);margin-left:-3%;height:68px">
+                        <p style="font-weight:bold;color:white;font-size:18px;">@item.nomeProfile</p>
+                        @if (item.tipo == 0)
+                        {
+                            <p style="color:white;font-size:14px;margin-top:-13px;white-space:nowrap">Novo jogo adicionado</p>
+                        }
+                        @if (item.tipo == 1)
+                        {
+                            <p style="color:white;font-size:14px;margin-top:-13px;white-space:nowrap">Nova conquista obtida</p>
+                        }
+                        @if (item.tipo == 2)
+                        {
+                            <p style="color:white;font-size:14px;margin-top:-13px;white-space:nowrap">Nova anotação</p>
+                        }
+                        @if (item.tipo == 3)
+                        {
+                            <p style="color:white;font-size:14px;margin-top:-13px;white-space:nowrap">Nova platina obtida</p>
+                        }
+                    </div>               
+                </div>
+                <p style="color:white;font-size:14px;white-space:nowrap;text-align:right;margin-top:-4rem;transform:translate(-4%,0%)">@item.timeElapsed <i class="fa fa-calendar-check" style="color:#8cb4ff;transform:translate(30%,0%)"></i></p>
+            </div>
+            <div style="display:inline-flex;width:100%;height:273px;margin-top:-0.9%">
+                <div onclick="PageGame(@item.idGame)" style="width:25%;height:60%;margin-left:3%;margin-top:3%">
+                    @if (item.imgCustom == null)
+                    {
+                        <img src="@item.Imagem" width="131px" height="163px" style="object-fit:cover;border-radius:2px">
+                    }
+                    else
+                    {
+                        <img src="data:image /png;base64,@item.imgCustom" width="131px" height="163px" style="object-fit:cover;border-radius:2px" />
+                    }
+                </div>
+                <div style="width:72%;height:60%; background-color:rgba(0,0,0,.5);margin-left:-2.3%;margin-top:3%">
+                    <div style=" width:100%;margin-top:1%;margin-left:2%">
+                        <p class="nameGame" onclick="PageGame(@item.idGame)" title="@item.nome" style="font-weight:bold; font-size:18px;white-space:nowrap;max-width:21ch;text-overflow: ellipsis;overflow: hidden;">@item.nome</p>
+                    </div>
+                    @if (item.tipo == 0 || item.tipo == 1 || item.tipo == 3)
+                    {
+                        <div style="width:100%;height:78%;display:inline-flex">
+                            <div style="width:50%;height:100%;margin-left:2%;margin-top:-3%">
+                                @if (item.tipo == 0 || item.tipo == 1 || item.tipo == 3)
+                                {
+                                    <div style="margin-left:1%;margin-top:9%;display:inline-flex">
+                                        @if (item.plataform == 0)
+                                        {
+                                            <img src="@item.icon" width="50" height="50" style="border:2px solid #bf930d" />
+                                        }
+                                        else
+                                        {
+                                            <img src="https://retroachievements.org/Badge/@item.icon" title="https://retroachievements.org/Badge/@item.icon" width="50" height="50" style="border:2px solid #bf930d">
+                                        }
+                                        <p style="font-weight:bold;color:white;font-size:14px;margin-left:3%">@item.nomeAch</p>
+                                    </div>
+                                    <div style="margin-left:1%;margin-top:8%;display:inline-flex">
+                                        <div class="progress" style="width:160px;height:14px;">
+                                            @if (item.porcentagem != 100)
+                                            {
+                                                <div class="progress-bar bg-info" role="progressbar" style="width:@item.porcentagem%" aria-valuenow="@item.porcentagem" aria-valuemin="0" aria-valuemax="100"></div>
+                                            }
+                                            else
+                                            {
+                                                <div class="progress-bar" role="progressbar" style="width:@item.porcentagem%;background-color:#bf930d" aria-valuenow="@item.porcentagem" aria-valuemin="0" aria-valuemax="100"></div>
+                                            }
+                                        </div>
+                                        <p style="font-weight:bold; color:white;margin-top:-3%;margin-left:2%">@item.porcentagem%</p>
+                                    </div>
+                                }
+                            </div>
+                            <div style="width:100px;height:36px;border-radius:4px;display:inline-flex;background-color:cornflowerblue;margin-left:4.5rem;margin-top:-1.8rem">
+                                @if (item.plataform == 0)
+                                {
+                                    <img src="~/img/Games/img/steamBlack.png" width="27px" height="27px" style="margin-top:3%;margin-left:5%"><p style="color:white;font-weight:bold;margin-top:3%;margin-left:6%">@item.namePlataform</p>
+                                }
+                                else
+                                {
+                                    <img src="~/img/Games/img/RetroAchiev.png" width="27px" height="27px" style="margin-top:3%;margin-left:5%"><p style="color:white;font-weight:bold;margin-top:3%;margin-left:6%">@item.namePlataform</p>
+                                }
+                            </div>
+                            <div style="width:175px;height:2rem;margin-top:3rem;margin-left:-9rem">
+                                <div>                                                               
+                                    @if (item.plataform == 0)
+                                    {
+                                        <div style="width:100%;display:block;top:0.5rem;margin-left:2%">
+                                            <p style="font-weight:bold; color:white;text-align:right;font-size:14px">@item.time horas registradas</p>
+                                        </div>
+                                    }
+                                    <div style="width:100%;display:block;top:1.9rem;margin-left:2%">
+                                        <p style="font-weight:bold; color:white;text-align:right;font-size:14px">Obtida em @item.dateObj.ToString("dd' de' MMM", new System.Globalization.CultureInfo("pt-BR"))</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div style="margin-left:4%;margin-top:-3%">
+                            <textarea style="width:95%;height:33px;resize:none;background-color:#373636;border:none;color:white;border-top-left-radius:4px;border-top-right-radius:4px;" readonly>@Html.Raw(" "+item.titulo)</textarea>
+                            <textarea style="width:95%;height:78px;background-color:#373636;border:none;border-bottom-left-radius:4px;border-bottom-right-radius:4px;color:white;" readonly>@Html.Raw(item.mensagem)</textarea>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <script>
+            $(document).ready(function () {
+                var porcent = "@item.porcentagem";
+                if (porcent == "100") {
+                    document.querySelector("#idMainFeed" + @item.id + "").style.borderLeftColor = '#f1af09';
+                } else {
+                    document.querySelector("#idMainFeed" + @item.id + "").style.borderLeftColor = '#8cb4ff';
+                }
+            });
+        </script>
+    }
+}
+<style>
+    .nameGame{
+        color:white;
+        cursor:pointer
+    }.nameGame:hover{
+        color: #8cb4ff;
+    }
+</style>
+
+
+

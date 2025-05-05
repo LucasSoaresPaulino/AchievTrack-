@@ -1,0 +1,152 @@
+﻿@model ProjectGames.DTO.GamesDTO
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+<div class="card-header" style="width:7.5rem;height:40px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;position:absolute;margin-top:-4.5rem"><p style="color:white;font-weight:bold;margin-left:6%;margin-top:6px;text-align:center;position:absolute;white-space:nowrap">Grid Games</p></div>
+
+@foreach (var item in Model.listJogosList)
+{
+    if (item.ativo == 1)
+    {
+        string id = "id_Edit" + item.id;
+        string idStts = "id_Statistic" + item.id;
+        string idProgress = "idProgress_" + item.id;
+        <div class="card2" onmouseover="openDivEdit('@item.id',0,'@item.porcentagem')" onmouseleave="openDivEdit('@item.id',1)" style="width:14rem;height:18rem;margin-top:6rem;border:none;margin: 0;padding:0;border-radius:10px;margin-bottom:30px">
+            @if (item.imgCustomGrid == null)
+            {
+                <img src="@item.imgGrid" width="100%" height="100%" style="object-fit:cover;border-radius:8px;box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 65px;" />
+            }
+            else
+            {
+                <img src="data:image /png;base64,@item.imgCustomGrid" width="100%" height="100%" style="object-fit:cover;border-radius:8px;box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 65px;" />
+
+            }
+            <i class="fa fa-pen-to-square" id="@id" onclick="openModalEdit(@item.id)" style="position:absolute; width:50px; height:30px ;left:78%; top:3%; color:white;display:none"></i>
+            <div onclick="PageGame(@item.id)" style="min-width:294px; min-height:282px; position:absolute; top:60px; left:0px;"></div>
+            <div id="@idStts" style="width:100%;min-height:18rem;left:0%;position:absolute;top:0%;display:flex;border-radius:6px;display:none;background-color:#191919">
+                <div onclick="PageGame(@item.id)" style="width:100%;height:6.3rem;">
+                    <img src="data:image/png;base64,@item.banner" width="100%" height="100" style="object-fit:cover">
+                </div>
+                <div style="width:100%;height:11rem">
+                    <div style="display:inline-flex;margin-top:3%;width:100%">
+                        <p title="@item.nome" onclick="PageGame(@item.id)" style="color:white;white-space:nowrap;max-width:18ch;text-overflow: ellipsis;overflow: hidden;margin-left:3%;font-size:17px">@item.nome</p>
+                        <i class="fa-regular fa-star" style="height:18px;position:absolute;left:88%;color:#f1af09"></i>
+                        <i class="fa-regular fa-pen-to-square" onclick="openModalEdit(@item.id)" style="height:18px;position:absolute;left:89%;top:8.5rem;color:white;cursor:pointer"></i>
+                    </div>
+                    <div style="width:100%;margin-top:-7%">
+                        <p title="categoria" style="color:white;font-size:11px;margin-left:3%;">@item.categoria</p>
+                    </div>
+                    <div style="width:100%;margin-top:2%;position:absolute;top:10.2rem;display:inline-flex">
+                        <div class="progress" style="width:90px;height:10px;margin-left:3%">
+                            @if (item.porcentagem != 100)
+                            {
+                                <div class="progress-bar bg-info" title="Progresso conquistas" role="progressbar" style="width: @item.porcentagem%" aria-valuenow="@item.porcentagem" aria-valuemin="0" aria-valuemax="100"><p style="color:white;position:absolute;font-size:10px;margin-left:12%;margin-top:7%">@item.numAchievememtUnlock/@item.numAllAchievements</p></div>
+                            }
+                            else
+                            {
+                                <div class="progress-bar" title="Progresso conquistas" role="progressbar" style="width: @item.porcentagem%; background-color:#f1af09" aria-valuenow="@item.porcentagem" aria-valuemin="0" aria-valuemax="100"><p style="color:white;position:absolute;font-size:10px;margin-left:12%;margin-top:7%">@item.numAchievememtUnlock/@item.numAllAchievements</p></div>
+                            }
+                        </div>
+                        <div class="bg-primary" style="width:60px;height:24px;border-radius:5px;margin-top:-2.5%;margin-left:6%">
+                            <div title="Plataforma" style="display:inline-flex">
+                                <img src="~/img/Games/img/steamBlack.png" style="width:17px;height:17px;margin-left:3px;margin-top:3px" />
+                                <p style="color:white; font-weight:bold; margin-top:3px;margin-left:3px;font-size:11px">@item.plataforma</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="top:12.5rem;width:100%;position:absolute">
+                        <div style="margin-left:4%;display:inline-flex;">
+                            <i class="fa fa-calendar-check" title="Data ultima conquista" style="color:#8cb4ff;height:14px"></i>
+                            <p title="@item.dateLastAchievement.ToString("dd/MM/yyyy")" style="color:white;font-size:11px;margin-left:3%;white-space:nowrap;">@item.dateLastAchievement.ToString("dd' de' MMMM", new System.Globalization.CultureInfo("pt-BR"))</p>
+                            @if (item.Intplataforma == 0)
+                            {
+                                <div style="margin-top:1%;display:inline-flex;margin-left:12%">
+                                    <i class="fa-regular fa-clock" title="Tempo de jogo" style="color:#8cb4ff;height:14px"></i>
+                                    <p style="color:white;font-size:11px;margin-left:7%;margin-top:-4%;white-space:nowrap;font-weight:bold">@item.timeGame h</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div style="top:14.8rem;width:100%;position:absolute;display:inline-flex">
+                        <img src="~/img/Games/img/goldGif.gif" width="15%" height="33px" style="margin-left:4%;position:absolute;" />
+                        @if (item.Intplataforma == 0)
+                        {
+                            <img src="@item.iconAchievements" width="13%" height="29px" style="margin-left:5%;margin-top:1%;position:absolute;z-index:9999">
+                        }
+                        else
+                        {
+                            <img src="https://retroachievements.org/Badge/@item.iconAchievements" width="13%" height="29px" style="margin-left:5%;margin-top:1%;position:absolute;z-index:9999">
+                        }
+                        <div style="width:77%;height:33px;margin-left:21%;background-color:rgba(0,0,0,.4);">
+                            <div style="position:absolute;margin-left:2px">
+                                <p style="color:white;font-size:11px;white-space:nowrap;max-width:20ch;text-overflow: ellipsis;overflow: hidden;">@item.nomeAchiev</p>
+                            </div>
+                            <div style="display:inline-flex;">                                
+                                <div class="box" style="margin-top:0.5%;margin-left:46%">
+                                    <div>
+                                        <svg>
+                                            <circle cx="13" cy="13" r="13" style="stroke: rgb(102,102,102);stroke-dashoffset: 0"></circle>
+                                            <circle class="circleProgresso" id="@idProgress" cx="13" cy="13" r="13" style="stroke: aquamarine;transition: stroke-dashoffset 0.8s"></circle>
+                                        </svg>                                       
+                                    </div>                                   
+                                </div>
+                                <div class="number" style="position:absolute;left:85%;top:25%;width:20px;white-space:nowrap">
+                                    <p style="color:white;font-size:8px;font-weight:bold;text-align:center">@item.porcentagem%</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+<script>
+    function openDivEdit(id, tipo,number) {
+        var div = document.querySelector("#id_Edit" + id + "");
+        var divStts = document.querySelector("#id_Statistic" + id + "");
+        if (tipo == 0) {
+            if (div.style.display === "none") {
+                div.style.display = "block"
+            } if (divStts.style.display === "none") {
+                divStts.style.display = "block"
+            }
+        } else {
+            if (div.style.display === "block") {
+                div.style.display = "none"
+            } if (divStts.style.display === "block") {
+                divStts.style.display = "none"
+            }
+        }
+        var circle = document.querySelector("#idProgress_"+id+"");
+        circle.style.strokeDashoffset = 82 - (82 * number) / 100;
+
+        if (number == 100) {
+            circle.style.stroke = '#bf930d';
+        }
+    }
+</script>
+
+<style>
+    .card2 {
+        transition: transform 0.5s ease;
+        z-index: 1;
+        flex-shrink: 0;
+    }
+
+        .card2:hover {
+            cursor: pointer;
+            transform: scale(1.3);
+            z-index: 9999; /* Força a carta a estar no topo */
+            position: relative;
+        }
+
+    circle {
+        fill: none;
+        transform: translate(2px,2px);
+        stroke-width: 4;
+        stroke-dasharray: 82;
+        stroke-dashoffset: 82;
+    }
+
+</style>

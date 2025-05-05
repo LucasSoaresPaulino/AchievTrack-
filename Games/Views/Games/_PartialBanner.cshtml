@@ -1,0 +1,25 @@
+﻿@model ProjectGames.DTO.GamesDTO
+
+<div style="width:100%; position:absolute ;top:57px; left:0px;overflow-x: hidden;overflow-y: hidden;box-shadow: rgba(0, 0, 0, 0.65) 0px 5px 15px;">
+    <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="data:image /png;base64,@Model.listGames[0].banner" class="d-block w-105" style="height:346px;width:100%;object-fit:cover">
+            </div>
+            @for (int i = 1; i<= Model.listGames.Count-1;i++)
+            {
+                <div class="carousel-item">
+                    <img src="data:image /png;base64,@Model.listGames[i].banner" class="d-block w-105" style="height:346px;width:100%;object-fit:cover">
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#carouselExample').carousel({
+            interval: 5000 // Defina a velocidade em milissegundos (por padrão, é 5000 ms ou 5 segundos)
+        });
+    });
+</script>

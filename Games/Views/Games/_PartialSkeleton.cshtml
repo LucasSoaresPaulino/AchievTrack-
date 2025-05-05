@@ -1,0 +1,49 @@
+﻿<head>
+    <link href="~/css/animation.css" rel="stylesheet" />
+
+</head>
+@if (ViewBag.tipo == null || ViewBag.tipo == 0)
+{
+    <div class="loading">
+        <div style="width:9rem;height:40px;margin-left:12.4%;margin-top:4.5%;margin-bottom:-2%"></div>
+        @for (int num = 1; num <= 10; num++)
+        {
+            <div style="width:950px;height:165px;margin-left:12.5%;margin-top:4%;display:block;border-bottom:1px solid #292929;border-radius:4px">
+                <div style="display:inline-flex;transform:translateY(1rem);">
+                    <div style="width:260px;height:130px;margin-left:30px; cursor:pointer;border-radius:4px;box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 5px;">
+                    </div>
+                    <div style="display:inline-flex;margin-left:10px; width:628px;height:130px;box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 5px;">
+                    </div>
+                </div>
+            </div>
+            <div style="display:inline-flex;width:950px;margin-left:12.5%;padding:12px">
+                @for (int i = 1; i <= 12; i++)
+                {
+                    <div style="width:58px;height:58px;margin-left:18px;box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 5px;">
+                    </div>
+                }
+            </div>
+        }
+    </div>
+}
+@if (ViewBag.tipo == 1)
+{
+    <div class="row gap-4 loadingGrid" style="width:100%;margin-top:7.5rem;margin-left:1.1%;background-color:#22252C;border-radius:10px;">
+        <div style="width:7.5rem;height:40px;margin-left:0%;margin-top:-5rem;margin-bottom:-2%;position:absolute"></div>
+        @for (int i = 1; i <= 74; i++)
+        {
+            <div style="width:14rem;height:18rem;margin-top:9rem;border:none;margin: 0;padding:0;border-radius:10px;">
+            </div>
+        }
+    </div>
+}
+@if(ViewBag.tipo == 2)
+{
+    <div class="row justify-content-center loadingGrid" style="border-radius:11px;">
+        @for(int i = 1; i<= 40; i++)
+        {
+            <div style="width:355px;height:400px;margin-left:15px;margin-bottom:30px;border:1px solid #292929;padding:0;margin-top:0%;box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 7px;">
+            </div>
+        }
+    </div>
+}

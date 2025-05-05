@@ -1,0 +1,8 @@
+﻿@model ProjectGames.DTO.GamesDTO
+
+<select id="id_destaque">
+    @foreach(var item in Model.listAchievements)
+    {
+        <option value="@item.id">@item.nome</option>
+    }
+</select>

@@ -1,0 +1,149 @@
+﻿@model ProjectGames.DTO.GamesDTO
+
+<body style="background-color:#222222">
+    <div style="position:absolute;width: 100%;height:300px;background-color: rgba(0, 0, 255, 0.4);-webkit-filter: grayscale(40%);left:0px;z-index:-1"></div>
+    <div style="position:absolute;width: 100%;left:0px;box-shadow: rgba(0, 0, 0, 0.65) 0px 5px 15px;-webkit-filter: grayscale(80%);z-index:-5">
+        <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="data:image /png;base64,@ViewBag.Banner.listGames[0].banner" class="d-block" style="height:300px;width:100%;object-fit:cover">
+                </div>
+                @for (int i = 1; i <= ViewBag.Banner.listGames.Count - 1; i++)
+                {
+                    <div class="carousel-item">
+                        <img src="data:image /png;base64,@ViewBag.Banner.listGames[i].banner" class="d-block" style="height:300px;width:100%;object-fit:cover">
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div id="div_body">
+        <div class="row justify-content-center" style="">
+            <div style="margin-top:25%;display:block">
+                <i class="fa fa-circle-chevron-left" id="chevBack" onclick="backHome()" style="width:40px; height:40px;margin-left:11%;cursor:pointer"></i>
+                <div class="card-header" style="width:auto;height:50px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;margin-top:3.5rem;margin-left:8.8rem;position:absolute;"><h4 style="color:white">@Model.listJogosList[0].categoria</h4></div>
+            </div>
+        </div>
+
+        <div style="display:block;transform:translate(-1%,170%);margin-left:75.5%">
+            <p style="margin-top:-50px;color:white;transform:translate(0%,70%)">@ViewBag.porcentagem%<i class="fa fa-trophy" style="color:#8cb4ff;margin-left:45%"></i></p>
+
+            <div class="progress" style="width:200px;height:14px;">
+                @if (ViewBag.porcentagem != 100)
+                {
+                    <div class="progress-bar bg-info" role="progressbar" style="width: @ViewBag.porcentagem%" aria-valuenow="@ViewBag.porcentagem" aria-valuemin="0" aria-valuemax="100"></div>
+                }
+                else
+                {
+                    <div class="progress-bar" role="progressbar" style="width: @ViewBag.porcentagem%; background-color:#f1af09" aria-valuenow="@ViewBag.porcentagem" aria-valuemin="0" aria-valuemax="100"></div>
+                }
+            </div>
+        </div>
+        <div class="row gap-2" style="margin-top:10.5%; z-index:5;margin-left:9%">
+            @foreach (var item in Model.listJogosList)
+            {
+                string idProgresso = "idProgresso_" + item.id;
+                if (item.imgCustom == null)
+                {
+                    <div class="card" style="width:234px; height:300px; background-image:url(@item.imagem); background-size:cover; background-repeat:no-repeat; margin-left:25px; margin-bottom:30px;box-shadow: rgba(0, 0, 0, 1.0) 0px 5px 25px 10px; border:none;">
+                        <div onclick="PageGame(@item.id)" style="min-width:294px; min-height:282px; position:absolute; top:60px; left:0px;"></div>
+                        <div id="" style="position:absolute;background-color:rgba(0,0,0,.9);width:100.4%;height:35px;left:0%;top:88.3%;display:flex;border-bottom-left-radius:4px;border-bottom-right-radius:4px;display:block">
+                            <div style="width:75%;height:35px;border-right:1px solid #8cb4ff">
+                                <p style="color: white;font-size:13px;max-width:26.5ch;overflow: hidden;margin-left:3px">@item.nome</p>
+                            </div>
+                            <div style="position:absolute;margin-left:81%;margin-top:-33px">
+                                <div class="box" style="margin-top:0.5%;">
+                                    <div>
+                                        <svg>
+                                            <circle cx="13" cy="13" r="13" style="stroke: rgb(102,102,102);stroke-dashoffset: 0"></circle>
+                                            <circle class="circleProgresso" id="@idProgresso" cx="13" cy="13" r="13" style="stroke: aquamarine;transition: stroke-dashoffset 0.8s;"></circle>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="card" style="width:234px; height:300px; background-image:url('data:image /png;base64,@item.imgCustom'); background-size:cover; background-repeat:no-repeat; margin-left:25px; margin-bottom:30px;box-shadow: rgba(0, 0, 0, 1.0) 0px 5px 25px 10px; border:none;">
+                        <div onclick="PageGame(@item.id)" style="min-width:294px; min-height:282px; position:absolute; top:60px; left:0px;"></div>
+                        <div id="" style="position:absolute;background-color:rgba(0,0,0,.9);width:100.4%;height:35px;left:0%;top:88.3%;display:flex;border-bottom-left-radius:4px;border-bottom-right-radius:4px;display:block">
+                            <div style="width:75%;height:35px;border-right:1px solid #8cb4ff">
+                                <p style="color: white;font-size:13px;max-width:26.5ch;overflow: hidden;margin-left:3px">@item.nome</p>
+                            </div>
+                            <div style="position:absolute;margin-left:81%;margin-top:-33px">
+                               <div class="box" style="margin-top:0.5%;">
+                                    <div>
+                                        <svg>
+                                            <circle cx="13" cy="13" r="13" style="stroke: rgb(102,102,102);stroke-dashoffset: 0"></circle>
+                                            <circle class="circleProgresso" id="@idProgresso" cx="13" cy="13" r="13" style="stroke: aquamarine;transition: stroke-dashoffset 3.0s"></circle>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <script>
+                    function loadProgress(){
+                        var id = "@item.id";
+                        var number = "@item.porcentagem"
+                        var circle = document.querySelector("#idProgresso_" + id + "");
+                        circle.style.strokeDashoffset = 82 - (82 * number) / 100;
+
+                        if (number == 100) {
+                            circle.style.stroke = '#f1af09';
+                        }
+                    }
+                    loadProgress();
+                </script>
+            }
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+</body>
+
+<script>
+    $(document).ready(function () {
+        loadSidebar();
+    });
+    function backHome() {
+        $("#div_body").css('margin-left', '0%').animate({ marginLeft: '500%' }, 200);
+        window.location.href = '@Url.Action("GamesCategoria", "Games")';
+    }
+</script>
+
+<style>
+    .card:hover {
+        cursor: pointer;
+        -webkit-transform: scale(1.1);
+        -ms-transform: scale(1.1);
+        transform: scale(1.1);
+    }
+    #chevBack {
+        color: white;
+    }
+
+        #chevBack:hover {
+            color: #8cb4ff;
+        }
+
+    .fa-pen-to-square{
+        color: white;
+    }
+
+    .fa-pen-to-square:hover {
+        color: #8cb4ff;
+    }
+
+    circle {
+        fill: none;
+        transform: translate(2px,2px);
+        stroke-width: 4;
+        stroke-dasharray: 82;
+        stroke-dashoffset: 82;
+        transition: stroke-dashoffset 0.8s;
+    }
+</style>

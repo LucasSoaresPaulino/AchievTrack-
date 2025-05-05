@@ -1,0 +1,208 @@
+﻿@model ProjectGames.DTO.GamesDTO
+
+<body style="background-color:#222222">
+    <div style="position:absolute;width: 100%;left:0px;box-shadow: rgba(0, 0, 0, 0.65) 0px 5px 15px;-webkit-filter: grayscale(80%);z-index:-5">
+        <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="data:image /png;base64,@ViewBag.Banner.listGames[0].banner" class="d-block" style="height:300px;width:100%;object-fit:cover">
+                </div>
+                @for(int i = 1; i<= ViewBag.Banner.listGames.Count-1; i++)
+                {
+                    <div class="carousel-item">
+                        <img src="data:image /png;base64,@ViewBag.Banner.listGames[i].banner" class="d-block" style="height:300px;width:100%;object-fit:cover">
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    
+    <!--Corpo-->
+    <div class="row justify-content-center" id="div_body" style="margin-top:0%">
+        <div style="margin-top:22rem;position:fixed;margin-left:97%">
+            <div style="">
+                <div class="box" style="margin-top:0.5%;margin-left:46%">
+                    <div title="@ViewBag.progresso%">
+                        <svg style="cursor:pointer">
+                            <circle cx="23" cy="23" r="23" style="stroke: rgb(102,102,102);stroke-dashoffset: 0"></circle>
+                            <circle class="circleProgresso" id="idProgresso" cx="23" cy="23" r="23" style="stroke: aquamarine;transition: stroke-dashoffset 0.8s;"></circle>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="margin-top:16%">
+            <div class="row justify-content-center" style="">
+                <div style="margin-top:10%;display:block">
+                    <i class="fa fa-circle-chevron-left" id="chevBack" onclick="backHome()" style="width:40px; height:40px;margin-left:9.7%;cursor:pointer"></i>                   
+                </div>
+                <div style="display:inline-flex;margin-left:17rem;margin-top:3rem;">
+                    <div class="card-header" style="width:auto;height:50px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;"><h4 style="color:white">@Model.listGames[0].nomeFranquia</h4></div>
+                    <div onclick="openModal()" style="width:50px;height:50px;background-color:rgba(0,0,0,.6);margin-left:0.5rem;cursor:pointer"><i class="fa fa-pen-to-square" style="color:white;height:27px;width:27px;margin-top:8px;margin-left:11px"></i></div>
+                </div>
+            </div>          
+            <div class="row gap-4" style="margin-top:3%; z-index:5;margin-left:10%;">
+                @foreach (var item in Model.listGames)
+                {
+                    <div class="card" style="width:234px; height:300px;padding:0;box-shadow:rgba(0, 0, 0, 1.0) 0px 5px 15px 7px;border-radius:5px;border:none;margin-left:10px;margin-bottom:20px">
+                        @if (item.imagemCustom == null)
+                        {
+                            <img src="@item.imagem" width="100%" height="100%" style="object-fit:cover;">
+                        }
+                        else
+                        {
+                            <img src="data:image /png;base64,@item.imagemCustom" width="100%" height="100%" style="object-fit:cover;">
+                        }
+                        <div onclick="PageGame(@item.id)" style="min-width:294px; min-height:282px; position:absolute; top:60px; left:0px;"></div>
+                        <div id="" style="position:absolute;background-color:rgba(0,0,0,.9);width:100.4%;height:40px;left:0%;top:86.8%;display:flex;border-bottom-left-radius:0px;border-bottom-right-radius:0px;display:block">
+                            <div style="width:100%;height:42px;margin-left:3px">
+                                <p style="color: white;font-size:13px;max-width:25.5ch;text-overflow: ellipsis;overflow: hidden;margin-bottom:5px">@item.nome</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="id_modalfranchise" role="dialog" data-backdrop="static" style="margin-top:7%;margin-left:-100px">
+        <div class="modal-dialog" style="">
+            <div class="modal-content" style="background-color:#222222;width:45rem">
+                <div class="modal-header" style="border-color:black">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                    <label class="modal-title" style="text-align:center;"><b style="color:white;">Editar franquia</b></label>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="border:none;background-color:#222222">
+                        <span aria-hidden="true" onclick="$('#id_modalfranchise').modal('hide')" style="background-color:transparent; color:white"><i class="fa fa-x"></i></span>
+                    </button>
+                </div>
+                <div class="modal-body" style="height:38.5vh; overflow-y: auto;">
+                    <div style="margin-top:10px">
+                        <div class="" style="margin-top:10px">
+                            <div class="card-header" style="width:8rem;height:33px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;margin-top:2%;margin-left:0%"><h6 style="color:white;margin-top:-3%">Titulo</h6></div>
+                            <input type="text" id="id_titleItem" value="@Model.listGames[0].nomeFranquia" style="margin-top:10px;width:35%;background-color: #cac7ff;border-radius:6px;height:37px;" />
+                        </div>
+                        <div style="margin-top:10%">
+                            <div class="card-header" style="width:8rem;height:39px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;margin-top:2%;margin-left:0%"><h5 style="color:white;margin-top:-3%">Games</h5></div>
+                        </div>
+                        <div id="id_bodyGames" style="display:block">
+                            <div style="margin-left:62%; margin-top:-2.4rem;">
+                                <div class="input-group">
+                                    <div class="form-outline" style="margin-top:0px; margin-left:0px">
+                                        <input type="search" class="form-control" id="id_searchGamesList" placeholder="Pesquisar" style="height:38px;border-top-right-radius:0px;background-color:RGB(221,221,255)" />
+                                        <label class="form-label" for="form1"></label>
+                                    </div>
+                                    <button type="button" class="btn btn-primary" onclick="searchListGames()" style="height:38px; margin-top:0px">
+                                        <i class="fas fa-search" style="align-items:center;border-top-left-radius:0px"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row" id="idGameSearch" style="margin-top:2%">
+                                <!--_PartialResultSearchGames-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="background-color:#222222;border-color:black">
+                    <button type="button" class="btn btn-primary" onclick="EditFranchise()"><b>Salvar</b></button>
+                    <button type="button" class="btn btn-secondary" onclick="$('#id_modalfranchise').modal('hide')" data-dismiss="modal"><b>Fechar</b></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+</body>
+<script>
+    function backHome() {
+        $("#div_body").css('margin-left', '0%').animate({ marginLeft: '500%' }, 200);
+        window.location.href = '@Url.Action("GamesCategoria", "Games")';
+    }
+    function loadProgress() {
+        var number = "@ViewBag.progresso"
+        var circle = document.querySelector("#idProgresso");
+        circle.style.strokeDashoffset = 82 - (82 * number) / 100;
+
+        if (number == 100) {
+            circle.style.stroke = '#f1af09';
+        }
+    }
+    loadProgress();
+    function openModal() {
+        $("#id_modalfranchise").modal('show');
+        searchListGames();
+    }
+    function searchListGames() {
+        var pesquisa = $("#id_searchGamesList").val();
+
+        var formData = new FormData();
+        formData.append("pesquisa", pesquisa);
+
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialResultSearchGames", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $("#idGameSearch").html(result);
+                }
+            });
+    }
+    var listaIds = [];
+    function SelectRemove(idGame, id) {
+        listaIds.push(id);
+        document.querySelector("#" + idGame + "").style.webkitFilter = "grayscale(100%)";
+    }
+    function EditFranchise(){
+        var formData = new FormData();
+        formData.append("title", $("#id_titleItem").val());
+        formData.append("games", listaIds);
+        formData.append("tipo", 1);
+        formData.append("nomeFranquia", "@Model.listGames[0].nomeFranquia");
+        $.ajax(
+            {
+                url: '@Url.Action("saveFranchiseGame", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                }
+            });
+    }
+</script>
+<style>
+    .card:hover {
+        cursor: pointer;
+        -webkit-transform: scale(1.1);
+        -ms-transform: scale(1.1);
+        transform: scale(1.1);
+    }
+
+    #chevBack {
+        color: white;
+    }
+
+        #chevBack:hover {
+            color: #8cb4ff;
+        }
+
+    .fa-pen-to-square {
+        color: white;
+    }
+
+        .fa-pen-to-square:hover {
+            color: #8cb4ff;
+        }
+
+    circle {
+        fill: none;
+        transform: translate(6px,6px);
+        stroke-width: 8;
+        stroke-dasharray: 145;
+        stroke-dashoffset: 145;
+    }
+    #id_modalfranchise{
+        scrollbar-width: thin;
+        scrollbar-color: #f1f1f1 #222222;
+    }
+</style>

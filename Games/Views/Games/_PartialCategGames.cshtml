@@ -1,0 +1,188 @@
+﻿@model ProjectGames.DTO.GamesDTO
+
+@{
+    string lastnomeFranquia = null;
+    int count = 0;
+}
+
+<div class="card-header" style="width:12rem;height:50px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;margin-top:6%;margin-left:9%"><h4 style="color:white">Categorias</h4></div>
+<div class="row justify-content-center" style="margin-top:2.5%">
+    <div class="row gap-3" style="margin-left:17%;">
+        @for (int x = 0; x <= Model.listGames.Count - 1; x++)
+        {
+            if (Model.listGames[x].nomeFranquia != lastnomeFranquia)
+            {
+                <div class="box" onclick="openModal()" id="imgCateg" title="@Model.listGames[x].nomeFranquia" style="width:26%;height:130px;background-color:rgba(0,0,0,.5);border-radius:3px;border: 1px solid #cdc8c8;cursor:pointer;display:inline-flex;background-color:rgba(0, 0, 255, 0.4);margin-bottom:30px">
+                    @try
+                    {
+                        @for (int i = 0; i <= 2;)
+                        {
+                            <div class="imgs" onclick="openGameCateg('@Model.listGames[x].nomeFranquia')" style="height:128px;width:33.3%;-webkit-transform: skew(10deg);border-right: 2px solid #cdc8c8">
+                                @if (Model.listGames[x].nomeFranquia != lastnomeFranquia)
+                                {
+                                    if (Model.listGames[count].imagemCustom == null)
+                                    {
+                                        <img src="@Model.listGames[count].imagem" style="height:128px;width:100%;" />
+                                        i++;
+                                        count++;
+                                    }
+                                    else
+                                    {
+                                        <img src="data:image /png;base64,@Model.listGames[count].imagemCustom" style="height:128px;width:100%;" />
+                                        i++;
+                                        count++;
+                                    }
+                                }
+                            </div>
+                            <div style="height:115px;width:33.3%;position:absolute;margin-left:-3.1%;border-radius:1px;z-index:-1;margin-top:3.5px">
+                                @if (Model.listGames[x].imagemCustom == null)
+                                {
+                                    <img src="@Model.listGames[x].imagem" style="height:123.5px;width:100%;filter: blur(2px);" />
+                                }
+                                else
+                                {
+                                    <img src="data:image /png;base64,@Model.listGames[x].imagemCustom" style="height:123.5px;width:100%;filter: blur(2px);" />
+                                }
+                            </div>
+                            <div style="height:128px;width:33.3%;position:absolute;z-index:-1;margin-left:62.8%;border-radius:1px;margin-top:1.8px">
+                                @if (Model.listGames[count - 1].imagemCustom == null)
+                                {
+                                    <img src="@Model.listGames[count-1].imagem" style="height:124px;width:100%;filter: blur(2px);" />
+                                }
+                                else
+                                {
+                                    <img src="data:image /png;base64,@Model.listGames[count-1].imagemCustom" style="height:124px;width:100%;filter: blur(2px);" />
+                                }
+                            </div>
+                        }
+                    }
+                    catch
+                    {
+
+                    }
+                    <div style="margin-top:42%;position:absolute;width:324.50px;height:30px;margin-left:-13px">
+                        <p style="color:white;text-align:center">@Model.listGames[x].nomeFranquia</p>
+                    </div>
+                </div>
+            }
+            lastnomeFranquia = Model.listGames[x].nomeFranquia;
+        }
+        @*<div onclick="openModal()" style="width:22%;height:130px;background-color:rgba(0,0,0,.5);border-radius:3px;border: 2px dashed #cdc8c8;cursor:pointer;">
+            <i class="fa fa-plus" style="width:48px;height:90px;margin-left:100px;margin-top:18px;color:#8cb4ff"></i>
+        </div>*@
+    </div>
+</div>
+
+<div class="modal" id="modalEditCateg" role="dialog" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="glyphicon glyphicon-pencil"></span>
+                <label class="modal-title" style="text-align:center;"><b>Personalizar jogo</b></label>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="border:none;background-color:white">
+                    <span aria-hidden="true" onclick="window.location.reload();" style="background-color:white">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" style="height:30.5vh; overflow-y: auto;">
+                <div style="margin-top:10px">
+
+                    <b>Banner:</b><br />
+                    <label for="file" class=" file-style" style="margin-top:5px">
+                        <img src="~/img/Dispensa/Icons/icons8-upload-to-cloud-50.png" id="id_imgCatalogo" width="50">
+                        <p>Selecione a imagem</p>
+                    </label>
+                    <input type="file" id="file" onchange="changeImg()">
+                </div>
+                <input type="hidden" id="id_editcateg" />
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="saveEditCateg()"><b>Salvar</b></button>
+                <button type="button" class="btn btn-secondary" onclick="window.location.reload(); " data-dismiss="modal"><b>Fechar</b></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openGameCateg(categoria) {
+        window.location.href = '@Url.Action("jogosCateg", "Games")?categoria=' + categoria;
+    }
+    function openModalEditCateg(categoria) {
+        $("#modalEditCateg").modal('show');
+        $("#id_editcateg").val(categoria);
+    }
+    function saveEditCateg() {
+        var formData = new FormData();
+        formData.append("categoria", $("#id_editcateg").val());
+        formData.append("imagem", $("#file")[0].files[0]);
+
+        $.ajax(
+            {
+                url: '/Games/SaveEditCateg',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $("#modalEdit").modal('hide');
+                    $("#modal_sucess").modal("show");
+                }
+            });
+    }
+    const items = document.querySelectorAll('.imgs');
+    for(let i = 0; i < items.length;i++){
+        if (i % 3 === 2){
+            items[i].style.borderRight = 'none';
+        }
+    }
+
+</script>
+
+<style>
+    #customEdit:hover {
+        color: blue;
+    }
+
+    #file {
+        display: none;
+    }
+
+    .file-style {
+        font-family: 'Trebuchet MS';
+        width: 400px;
+        display: block;
+        background-color: #f5f4f4;
+        margin: auto;
+        cursor: pointer;
+        text-align: center;
+        padding: 20px;
+        border-radius: 15px;
+        border: 2px dashed #cdc8c8;
+    }
+
+    #imgCateg {
+        background-color: rgba(0, 0, 255, 1.0); /* Cor azul com 50% de opacidade */
+        background-blend-mode: multiply; /* Multiplica a cor sobre a imagem de fundo */
+        -webkit-filter: grayscale(10%);
+    }
+
+    .imgs:nth-child(2) {
+        border-right: none;
+    }
+
+    #chevBack{
+        color:white;
+    }
+    #chevBack:hover {
+        color: #8cb4ff;
+    }
+
+    .box:hover {
+        cursor: pointer;
+        -webkit - transform: scale(1.1);
+        -ms - transform: scale(1.1);
+        transform: scale(1.1);
+    }
+</style>

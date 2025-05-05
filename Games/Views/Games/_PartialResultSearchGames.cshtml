@@ -1,0 +1,67 @@
+﻿@model ProjectGames.DTO.GamesDTO
+
+@foreach (var item in Model.listJogosList.Take(6))
+{
+    string idGame = "id_" + item.id;
+    @if (item.imgCustomGrid == null)
+    {
+        <img class="gap-4" id="@idGame" src="@item.imgGrid" onclick="selectGame('@idGame','@item.id')" style="width:172px;height:200px;margin-bottom:30px;border-radius:8px;object-fit:cover">
+    }
+    else
+    {
+        <img class="gap-4" id="@idGame" src="data:image /png;base64,@item.imgCustomGrid" onclick="selectGame('@idGame','@item.id')" style="width:172px;height:200px;margin-bottom:30px;border-radius:8px;object-fit:cover">
+    }
+}
+<input type="hidden" id="idPushGame" />
+
+<script>
+    let countGrid = 0;
+    let numeroGrid = 0;
+    var meuArrayGrid = [];
+    function selectGame(idGame, id) {
+        document.getElementById("idPushGame").value = id;
+        if (numeroGrid % 2 === 0) {
+            meuArrayGrid.push(idGame);
+            document.querySelector("#" + meuArrayGrid[countGrid] + "").style.webkitFilter = "grayscale(0%)";
+            document.querySelector("#" + idGame + "").style.webkitFilter = "grayscale(100%)";
+            if (countGrid != 0) {
+                countGrid++;
+            }
+
+        } else {
+            meuArrayGrid.push(idGame);
+            document.querySelector("#" + meuArrayGrid[countGrid] + "").style.webkitFilter = "grayscale(0%)";
+            document.querySelector("#" + idGame + "").style.webkitFilter = "grayscale(100%)";
+            countGrid++;
+        }
+        numeroGrid++;
+    }
+    function savedGame(tipo) {
+        var controller = "";
+        var formData = new FormData();
+
+        if(tipo == 0){
+            controller = '@Url.Action("saveMetaGame", "Games")';
+            formData.append("idGame", $("#idPushGame").val());
+            formData.append("ano", $("#idValueYear").val());
+            formData.append("mes", $("#idValueMonth").val());
+        } 
+        if (tipo == 1) {
+            controller = '@Url.Action("saveFranchiseGame", "Games")';
+            formData.append("title", $("#id_titleItem").val());
+            formData.append("games", meuArrayGrid);
+            formData.append("tipo", 0);
+        }
+        
+        $.ajax(
+            {
+                url: controller,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                }
+            });
+    }
+</script>

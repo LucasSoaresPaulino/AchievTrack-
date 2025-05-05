@@ -1,0 +1,62 @@
+﻿@model ProjectGames.DTO.GamesDTO
+
+@if (Model.listAchievements.Count != 0)
+{
+    foreach (var item in Model.listAchievements)
+    {
+        if (item.ativo != 0)
+        {
+            <div style="display:inline-flex; border-bottom:1px solid black ; ">
+                <div style="display:inline-flex;margin-top:2%;margin-bottom:2%">
+                    @if (ViewBag.plataform == 0)
+                    {
+                        <img src="@item.iconUnlock" width="64px" height="64px" style="border: 4px solid #bf930d;">
+                    }
+                    else
+                    {
+                        <img src="https://retroachievements.org/Badge/@item.iconUnlock" width="64px" height="64px" style="border: 4px solid #bf930d;">
+                    }
+                    <div style="margin-left:15px;">
+                        <b style="color:white">@item.nome</b><br>
+                        <p style="color:white;max-width:52.5ch;position:absolute;font-size:14px">@item.descricao</p>
+
+                        <div class="card" style="height:45px;width:1px;background-color:aquamarine;position:absolute;left:75%;margin-top:-18px"></div>
+                        <p style="color:white;position:absolute;left:49%; margin-top:-3%"><i class="fa-regular fa-clock" style="margin-left:220px;color:#8cb4ff"></i>    @item.dateUnclock.ToString("dd/MM/yyyy HH:mm")</p>
+                        <br />
+                        <b style="color:white;position:absolute;left:49%; margin-top:-2%"><i class="fa fa-trophy" style="margin-left:218px;color:#bf930d"></i>    @item.porcent%</b>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div style="display:inline-flex; border-bottom:1px solid black ; ">
+                <div style="display:inline-flex;margin-top:15px;margin-bottom:15px">
+                    @if (ViewBag.plataform == 0)
+                    {
+                        <img src="@item.iconLock" width="64px" height="64px;" style="border: 4px solid #c0c0c0;">
+                    }
+                    else
+                    {
+                        <img src="https://retroachievements.org/Badge/@item.iconUnlock" width="64px" height="64px;" style="border: 4px solid #c0c0c0;">
+                    }
+                    <div style="margin-left:15px;">
+                        <b style="color:white">@item.nome</b><br>
+                        <p style="color:white;max-width:52.5ch;position:absolute">@item.descricao</p>
+
+                        <div class="card" style="height:45px;width:1px;background-color:aquamarine;position:absolute;left:75%;margin-top:-18px"></div>
+                        <b style="color:white;position:absolute;left:49%; margin-top:1%"><i class="fa fa-trophy" style="margin-left:218px;color:#c0c0c0"></i>    @item.porcent%</b>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+}
+else
+{
+    <div class="justify-content-center" style ="padding:50px;margin-left:27%">
+        <img src="~/img/Games/img/completAch.png" width="30%" height="400rem">
+        <img src="~/img/Games/img/trophyAch.gif" width="15%" height="150rem" style="position:absolute;margin-left:-40%;top:40%">
+        <img src="~/img/Games/img/lvlUp.gif" width="25%" height="200rem" style="position:absolute;">
+    </div>
+}

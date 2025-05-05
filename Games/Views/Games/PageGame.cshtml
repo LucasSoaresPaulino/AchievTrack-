@@ -1,0 +1,80 @@
+﻿@model ProjectGames.DTO.JogosDTO
+<html>
+<body class="classBody" style="background-color:#222222">
+    <div class="row justify-content-center" style="margin-top:0%"></div>
+    <div style="position:absolute;width:100%;height:430px;left:0px;z-index:-5">
+        <img src="data:image/png;base64,@Model.banner" style="height:487px;width:100%;object-fit:cover;filter: blur(15px);">
+    </div>
+    <div id="id_backbanner" style="z-index:-1;width:100%;position:absolute;height:430px;display:flex; justify-content:center;top:57px; left:0px;overflow-x: hidden;overflow-y: hidden;box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;background-color:#1b2838">
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    @if (ViewBag.Type == 0)
+                    {
+                        if (Model.banner != "")
+                        {
+                            <img class="d-block" id="idBanner" src="data:image/png;base64,@Model.banner" style="" alt="First slide">
+                        }
+                        else
+                        {
+                            <img class="d-block" src="@ViewBag.GameAPI[0].BackgroundRaw" alt="First slide">
+                        }
+                    }
+                    else
+                    {
+                        <img class="d-block" id="id_backRaw" src="@ViewBag.GameAPI[0].BackgroundRaw" alt="First slide">
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="id_newPage" style="margin-top:1%">
+        
+    </div>
+    <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        var type = "@ViewBag.Type";
+        var plataform = "@ViewBag.PlataformIndex";
+
+        var formData = new FormData();
+        var id = "@ViewBag.id";
+        formData.append("id", id);
+        formData.append("plataform", plataform);
+
+        if (type == null || type == 0) {
+            $.ajax(
+                {
+                    url: '@Url.Action("_PartialPageGame", "Games")',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (resp) {
+                        $('#id_newPage').fadeOut(500, function () {
+                            $(this).html(resp).fadeIn(500).addClass('blink');
+                        });
+                    }
+                });
+            }else{
+                $.ajax(
+                {
+                    url: '@Url.Action("_PartialPageNewGame", "Games")',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (resp) {
+                        $('#id_newPage').fadeOut(500, function () {
+                            $(this).html(resp).fadeIn(500).addClass('blink');
+                        });
+                    }
+                });
+            }
+        loadSidebar();
+    });
+    
+</script>

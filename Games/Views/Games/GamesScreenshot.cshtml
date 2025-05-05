@@ -1,0 +1,519 @@
+﻿@model ProjectGames.DTO.GamesDTO
+<!--filter: blur(5px);-->
+<body style="background-color:#222222;overflow-x: hidden">
+    <div class="row justify-content-center" id="" style="overflow-y: hidden;">
+        <div style="margin-top:8%;position:fixed;margin-left:190%">
+            <button class="btn" onclick="openModal_screenchot(1)" style="width:45px; height:45px;border-radius:55%;background-color:#8cb4ff">
+                <i class="fa fa-image" style="color:white"></i>
+            </button>
+        </div>
+        <div style="margin-top:11%;position:fixed;margin-left:190%">
+            <button class="btn" onclick="openModal_screenchot(2)" style="width:45px; height:45px;border-radius:55%;background-color:#8cb4ff">
+                <i class="fa fa-folder-open" style="color:white"></i>
+            </button>
+        </div>
+        <div class="row justify-content-center" style="margin-top:13%">
+            <i class="fa-regular fa-circle-xmark" id="id_deleteImg" onclick="testeScreenchot()" style="height:50px;color:red;position:fixed;margin-left:1400px;display:none"></i>
+        </div>
+        <div class="card-header" style="width:14rem;height:50px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;position:absolute;margin-bottom:15%;margin-left:-60.5rem;top:15rem"><h4 style="color:white">Screenshots</h4></div>
+        <div style="width:64%;height:50px;margin-top:5%;margin-left:9%;display:inline-flex">
+            
+        </div>
+        
+        <div style="margin-top:2%;width:90%;background-color:rgba(0,0,0,.2);border-radius:7px;box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 10px;border:1px solid #292929">
+            <div style="margin-top:2.5%;margin-left:3%;display:inline-flex;">
+                <div style="width:7rem;height:40px;background-color:rgba(0,0,0,.6);display:inline-flex;border-radius:4px;box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 6px">
+                    <div style="height:40px;width:50%;border-right:1px solid aquamarine" onclick="changeModaliteScreen(1)">
+                        <i class="fa-regular fa-images" style="color:white;height:22px;margin-left:15px;margin-top:8px"></i>
+                    </div>
+                    <div style="height:40px;width:50%;">
+                        <i class="fa fa-folder-open" style="color:white;height:22px;margin-left:15px;margin-top:8px" onclick="changeModaliteScreen(2)"></i>
+                    </div>
+                </div>
+                <div class="form-outline" style="margin-left:44.6rem;">
+                    <input type="search" class="form-control" id="id_searchNewGames" placeholder="Pesquisar" style="height:48px;width:17rem;border-radius:9px;background-color:rgba(0,0,0,.9);border:none;box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 13px;color:white" />
+                    <label class="form-label" for="form1"></label>
+                </div>
+                <button type="button" class="btn " onclick="searchNewGame()" style="height:37px;width:37px;border-radius:50px;margin-left:-45px;margin-top:0.5%;background-color:#2c2c2c; ">
+                    <i class="fas fa-search" style="margin-left:-15%;color:rgba(255,255,255,0.2)"></i>
+                </button>                
+            </div>
+            <div id="id_skeleton" style="margin-top:1%;margin-left:-1%">
+            </div>
+            <div class="" id="id_PartialGerScreen" style="cursor:pointer;">
+                <!--Partial-->
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="hamburger btn " onclick="hamburguerScreen()">
+            <i class="fa fa-bars" style="color:white;height:800%; width:350%;margin-left:-7px"></i>
+        </div>
+    </div>
+    <aside class="sidebar" style="z-index:999999">
+        <nav>
+            <div style="margin-bottom:0px;">
+                <div onclick="showHide()" style="position:relative;background-color: rgba(0,0,0,.4);box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.2) 0px 8px 16px -8px;min-height:40px;cursor:pointer">
+                    <h5 style="color:#8cb4ff; text-align:center; margin-left:30px">Todos os jogos</h5>
+                </div>
+            </div>
+            <div class="row justify-content-center" id="searchGame">
+            </div>           
+        </nav>
+    </aside>
+
+    <div class="modal" id="id_modalScreen" role="dialog" data-backdrop="static" style="margin-top:4%">
+        <div class="modal-dialog">
+            <div class="modal-content" style="background-color:#222222">
+                <div class="modal-header" style="border-color:black">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                    <label class="modal-title" style="text-align:center;"><b style="color:white;">Adicionar captura de tela</b></label>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="border:none;background-color:#222222">
+                        <span aria-hidden="true" onclick="window.location.reload();" style="background-color:transparent; color:white"><i class="fa fa-x"></i></span>
+                    </button>
+                </div>
+                <div class="modal-body" style="height:30.5vh; overflow-y: auto;">
+                    <div id="modalNewImg" style="display:block">
+                        <div style="margin-top:10px">
+                            <b style="color:#8cb4ff">Nome:</b><br />
+                            <input type="text" id="id_nomeItem" style="margin-top:5px;width:95%;background-color: #cac7ff;border-radius:6px;height:37px;" />
+                        </div>
+
+                        <div style="margin-top:30px">
+                            <b style="color:#8cb4ff">Descrição:</b><br />
+                            <textarea id="id_descricaoItem" style="margin-top:5px;width:95%;background-color: #cac7ff;border-radius:6px;height:143px;"></textarea>
+                        </div>
+
+                        <div style="margin-top:30px">
+                            <b style="color:#8cb4ff">Adicionar imagem:</b><br />
+                            <label for="file" class=" file-style" style="margin-top:5px">
+                                <img src="~/img/Dispensa/Icons/icons8-upload-to-cloud-50.png" id="id_imgCatalogo" width="50">
+                                <p>Selecione a imagem</p>
+                            </label>
+                            <input type="file" id="file" onchange="changeImg()">
+                        </div>
+
+                        <div style="display:inline-block; margin-top:30px">
+                            <b style="color:#8cb4ff">Determinar jogo</b>
+                            <select class="form-select" id="id_slcGame" onchange="selectGame()" style="background-color: #cac7ff;">
+                                <option selected>Selecionar jogo</option>
+                                @foreach (var item in ViewBag.Games)
+                                {
+                                    <option value="@item.id">@item.nome</option>
+                                }
+                            </select>
+                            <br />
+                        </div>
+
+                        <div style="margin-top:10px">
+                            <b style="color:#8cb4ff">Pasta:</b><br />
+                            <select id="id_pastaItem" style="background-color: #cac7ff;height:37px;width:90%; border-radius:6px; margin-top:6px">
+                                <option selected>Selecionar pasta</option>
+                                @foreach (var item in ViewBag.Folder)
+                                {
+                                    <option value="@item.id">@item.nome</option>
+                                }
+                            </select>
+                            <input type="hidden" id="idHideTypeModal" />
+                        </div>
+                    </div>
+                    <div id="modalNewFolder" style="display:block">
+                        <div style="margin-top:10px">
+                            <b style="color:#8cb4ff">Nova pasta:</b><br />
+                            <input type="text" id="id_folderItem" style="margin-top:5px;width:95%;background-color: #cac7ff;border-radius:6px;height:37px;" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="background-color:#222222;border-color:black">
+                    <i class="fa fa-file-circle-plus fafa" onclick="addImg()" style="width:30px; min-height:70px;"></i>
+                    <button type="button" class="btn btn-primary" onclick="save_screen()"><b>Salvar</b></button>
+                    <button type="button" class="btn btn-secondary" onclick="$('#id_modalScreen').modal('hide')" data-dismiss="modal"><b>Fechar</b></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+</body>
+
+<script>
+    function nextScreenGame(id, tipo) {
+
+    }
+
+    function efectsModal() {
+        document.getElementById("mainContent").style.filter = "blur(5px)";
+    }
+    function outsideClick(event) {
+        if (event.target == document.getElementById("id_modalteste")) {
+            document.getElementById("mainContent").style.filter = "none";
+            $("#id_modalteste"); modal('hide')
+        }
+    }
+
+    function testeiimg() {
+        var dialog = document.getElementById("id_modalDialog");
+        var imagem = document.getElementById("id_Fullscreen");
+        var largura = imagem.width;
+
+        if (imagem.width == "2560") {
+            dialog.style.minWidth = "1900px"
+        } else {
+            dialog.style.minWidth = "1500px"
+        }
+
+        $("#id_modalFullScreen").modal('show')
+    }
+    function skeletonLoading(tipo) {
+            var formData = new FormData();
+            formData.append("tipo", tipo);
+            $.ajax(
+                {
+                    url: '@Url.Action("_PartialSkeleton", "Games")',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                        $("#id_skeleton").html(result);
+                    }
+                });
+    }
+
+    $(document).ready(function () {
+        skeletonLoading(2);
+        document.querySelector("#id_skeleton").style.display = "block";
+        document.querySelector("#id_loadedJ").style.display = "block";
+        var id = "@ViewBag.id";
+
+        var formData = new FormData();
+        if (id != 0) {
+            formData.append("tipo", 1);
+            formData.append("idGame", id);
+        } else {
+            formData.append("tipo", 0);
+        }
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialScreenshotGerenc", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $("#id_PartialGerScreen").html(result);
+                    document.querySelector("#id_skeleton").style.display = "none";
+                    document.querySelector("#id_loadedJ").style.display = "none"
+                }
+            });
+    });
+
+    function changeModaliteScreen(Mod) {
+        var id = "@ViewBag.id";
+
+        if (Mod == 1) {
+            document.querySelector("#id_loadedG").style.display = "block"
+            var formData = new FormData();
+            if (id != 0) {
+                formData.append("tipo", 1);
+                formData.append("idGame", id);
+            } else {
+                formData.append("tipo", 0);
+            }
+            $.ajax(
+                {
+                    url: '@Url.Action("_PartialScreenshotGerenc", "Games")',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                        $('#id_PartialGerScreen').fadeOut(300, function () {
+                            $(this).html(result).fadeIn(300).addClass('blink');
+                        });
+                        document.querySelector("#id_loadedG").style.display = "none"
+                    }
+                });
+        }
+        if (Mod == 2) {
+            var formData = new FormData();
+
+            $.ajax(
+                {
+                    url: '@Url.Action("_PartialFoldersGerenc", "Games")',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                        $('#id_PartialGerScreen').fadeOut(300, function () {
+                            $(this).html(result).fadeIn(300).addClass('blink');
+                        });
+                    }
+                });
+        }
+    }
+
+    function OpenFolder(folder, id) {
+        var div = document.querySelector("#" + id + "");
+        if (div.style.display === "block") {
+            div.style.display = "none"
+        }
+        else {
+            div.style.display = "block"
+        }
+
+        var formData = new FormData();
+        formData.append("folder", folder);
+
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialGamesForFolder", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $("#" + id + "").html(result);
+                }
+            });
+    }
+
+    function openModal_screenchot(tipo) {
+        if (tipo == 1 || tipo == 2) {
+            $("#id_modalScreen").modal('show');
+        }
+        $("#idHideTypeModal").val(tipo);
+
+        var div = document.querySelector("#modalNewImg");
+        var div2 = document.querySelector("#modalNewFolder");
+
+        if (tipo == 1) {
+            if (div.style.display === "block") {
+                div.style.display = "none"
+            }
+            if (div.style.display === "none") {
+                div.style.display = "block"
+            }
+            div2.style.display = "none"
+        }
+
+        if (tipo == 2) {
+            if (div2.style.display === "block") {
+                div2.style.display = "none"
+            }
+            if (div2.style.display === "none") {
+                div2.style.display = "block"
+            }
+            div.style.display = "none"
+        }
+        if (tipo == 3) {
+            $("#id_filterScreen").modal('show');
+        }
+    }
+
+    function save_screen() {
+        var tipo = $("#idHideTypeModal").val();
+        var formData = new FormData();
+
+        if (tipo == 1) {
+            formData.append("nome", $("#id_nomeItem").val());
+            formData.append("descricao", $("#id_descricaoItem").val());
+            formData.append("imagem", $("#file")[0].files[0]);
+            formData.append("id", $("#id_slcGame").val());
+            formData.append("pasta", $("#id_pastaItem").val())
+            $.ajax(
+                {
+                    url: '@Url.Action("saveScreen", "Games")',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                    }
+                });
+        } if (tipo == 2) {
+            formData.append("folder", $("#id_folderItem").val());
+            $.ajax(
+                {
+                    url: '@Url.Action("saveFolder", "Games")',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                    }
+                });
+        }
+    }
+
+    function hamburguerScreen() {
+        document.querySelector(".container").classList.toggle("show-menu");
+        var formData = new FormData();
+        formData.append("search", "");
+        formData.append("tipo", 1);
+
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialGamesForSearch", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $("#searchGame").html(result);
+                }
+            });
+    }
+
+    function backScreen(tipo) {
+        if (tipo == 0) {
+            var formData = new FormData();
+            formData.append("tipo", 1);
+
+            $.ajax(
+                {
+                    url: '@Url.Action("_PartialFoldersGerenc", "Games")',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                        $('#id_PartialGerScreen').animate({ marginRight: '-500%' }, 300, function () {
+                            $(this).html(result).css('margin-right', '0%').animate({ marginRight: '0%' }, 300);
+                        });
+                    }
+                });
+        } else {
+            var formData = new FormData();
+
+            $.ajax(
+                {
+                    url: '@Url.Action("_PartialScreenshotGerenc", "Games")',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                        $('#id_PartialGerScreen').animate({ marginRight: '-500%' }, 300, function () {
+                            $(this).html(result).css('margin-right', '0%').animate({ marginRight: '0%' }, 300);
+                        });
+                    }
+                });
+        }
+    }
+
+    function LoadScreen(id) {
+        var formData = new FormData();
+        formData.append("tipo", 1);
+        formData.append("idGame", id);
+
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialScreenshotGerenc", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $("#id_PartialGerScreen").html(result);
+                }
+            });
+    }
+
+    function addImg() {
+        var formData = new FormData();
+        $.ajax(
+            {
+                url: '@Url.Action("addImgInteligent", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $("#id_modalScreen").modal('hide')
+                    $("#modal_sucess").modal('show')
+                    //$("#id_partialEditScreeen").html(result);
+                }
+            });
+    }
+
+</script>
+
+<style>
+
+    #file {
+        display: none;
+    }
+
+    .file-style {
+        font-family: 'Trebuchet MS';
+        width: 400px;
+        display: block;
+        background-color: #e5e5e5;
+        margin: auto;
+        cursor: pointer;
+        text-align: center;
+        padding: 20px;
+        border-radius: 15px;
+        border: 2px dashed #cdc8c8;
+    }
+
+    .hamburger {
+        width: 2rem;
+        height: 4rem;
+        position: fixed;
+        z-index: 5;
+        left: 0rem;
+        top: 27rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        cursor: pointer;
+        transition: all .8s;
+        background-color: #393e49;
+    }
+
+    .show-menu .hamburger {
+        left: 27rem;
+        z-index:10000000;
+    }
+
+    .sidebar {
+        width: 27rem;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: -27rem;
+        z-index: 10000000;
+        overflow-x: hidden;
+        overflow-y: auto;
+        transition: all .8s;
+        box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.582);
+        background-color: #222222;
+    }
+
+    .show-menu .sidebar {
+        left: 0;
+    }
+
+    .fafa {
+        color: white;
+    }
+
+        .fafa:hover {
+            color: #8cb4ff;
+            cursor: pointer
+        }
+
+    .blurred {
+        filter: blur(5px);
+    }
+
+    .blur {
+        filter: blur(5px);
+    }
+
+    #idContentHamburguer{
+        display:none;
+    }
+</style>

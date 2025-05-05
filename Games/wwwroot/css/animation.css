@@ -1,0 +1,47 @@
+﻿body {
+}
+@keyframes loading {
+    0% {
+        background-position: 0%;
+    }
+
+    50% {
+        background-position: 350px;
+    }
+
+    100% {
+        background-position: 0%;
+    }
+}
+
+.loading * {
+    position: relative;
+}
+
+    .loading *::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: 400%; /* Gradiente muito maior que o contêiner */
+        background: linear-gradient(-45deg, #434343 50%, #4f4c4c 60%, #4f4c4c 61%, #434343 70%); /* Define o gradiente */
+        animation: loading 1.5s reverse infinite; /* Animação contínua e visível */
+    }
+
+.loadingGrid * {
+    position: relative;
+}
+
+    .loadingGrid *::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: 200%; /* Gradiente muito maior que o contêiner */
+        background: linear-gradient(250deg, #434343 50%, #4f4c4c 60%, #4f4c4c 61%, #434343 70%); /* Define o gradiente */
+        animation: loading 1.5s reverse infinite; /* Animação contínua e visível */
+    }

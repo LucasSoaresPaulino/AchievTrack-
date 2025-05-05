@@ -1,0 +1,379 @@
+﻿@model ProjectGames.DTO.ProfileDTO
+
+<body style="background-color:#222222;overflow-x:hidden">
+    <div style="position:absolute;width: 100%;height:300px;background-color: rgba(0, 0, 255, 0.4);-webkit-filter: grayscale(40%);left:0px;z-index:-1"></div>
+    <div style="position:absolute;width: 100%;left:0px;box-shadow: rgba(0, 0, 0, 0.65) 0px 5px 15px;-webkit-filter: grayscale(80%);z-index:-5">
+        <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="data:image /png;base64,@ViewBag.Banner.listGames[2].banner" class="d-block" style="height:300px;width:100%;object-fit:cover">
+                </div>
+                @foreach (var result in ViewBag.Banner.listGames)
+                {
+                    <div class="carousel-item">
+                        <img src="data:image /png;base64,@result.banner" class="d-block" style="height:300px;width:100%;object-fit:cover">
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center" style="margin-top:0%"></div>
+
+    <div class="row justify-content-center" style="background-color:#393e49;margin-top:20%;border-top-left-radius:10px;border-top-right-radius:10px;box-shadow: rgba(0, 0, 0, 1.75) 0px 0px 60px;z-index:5;border-top:2px solid #8cb4ff">
+        <div>
+            <div style="margin-top:-4%;margin-left:20px;margin-bottom:15px">
+                <img src="data:image /png;base64,@Model.avatar" class="imgBanner" width="10%" height="8%" style="border-radius:50%; border:2px solid #8cb4ff" />
+                <label for="file" style="position:absolute;width:140px; height:130px;transform:translate(-100%,0%)">
+                </label>
+                <input type="file" id="file" onchange="changeImg()" style="display:none">
+                <div style="display:inline-flex;background-color:none;transform:translate(10%,30%);">
+                    <p style="color:white; font-weight:bold; font-size:27px;">@Model.name</p>
+                </div>
+                <div style="display:inline-flex;transform:translate(-40%,6.5rem);position:absolute">
+                    <div class="progress" style="width:200px;height:14px;">
+                        <div class="progress-bar bg-info" role="progressbar" style="width:@Model.porcentagem%" aria-valuenow="@Model.porcentagem" aria-valuemin="0" aria-valuemax="100">@Model.porcentagem/100%</div>
+                    </div>
+                    <i class="fa fa-trophy" style="color:#FFCF40;margin-left:5%"></i>
+                </div>
+
+                <div style="display:inline-flex;margin-left:40%;transform:translate(0%,30%);padding:15px">
+                    <i class="fa fa-percent" style="color:white;width:30px;height:21px"></i><p style="color:white;font-weight:bold;font-size:19px;margin-top:-5px;margin-left:5px">@Model.porcentagem</p>
+                    <i class="fa fa-clock" style="color:white;width:30px;height:21px;margin-left:15%"></i><p style="color:white;font-weight:bold;font-size:19px;margin-top:-5px;margin-left:5px">@Model.timeGame</p>
+                    <i class="fa fa-award" style="color:white;width:30px;height:21px;margin-left:15%"></i><p style="color:white;font-weight:bold;font-size:19px;margin-top:-5px;margin-left:5px">@Model.allAchievements</p>
+                    <i class="fa fa-gamepad" style="color:white;width:30px;height:21px;margin-left:15%"></i><p style="color:white;font-weight:bold;font-size:19px;margin-top:-5px;margin-left:5px">@Model.allGames</p>
+                    <i class="fa fa-gamepad" style="color:yellow;width:30px;height:21px;margin-left:15%"></i><p style="color:white;font-weight:bold;font-size:19px;margin-top:-5px;margin-left:5px">@Model.allPlatinas</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="background-color:#393e49;box-shadow: rgba(0, 0, 0, 0.70) 0px 50px 60px -50px inset, rgba(0, 0, 0, 0.70) 0px 8px 0px -8px inset;z-index:-1">
+        <div class="row" style="display:inline-flex">
+            <div class="card-header" style="width:auto;height:2.6rem;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;transform:translate(4.9rem,5.8rem)"><b style="color:white;">Ultima Platina</b></div>
+            <div style="width:60%;height:19rem;margin-bottom:4%;border-left:5px solid #f1af09;border-radius:3px;margin-top:11.5%;margin-left:-4.9%;background-color:rgba(0,0,0,.4);box-shadow: rgba(0, 0, 0, 2.2) 0px 0px 14px;padding:0;">
+                <div style="width:100%;height:4rem;background-color:rgba(0,0,0,.5);border-top-left-radius:3px;border-top-right-radius:3px;margin:0;padding:0;">
+                    <img src="@ViewBag.LastPorc.avatar" width="7%" height="85%" style="margin-top:0.7%;margin-left:3%;border-right:2px solid #8cb4ff;border-radius:2px;object-fit:cover">
+                    <div style="width:80%;margin-left:3%;display:inline-flex;">
+                        <div style="display:block;transform:translate(0%,-14%);margin-left:-3%;height:68px">
+                            <p style="font-weight:bold;color:white;font-size:18px;">@ViewBag.LastPorc.nomeProfile</p>
+                            <p style="color:white;font-size:14px;margin-top:-13px;white-space:nowrap">Ultima platina</p>
+                        </div>
+                    </div>
+                    <p style="color:white;font-size:14px;white-space:nowrap;text-align:right;margin-top:-4rem;transform:translate(-4%,0%)">@ViewBag.LastPorc.timeElapsed <i class="fa fa-calendar-check" style="color:#8cb4ff;transform:translate(30%,0%)"></i></p>
+                </div>
+                <div style="display:inline-flex;width:100%;height:273px;margin-top:-0.9%">
+                    <div onclick="PageGame(@ViewBag.LastPorc.idGame)" style="width:25%;height:60%;margin-left:3%;margin-top:3%">
+                        @if (ViewBag.LastPorc.imgCustom == null)
+                        {
+                            <img src="@ViewBag.LastPorc.Imagem" width="165px" height="203px" style="object-fit:cover;border-radius:2px">
+                        }
+                        else
+                        {
+                            <img src="data:image /png;base64,@ViewBag.LastPorc.imgCustom" width="165px" height="203px" style="border-radius:2px;object-fit:cover" />
+                        }
+                    </div>
+                    <div style="width:72%;height:203px; background-color:rgba(0,0,0,.5);margin-left:-2.5%;margin-top:3%">
+                        <div style=" width:100%;margin-top:1%;margin-left:2%">
+                            <p class="nameGame" onclick="PageGame(@ViewBag.LastPorc.idGame)" title="@ViewBag.LastPorc.nome" style="font-weight:bold; font-size:18px;white-space:nowrap;max-width:31ch;text-overflow: ellipsis;overflow: hidden;">@ViewBag.LastPorc.nome</p>
+                        </div>
+                        <div style="width:100%;height:78%;display:inline-flex">
+                            <div style="width:50%;height:100%;margin-left:2%;margin-top:-3%">
+                                <div style="margin-left:1%;margin-top:15%;display:inline-flex">
+                                    @if (ViewBag.LastPorc.plataform == 0)
+                                    {
+                                        <img src="@ViewBag.LastPorc.icon" width="50" height="50" style="border:2px solid #bf930d" />
+                                    }
+                                    else
+                                    {
+                                        <img src="https://retroachievements.org/Badge/@ViewBag.LastPorc.icon" title="https://retroachievements.org/Badge/@ViewBag.LastPorc.icon" width="50" height="50" style="border:2px solid #bf930d">
+                                    }
+                                    <p style="font-weight:bold;color:white;font-size:14px;margin-left:4.5%">@ViewBag.LastPorc.nomeAch</p>
+                                </div>
+                                <div style="margin-left:1%;margin-top:14%;display:inline-flex">
+                                    <div class="progress" style="width:160px;height:14px;">
+                                        @if (ViewBag.LastPorc.porcentagem != 100)
+                                        {
+                                            <div class="progress-bar bg-info" role="progressbar" style="width:@ViewBag.LastPorc.porcentagem%" aria-valuenow="@ViewBag.LastPorc.porcentagem" aria-valuemin="0" aria-valuemax="100"></div>
+                                        }
+                                        else
+                                        {
+                                            <div class="progress-bar" role="progressbar" style="width:@ViewBag.LastPorc.porcentagem%;background-color:#bf930d" aria-valuenow="@ViewBag.LastPorc.porcentagem" aria-valuemin="0" aria-valuemax="100"></div>
+                                        }
+                                    </div>
+                                    <p style="font-weight:bold; color:white;margin-top:-3%;margin-left:2%">@ViewBag.LastPorc.porcentagem%</p>
+                                </div>
+                            </div>
+                            <div style="width:100px;height:36px;border-radius:4px;display:inline-flex;background-color:cornflowerblue;margin-left:9rem;margin-top:-1.8rem">
+                                @if (ViewBag.LastPorc.plataform == 0)
+                                {
+                                    <img src="~/img/Games/img/steamBlack.png" width="27px" height="27px" style="margin-top:3%;margin-left:5%">
+                                    <p style="color:white;font-weight:bold;margin-top:3%;margin-left:6%">@ViewBag.LastPorc.namePlataform</p>
+                                }
+                                else
+                                {
+                                    <img src="~/img/Games/img/RetroAchiev.png" width="27px" height="27px" style="margin-top:3%;margin-left:5%">
+                                    <p style="color:white;font-weight:bold;margin-top:3%;margin-left:6%">@ViewBag.LastPorc.namePlataform</p>
+                                }
+                            </div>
+                            <div style="width:175px;height:2rem;margin-top:5rem;margin-left:-13rem">
+                                <div style="position:relative">
+                                    @if (ViewBag.LastPorc.plataform == 0)
+                                    {
+                                        <div id="up" style="width:100%;display:block;position:relative;top:0.2rem;margin-left:2rem;">
+                                            <p style="font-weight:bold; color:white;text-align:right;font-size:14.5px;white-space:nowrap">
+                                                @ViewBag.LastPorc.time horas registradas
+                                            </p>
+                                        </div>
+                                        <div id="teste" style="width:100%;display:block;position:relative;margin-top:1rem;margin-left:2rem;">
+                                            <p style="font-weight:bold; color:white;text-align:right;font-size:14.5px;white-space:nowrap">
+                                                Obtida em @ViewBag.LastPorc.dateObj.ToString("dd' de' MMM", new System.Globalization.CultureInfo("pt-BR"))
+                                            </p>
+                                        </div>
+                                        <div style="border-right:2px solid aquamarine;width:175px;height:59px;position:absolute;margin-top:-4.5rem;margin-left:2.7rem;"></div>
+                                    }
+                                    else
+                                    {
+                                        <div id="teste" style="width:100%;display:block;position:relative;margin-top:2.4rem;margin-left:2rem;">
+                                            <p style="font-weight:bold; color:white;text-align:right;font-size:14.5px;white-space:nowrap">
+                                                Obtida em @ViewBag.LastPorc.dateObj.ToString("dd' de' MMM", new System.Globalization.CultureInfo("pt-BR"))
+                                            </p>
+                                        </div>
+                                        <div style="border-right:2px solid aquamarine;width:175px;height:25px;position:absolute;margin-top:-2.5rem;margin-left:2.7rem;"></div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="position:absolute;width:160px;height:35px;margin-left:66.4rem;margin-top:7rem;display:inline-flex;">
+                <a href=""><img src="~/img/Games/img/steamBlack.png" width="90%" height="75%" style="transform:translate(-40%,0%)"></a>
+                <a href=""><img src="~/img/Games/img/RetroAchiev.png" width="90%" height="80%" style="transform:translate(90%,0%)"></a>
+                <a href=""><img src="~/img/Games/img/exophase.jpg" width="90%" height="80%" style="object-fit:cover;transform:translate(210%,0%)"></a>
+            </div>
+            <div class="card mb-3" style="width: 18rem; height:25.5rem;border:none;background-color:rgba(0,0,0,.6);margin-top:11.5%;margin-left:10%;padding:0">
+                <div class="card-header" style="background-color:rgba(0,0,0,.9);text-align:center;border-left:5px solid #8cb4ff"><b style="color:white;">Setup</b></div>
+            </div>
+        </div>
+        <div class="row" style="margin-top:-9%">            
+            <div class="card-header" style="width:15%;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;transform:translate(4.9rem,5.8rem)"><b style="color:white;">Destaque de platinas</b></div>
+            <div style="display:inline-flex;margin-top:13%;">
+                <i class="fa fa-circle-chevron-left" onclick="moreFavGames(0)" style="color:white;width:50px;height:37px"></i>
+                <div id="id_partialFavGames" style="display:inline-flex;margin-top:-5%">
+                </div>
+                <i class="fa fa-circle-chevron-right" onclick="moreFavGames(1)" style="color:white;width:50px;height:37px;margin-left:18px;margin-top:10px"></i>
+
+                <div style="margin-top:-5%;margin-left:5%">
+                    <div class="card mb-3" style="width: 18rem; height:29.5rem;border:none;background-color:rgba(0,0,0,.6)">
+                        <div class="card-header" style="background-color:rgba(0,0,0,.9);text-align:center;border-left:5px solid #8cb4ff"><b style="color:white;">Conquistas raras</b></div>
+                        <div>
+                            @foreach (var item in ViewBag.AllRareAchiev)
+                            {
+                                <div style="display:block;border-bottom:1px solid black;padding:12.6px">
+                                    @if (item.plataform == 0)
+                                    {
+                                        <img src="@item.icon" title="@item.descricao" width="60" height="60" />
+                                    }
+                                    else
+                                    {
+                                        <img src="https://retroachievements.org/Badge/@item.icon" title="@item.descricao" width="60" height="60" />
+                                    }
+                                    <div style="display:inline-flex">
+                                        <b title="@item.nomeGame" style="color:white;margin-left:8px;position:absolute;margin-top:-15px;white-space:nowrap;max-width:21ch;text-overflow: ellipsis;overflow: hidden;">@item.nomeGame</b>
+                                        <p style="color:#8cb4ff;margin-left:8px;white-space:nowrap;max-width:23ch;text-overflow: ellipsis;overflow: hidden;transform:translate(0%,25%)">@item.nome</p>
+                                        <b style="color:white;margin-top:28px;margin-left:53%;position:absolute;color:white">@item.porcentagem%</b>
+                                        <i class="fa fa-award" style="color:white;margin-top:33px;margin-left:180px;position:absolute;color:#FFCF40"></i>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-header" style="width:auto;height:41px;background-color:rgba(0,0,0,.6);border-left:4px solid #8cb4ff;margin-top:-14.5%;margin-left:6%"><b style="color:white;white-space:nowrap">Destaque de screenshots</b></div>
+            <div style="width:60.8%;height:430px;margin-top:-10.5%;display:inline-flex;margin-left:-17.9%">
+                <div style="width:90%;height:97%;border-radius:5px;box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;">
+                    <img src="data:image /png;base64,@ViewBag.FavScreenshots[0].imagens" width="100%" height="100%" style="object-fit:cover;border-radius:5px" />
+                </div>
+                <div style="display:block;width:29%;height:100%;margin-left:1.4%;">
+                    @for (int i = 1; i <= ViewBag.FavScreenshots.Count - 1; i++)
+                    {
+                        <div style="width:107%;height:31.5%;margin-bottom:5px;box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;">
+                            <img src="data:image /png;base64,@ViewBag.FavScreenshots[i].imagens" width="100%" height="100%" style="object-fit:cover;border-radius:5px" />
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div style="margin-top:-20%;margin-left:75.1%">
+                <div class="card mb-3" style="width: 18.2rem; height:15.8rem;border:none;background-color:rgba(0,0,0,.6)">
+                    <div class="card-header" style="background-color:rgba(0,0,0,.9);text-align:center;border-left:5px solid #8cb4ff"><b style="color:white;">Estatisticas</b></div>
+                    <div style="display:block;margin-left:5%;margin-top:2%">
+                        <div style="display:inline-flex">
+                            <p style="color:white;font-weight:bold;font-size:15px">Nome:</p>
+                            <p style="color:#8cb4ff;margin-left:4%">@Model.name</p>
+                        </div>
+                        <div style="display:inline-flex">
+                            <p style="color:white;font-weight:bold;font-size:15px">Plataformas:</p>
+                            <p style="color:#8cb4ff;margin-left:4%">Steam/Retro</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-header" style="width:auto;height:41px;background-color:rgba(0,0,0,.6);border-left:4px solid #8cb4ff;margin-top:1%;margin-left:6%"><b style="color:white;white-space:nowrap">Metas</b></div>
+            <div style="width:60%;height:512px;margin-top:5%;margin-left:-6.2%;background-color:rgba(0,0,0,.5);padding:0;box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;">
+                <div style="width:100%;height:60px;background-color:rgba(0,0,0,.6);display:inline-flex;">
+                    <div style="position:absolute;margin-top:8px;margin-left:1.5rem">
+                        <select id="id_slcAnoList" onchange="filtragemMeta()" style="width:8rem;height:40px;border-radius:5px;background-color:rgba(0,0,0,.7);box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 8px;color:white;border:none">
+                            <option value="@DateTime.Now.Year">@DateTime.Now.Year</option>
+                            <option value="@(DateTime.Now.Year + 1)">@(DateTime.Now.Year + 1)</option>
+                        </select>
+                    </div>
+                    <div style="width:100%">
+                        <h4 id="idMes" style="color: white;text-align:center;margin-top:10px">@ViewBag.Mes</h4>
+                    </div>
+                    <div style="position:absolute;margin-top:8px;margin-left:39rem">
+                        <select id="id_slcMesList" onchange="filtragemMeta()" style="width:8rem;height:40px;border-radius:5px;background-color:rgba(0,0,0,.7);box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 8px;color:white;border:none">
+                            <option>Mês</option>
+                            <option value="0">Janeiro</option>
+                            <option value="1">Fevereiro</option>
+                            <option value="2">Março</option>
+                            <option value="3">Abril</option>
+                            <option value="4">Maio</option>
+                            <option value="5">Junho</option>
+                            <option value="6">Julho</option>
+                            <option value="7">Agosto</option>
+                            <option value="8">Setembro</option>
+                            <option value="9">Outubro</option>
+                            <option value="10">Novembro</option>
+                            <option value="11">Dezembro</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="width:100%;height:452px;overflow-x:hidden;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#f1f1f1 rgba(0,0,0,.3)">
+                    <div class="row" id="idPartialMeta" style="margin-bottom:25px;margin-left:12px;">
+                        <!--Partial-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center" style="background-color:#393e49;border-bottom-left-radius:10px;border-bottom-right-radius:10px;">
+        <div class="card-header" style="width:5.5rem;height:2.5rem;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;position:absolute;margin-top:75px;margin-left:-44rem"><b style="color:white;">Feed</b></div>
+        <div class="d-block" style="margin-bottom:4%;margin-top:10%;background-color:rgba(0,0,0,.2);width:60%;border-radius:7px;height:55.5rem;overflow-y: auto;scrollbar-width:thin;scrollbar-color:#f1f1f1 #393e49">
+            <div id="id_partialFeedGames" style="margin-top:5%;margin-left:6%">
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+</body>
+
+<script>
+    $(document).ready(function () {
+        var formData = new FormData();
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialFavGamesProfile", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $("#id_partialFavGames").html(result);
+                }
+            });
+
+        const data = new Date();
+        formData.append("ano",data.getFullYear());
+        formData.append("mes", data.getMonth());
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialMetaGames", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $("#idPartialMeta").html(result);
+                }
+            });
+    });
+    function filtragemMeta() {
+        const select = document.getElementById("id_slcMesList");
+        const textoSelecionado = select.options[select.selectedIndex].text;
+        document.getElementById("idMes").innerText = textoSelecionado;
+
+        var formData = new FormData();
+        formData.append("ano", $("#id_slcAnoList").val());
+        formData.append("mes", $("#id_slcMesList").val());
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialMetaGames", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $("#idPartialMeta").html(result);
+                }
+            });
+    }
+    function deleteitem(id) {
+        var formData = new FormData();
+        formData.append("id", id);
+
+        $.ajax(
+            {
+                url: '@Url.Action("removeMetaGame", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $('#idPartialMeta').load('@Url.Action("_PartialMetaGames", "Games")');
+                }
+            });
+    }
+
+    loadFeed();
+    function loadFeed() {
+        var formData = new FormData();
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialFeedGames", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $("#id_partialFeedGames").html(result);
+                }
+            });
+    }
+
+    function FavGames(tipo, size, pagina) {
+
+        var formData = new FormData();
+        formData.append("tipo", tipo);
+        formData.append("pagina", pagina);
+
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialFavGamesProfile", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $('#id_partialFavGames').fadeOut(300, function () {
+                        $(this).html(result).fadeIn(300).addClass('blink');
+                    });
+                }
+            });
+    }
+</script>
+
+<style>
+
+</style>

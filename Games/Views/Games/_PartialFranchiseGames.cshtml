@@ -1,0 +1,117 @@
+﻿@model ProjectGames.DTO.GamesDTO
+
+<div class="card-header" style="width:12rem;height:50px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;margin-top:6%;margin-left:6%"><h4 style="color:white">Franquias</h4></div>
+<div class="row  gap-3" style="margin-top:2.5%;margin-left:5rem">
+    @foreach (var item in Model.listGames)
+    {
+        <div class="box" onclick="openFran('@item.nome')" id="imgFran"style="width:22%;height:130px;background-image:url(https://cdn.cloudflare.steamstatic.com/steam/apps/@item.id/header.jpg);border-radius:3px;border: 1px solid #cdc8c8;cursor:pointer;background-size:contain;margin-bottom:3%">
+            <p style="color:white;margin-top:55%;text-align:center;">@item.nome</p>
+        </div>
+    }
+    <div onclick="openModal()" style="width:22%;height:130px;background-color:rgba(0,0,0,.5);border-radius:3px;border: 2px dashed #cdc8c8;cursor:pointer;">
+        <i class="fa fa-plus" style="width:48px;height:90px;margin-left:100px;margin-top:18px;color:#8cb4ff"></i>
+    </div>
+</div>
+
+<div class="modal" id="id_modalfranchise" role="dialog" data-backdrop="static" style="margin-top:7%;margin-left:-250px">
+    <div class="modal-dialog" style="">
+        <div class="modal-content" style="background-color:#222222;width:45rem">
+            <div class="modal-header" style="border-color:black">
+                <span class="glyphicon glyphicon-pencil"></span>
+                <label class="modal-title" style="text-align:center;"><b style="color:white;">Adicionar franquia</b></label>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="border:none;background-color:#222222">
+                    <span aria-hidden="true" onclick="$('#id_modalfranchise').modal('hide')" style="background-color:transparent; color:white"><i class="fa fa-x"></i></span>
+                </button>
+            </div>
+            <div class="modal-body" style="height:38.5vh; overflow-y: auto;">
+                <div style="margin-top:10px">
+                    <div class="" style="margin-top:10px">
+                        <div class="card-header" style="width:8rem;height:33px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;margin-top:2%;margin-left:0%"><h6 style="color:white;margin-top:-3%">Titulo</h6></div>
+                        <input type="text" id="id_titleItem" style="margin-top:10px;width:35%;background-color: #cac7ff;border-radius:6px;height:37px;" />
+                    </div>
+                    <div style="margin-top:10%">
+                        <div class="card-header" style="width:8rem;height:39px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;margin-top:2%;margin-left:0%"><h5 style="color:white;margin-top:-3%">Games</h5></div>
+                    </div>
+                    <div id="id_bodyGames" style="display:block">
+                        <div style="margin-left:62%; margin-top:-2.4rem;">
+                            <div class="input-group">
+                                <div class="form-outline" style="margin-top:0px; margin-left:0px">
+                                    <input type="search" class="form-control" id="id_searchGamesList" placeholder="Pesquisar" style="height:38px;border-top-right-radius:0px;background-color:RGB(221,221,255)" />
+                                    <label class="form-label" for="form1"></label>
+                                </div>
+                                <button type="button" class="btn btn-primary" onclick="searchListGames()" style="height:38px; margin-top:0px">
+                                    <i class="fas fa-search" style="align-items:center;border-top-left-radius:0px"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row" id="idGameSearch" style="margin-top:2%">
+                            <!--_PartialResultSearchGames-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="background-color:#222222;border-color:black">
+                <button type="button" class="btn btn-primary" onclick="savedGame(1)"><b>Salvar</b></button>
+                <button type="button" class="btn btn-secondary" onclick="$('#id_modalfranchise').modal('hide')" data-dismiss="modal"><b>Fechar</b></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openFran(franquia){
+        window.location.href = '@Url.Action("GamesFranchise", "Games")?franquia=' + franquia;
+    }
+    function openModal(){
+        $("#id_modalfranchise").modal('show');
+        searchListGames();
+    }
+    function OpenGames() {
+        var div = document.querySelector("#id_bodyGames");
+        if (div.style.display === "block") {
+            div.style.display = "none"
+        }
+        else {
+            div.style.display = "block"
+        }
+    }
+
+    function searchListGames() {
+        var pesquisa = $("#id_searchGamesList").val();
+
+        var formData = new FormData();
+        formData.append("pesquisa", pesquisa);
+
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialResultSearchGames", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $("#idGameSearch").html(result);
+                }
+            });
+    }
+</script>
+
+<style>
+    #imgFran{
+        background-color: rgba(0, 0, 255, 0.4); /* Cor azul com 50% de opacidade */
+        background-blend-mode: multiply; /* Multiplica a cor sobre a imagem de fundo */
+        -webkit-filter: grayscale(40%);
+    }
+
+    #imgFran:hover {
+        cursor: pointer;
+        -webkit-filter: grayscale(100%);
+        transition: all .8s;
+    }
+    #chevBack{
+        color:white;
+    }
+    #chevBack:hover {
+        color: #8cb4ff;
+    }
+</style>

@@ -1,0 +1,236 @@
+﻿@model ProjectGames.DTO.JogosDTO
+
+@if (ViewBag.tipo == 1)
+{
+    <div style="position:fixed;top:32rem;margin-left:-10rem;z-index:9999999999">
+        <i class="fa fa-circle-arrow-left" id="id_backPage" onclick="" style="width:50px;height:50px;cursor:pointer"></i>
+    </div>
+}
+<div class="card" id="divCard" style="width:100.13%;background-color:#393e49;transform:translate(-0.92%,171%);padding:10px;background-color:#393e49;display:block;border-top:3px solid aquamarine;border-top-left-radius:10px;border-top-right-radius:10px;">
+    <div class="" style=" width:100%;height:230px;display:inline-flex;margin-left:0.7%">
+        <div style="min-width:15%;height:100%;">
+            <img src="@Model.imagem" id="id_imgGridGame" width="100%" height="100%" style="object-fit:cover;" />
+        </div>
+        <div style="margin-left:1.5%;">
+            <h3 style="color:white;white-space:nowrap;">@Model.nome</h3>
+            <p style="color:white;white-space:nowrap;font-size:17px;cursor:pointer;position:absolute">@Model.developer/@Model.publisher</p>
+            <p style="color:white;white-space:nowrap;font-size:17px;cursor:pointer;margin-top:3rem">@Model.categoria</p>
+            <a href="https://store.steampowered.com/app/@Model.id/@Model.nome" target="_blank" style="color:#8cb4ff;position:absolute;transform:translate(0%,4rem);">Steam      <i class="fa fa-arrow-up-right-from-square" style="color:#8cb4ff;"></i></a>
+        </div>
+        <div style="background-color:rgba(0,0,0,.6);width:8.5%;height:2.5rem;border-radius:5px;display:inline-flex;margin-left:1%">
+            @if (Model.plataforma == 0)
+            {
+                <img src="~/img/Games/img/SteamLogo.png" width="30%" height="80%" style="margin-left:3%;margin-top:3%" />
+            }
+            else
+            {
+                <img src="~/img/Games/img/RAcolor.png" width="30%" height="80%" style="margin-left:3%;margin-top:3%" />
+            }
+            <p style="color:white;text-align:center;font-size:16.5px;margin-top:6%;margin-left:5%;font-weight:bold">@Model.plataformaG</p>
+        </div>
+        <i class="fa-regular fa-heart" style="color:white;height:30px;margin-left:94%;position:absolute;"></i>      
+        @if (Model.preco != null)
+        {
+            <div style="background-color:rgba(0,0,0,.8);width:6rem;height:2.5rem;position:absolute;margin-left:88.9%;margin-top:14%;border-radius:4px;box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 5px;border-right:2px solid #8cb4ff">
+                <p style="font-weight:bold;color:white;text-align:center;font-size:15px;margin-top:7px">@Model.preco</p>
+            </div>
+        }
+    </div>   
+</div>
+<div style="background-color:#393e49;margin-top:33.5%;position:relative;margin-left:-0.9%;border-bottom-left-radius:15px; border-bottom-right-radius:15px;width:100%;box-shadow: rgba(0, 0, 0, 0.70) 0px 50px 60px -50px inset, rgba(0, 0, 0, 0.70) 0px 8px 0px -8px inset;">
+    <div style="width:99%;display:block;margin-left:1%;transform:translate(0%,2.5rem)">
+        <div class="card-header" style="width:10rem;height:38px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;"><p style="color:white;font-size:20px;font-weight:bold;margin-top:-4%;margin-left:-6%">Descrição</p></div>
+        <div style="width:63%;height:110px;margin-top:1.5%;background-color:rgba(0,0,0,.7);display:inline-flex;border-radius:5px;box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 15px;">
+            <div style="min-width:291px;min-height:110px;">
+                <img src="@Model.imgHeader" style="width:100%;height:100%;border-top-left-radius:3px;border-bottom-left-radius:4px;border-right:4px solid aquamarine;object-fit:cover" />
+            </div>
+            <div style="padding-right:7px;max-height:110px">
+                @if (Model.plataforma == 0)
+                {
+                    <p style="color:white;margin-left:1%;margin-top:1%">@Model.descricao</p>
+                }
+                else
+                {
+                    <p style="color:white;margin-left:1%;margin-top:1%">@Model.nome game do genero @Model.categoria, foi desenvolvido por @Model.developer e publicado por @Model.publisher para plataforma @Model.plataformaG</p>
+                }
+            </div>
+        </div>
+    </div>
+    
+    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel" style="width:780px;min-height:488px;margin-top:8%;margin-left:19%;">
+        <div class="carousel-indicators">
+            @for (int i = 0; i <= Model.screenshots.Length - 1; i++)
+            {
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="@i" class="active" aria-current="true" aria-label="Slide '@i'"></button>
+
+            }
+        </div>
+        <div class="carousel-inner" style="box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 15px;">
+            <div class="carousel-item active">
+                <img src="@Model.screenshots[0]" class="d-block w-100" style="border-radius:5px;max-height:488px">
+            </div>
+            @for (int i = 1; i <= Model.screenshots.Length - 1; i++)
+            {
+                <div class="carousel-item">
+                    <img src="@Model.screenshots[i]" class="d-block w-100" style="border-radius:5px;max-height:488px">
+                </div>
+            }
+        </div>
+        <div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                <span class="fa fa-circle-chevron-left" style="height:30px;margin-top:-2rem"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                <span class="fa fa-circle-chevron-right" style="height:30px;margin-top:-2rem"></span>
+            </button>
+        </div>
+    </div>
+    @if(Model.plataforma == 0)
+    {
+        <p id="id_more" style="text-align:center;margin-top:1%;color:#8cb4ff;cursor:pointer" onclick="showAbout(1)">Ver mais <i class="fa fa-chevron-down" style="margin-left:0.4%"></i></p>
+        <div id="id_about" style="margin-top:3%;margin-left:21%;display:none">
+            <div class="card-header" style="width:10rem;height:38px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;"><p style="color:white;font-size:20px;font-weight:bold;margin-top:-4%;margin-left:-6%">Mais sobre</p></div>
+            <div style="margin-top:1.5%;background-color:rgba(0,0,0,.6);width:69.4%;box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 8px;border-radius:5px">
+                <div style="padding-top:0px;padding-bottom:40px;color:white;padding:15px">
+                    @if (Model.imgGif.Length != 0)
+                    {
+                        <div style="margin-left:4.5%">
+                            @Html.Raw(Model.imgGif[0])
+                        </div>
+                        <br>
+                    }
+                    @Html.Raw(Model.about)
+            </div>
+        </div>
+        <p style="margin-left:31.5%;margin-top:1%;color:#8cb4ff;cursor:pointer" onclick="showAbout(2)">Ver menos <i class="fa fa-chevron-up" style="margin-left:0.4%"></i></p>
+    </div>
+    }
+    <div style="width:100%;display:inline-flex;margin-top:3%">
+        <div style="display:block;width:60%;margin-left:1%;margin-bottom:20px;">
+            <div class="card-header" style="width:10rem;height:38px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;"><p style="color:white;font-size:20px;font-weight:bold;margin-top:-4%;margin-left:-6%">Conquistas</p></div>
+            <div id="partialAchiev" style="background-color:#222222; border-radius:5px; width:100%;display:block; margin-top:2.5%;box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 8px;">
+                @if(Model.listAchiev.Count != 0)
+                {
+                    @foreach(var item in Model.listAchiev)
+                    {
+                        <div style="display:block;border-bottom:1px solid black;">
+                            <div style="display:inline-flex;margin-top:2%;margin-bottom:2%;margin-left:2%">
+                                <img src="@item.iconLock" title="@item.iconLock" width="64px" height="64px" >
+                                <div style="margin-left:15px;">
+                                    <b style="color:white">@item.nome</b><br>
+                                    <p style="color:white;max-width:52.5ch;font-size:14px">@item.descricao</p>                    
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <img src="~/img/Games/Banner/notFound.gif" style="width:100%;object-fit:cover" />
+                }
+            </div>
+        </div>
+        <div style="display:block;margin-top:4.3%;margin-left:7%;margin-bottom:2%">
+            <div style="background-color:rgba(0,0,0,.4);max-width:340px;max-height:350px;border-radius:5px;box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 8px;">
+                <div class="card-header" style="min-height:60px;width:100%;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff" ">
+                    <h4 style="text-align:center;color:white;font-weight:bold">Estatisticas</h4>
+                </div>
+                <div style="padding-left:5px">
+                    <div style="display:inline-flex; margin-top:15px;">
+                        <i class="fa fa-fingerprint" style="color:#8cb4ff;margin-top:5px; margin-right:5px"></i><p style="color:white">Id:</p>
+                        <p style="color:#8cb4ff; margin-left:7px">@Model.id</p>
+                    </div>
+                    <br />
+                    <div style="display:inline-flex; margin-top:10px;">
+                        <i class="fa fa-signature" style="color:#8cb4ff;margin-top:5px; margin-right:5px"></i><p style="color:white">Nome:</p>
+                        <p style="color:#8cb4ff; margin-left:7px;white-space:nowrap;white-space:nowrap;max-width:28ch;text-overflow: ellipsis;overflow: hidden;">@Model.nome</p>
+                    </div>
+                    <br />        
+                    <div style="display:inline-flex; margin-top:10px;">
+                        <i class="fa fa-database" style="color:#8cb4ff;margin-top:5px; margin-right:5px"></i><p style="color:white">Desenvolvedor:</p>
+                        <p style="color:#8cb4ff; margin-left:7px;white-space:nowrap;white-space:nowrap;max-width:23ch;text-overflow: ellipsis;overflow: hidden;">@Model.developer/@Model.publisher</p>
+                    </div>    
+                    <br />
+                    <div style="display:inline-flex; margin-top:10px;">
+                        <i class="fa fa-database" style="color:#8cb4ff;margin-top:5px; margin-right:5px"></i><p style="color:white">Categoria:</p>
+                        <p style="color:#8cb4ff; margin-left:7px;white-space:nowrap;white-space:nowrap;max-width:23ch;text-overflow: ellipsis;overflow: hidden;">@Model.categoria</p>
+                    </div>
+                    <br />
+                    <div style="display:inline-flex; margin-top:10px;">
+                        <i class="fa fa-trophy" style="color:#8cb4ff;margin-top:5px; margin-right:5px"></i><p style="color:white">Total de conquistas:</p>
+                        <p style="color:#8cb4ff; margin-left:7px">@Model.listAchiev.Count</p>
+                    </div>
+                    <br />  
+                </div>
+            </div>        
+            <div style="background-color:rgba(0,0,0,.4);max-width:340px;min-height:340px;max-height:450px;border-radius:5px;box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 8px;margin-top:13%">
+                <div class="card-header" style="min-height:60px;width:100%;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff" ">
+                    <h4 style="text-align:center;color:white;font-weight:bold">Requisitos</h4>
+                </div>
+                <div style="margin-top:5px;padding-bottom:10px">
+                    <p style="color:white; margin-left:7px;text-overflow: ellipsis;overflow: hidden;">@Html.Raw(Model.requisitos)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function setTopAchiev() {
+        const desiredCharCount = 333;
+
+        // Seleciona o elemento <ul> e seu conteúdo HTML
+        const ulElement = document.querySelector('.bb_ul');
+        const ulContent = ulElement.innerHTML;
+
+        // Cria um elemento temporário para manipulação
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = ulContent;
+
+        // Função para contar apenas o texto, ignorando as tags HTML
+        const countTextCharacters = (element) => element.textContent.length;
+
+        let currentCharCount = countTextCharacters(tempDiv);
+
+        // Ajustar o conteúdo para o número desejado de caracteres
+        if (currentCharCount < desiredCharCount) {
+            tempDiv.innerHTML += ' '.repeat(desiredCharCount - currentCharCount);
+        } else if (currentCharCount > desiredCharCount) {
+            while (countTextCharacters(tempDiv) > desiredCharCount) {
+                let lastChild = tempDiv.lastChild;
+                lastChild.textContent = lastChild.textContent.slice(0, -1);
+                if (!lastChild.textContent && lastChild.nodeType !== Node.TEXT_NODE) {
+                    tempDiv.removeChild(lastChild);
+                }
+            }
+        }
+        // Atualiza o conteúdo da <ul> preservando as tags e atributos HTML
+        ulElement.innerHTML = tempDiv.innerHTML;
+    }
+    setTopAchiev();
+
+    function showAbout(tipo){
+        var more = document.querySelector("#id_more");
+        var about = document.querySelector("#id_about");
+        if(tipo == 1){
+            about.style.display = "block";
+            more.style.display = "none";
+        }else{
+            about.style.display = "none";
+            more.style.display = "block";
+        }
+    }
+</script>
+
+<style>
+    .bb_ul{
+        color:white
+    }
+
+    #id_backPage{
+        color:white
+    }
+    #id_backPage:hover{
+        color:#8cb4ff
+    }
+</style>

@@ -1,0 +1,245 @@
+﻿@model ProjectGames.DTO.GamesDTO
+<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="..."></script>
+
+<body style="background-color:#222222;overflow-x: hidden;overflow-y: auto;">
+    <!--Corpo-->
+
+    <div style="width:100%; position:absolute ;height:280px;display:flex; justify-content:center; background-color:#1b2838;top:57px; left:0px;overflow-x: hidden;overflow-y: hidden;box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;">
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+            <img class="d-block w-105 h-150" src="@ViewBag.GameAPI[0].BackgroundRaw" style="margin-top:-10%">
+        </div>
+    </div>
+
+    <div div="id_banner" style="width:100%; position:absolute ;height:280px;display:flex; justify-content:center; background-color:#1b2838;top:57px; left:0px;overflow-x: hidden;overflow-y: hidden;box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;">
+    <img src="@ViewBag.GameAPI[0].BackgroundRaw" style="width:50%;height:650px;margin-top:-4%">
+    </div>
+
+    <!--Corpo-->
+    <div class="row" style="">
+        <div id="id_NoteGame" style="margin-top:30%;">
+            <i class="fa fa-circle-chevron-left" onclick="backHome()" style="width:40px; height:40px;cursor:pointer"></i>
+            <div class="card-header" style="width:auto;height:50px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;margin-top:2.5rem;margin-left:0rem;position:absolute;"><h4 style="color:white">@ViewBag.nome</h4></div>
+
+            <div class="row gap-1" style="margin-top:8%">
+                @foreach (var item in Model.listNote)
+                {
+                    string id = "idEditNote_" + item.id;
+
+                    <div class="" style="width:33%;margin-top:15px">
+                        <div style="width:100%;height:75px;background-color: rgba(0,0,0,.8);border: 1px solid #cccc">
+                            <div style="width:88%;height:100%;margin-left:2.5%">
+                                <div style="padding:3px;display:inline-flex">
+                                    <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/@item.idGame/header.jpg" width="140px" height="66.1px" style="border:2px solid aquamarine;border-right:none;border-top:none;border-bottom:none;" />
+                                    <div style="display:block;min-width:118%;height:100%;">
+                                        <h6 title="@item.nome" style="color:white;margin-left:10px;white-space:nowrap;white-space:nowrap;max-width:18ch;overflow: hidden;">@item.nome</h6>
+                                        <p contenteditable="true" title="@item.titulo" style="color:white;margin-left:10px;white-space:nowrap;white-space:nowrap;max-width:22.5ch;overflow: hidden;">@item.titulo</p>
+                                    </div>
+                                    <i class="fa fa-trash" onclick="removeNote('@item.id')" style="transform:translate(2050%,10%);position:absolute;height:20px;cursor:pointer"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <textarea id="@id" onchange="EditNote('@item.id')" style="width:100%;min-height:8rem;border-bottom-left-radius:3px;border-bottom-right-radius:3px;background-color:rgba(0,0,0,.5);border-top:none;color:white;padding-left:7px">@Html.Raw(item.mensagem)</textarea>
+                    </div>
+                }
+                <div class="" style="width:33%;margin-top:15px;margin-bottom:35px">
+                    <textarea id="id_newText" readonly style="width:403px;min-height:205px;border-radius:3px;background-color:rgba(0,0,0,.5);color:white;resize:none"></textarea>
+                    <i class="fa fa-award" id="id_AchievTxt" onclick="openAchiev()" style="color:#8cb4ff;height:40px;margin-top:-15%;margin-left:3%;cursor:pointer;display:none"></i>
+                    <i class="fa fa-plus" id="id_plusTxt" onclick="newNote()" style="color:#8cb4ff;height:60px;margin-top:-33%;margin-left:43%;cursor:pointer;display:block"></i>
+                    <i class="fa-regular fa-circle-check" id="id_CheckTxt" onclick="openTitle()" style="color:#6eaa5e;height:40px;margin-top:-8%;margin-left:85%;cursor:pointer;display:none"></i>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal" id="id_modalNote" role="dialog" data-backdrop="static" style="margin-top:4%">
+        <div class="modal-dialog">
+            <div class="modal-content" style="background-color:#222222">
+                <div class="modal-header" style="border-color:black">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                    <label class="modal-title" style="text-align:center;"><b style="color:white;">Adicionar titulo da anotação</b></label>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="border:none;background-color:#222222">
+                        <span aria-hidden="true" onclick="$('#id_modalNote').modal('hide')" style="background-color:transparent; color:white"><i class="fa fa-x"></i></span>
+                    </button>
+                </div>
+                <div class="modal-body" style="height:10.5vh; overflow-y: auto;">
+                    <div style="margin-top:10px">
+                        <b style="color:#8cb4ff">Titulo:</b><br />
+                        <input type="text" id="id_titleItem" style="margin-top:5px;width:95%;background-color: #cac7ff;border-radius:6px;height:37px;" />
+                    </div>
+                </div>
+                <div class="modal-footer" style="background-color:#222222;border-color:black">
+                    <button type="button" class="btn btn-primary" onclick="SaveNote()"><b>Salvar</b></button>
+                    <button type="button" class="btn btn-secondary" onclick="$('#id_modalNote').modal('hide')" data-dismiss="modal"><b>Fechar</b></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="id_modalAchiev" role="dialog" data-backdrop="static" style="margin-top:4%">
+        <div class="modal-dialog">
+            <div class="modal-content" style="background-color:#222222">
+                <div class="modal-header" style="border-color:black">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                    <label class="modal-title" style="text-align:center;"><b>Personalizar categoria</b></label>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="border:none;background-color:#222222">
+                        <span aria-hidden="true" onclick="$('#id_modalAchiev').modal('hide')" style="background-color:transparent; color:white"><i class="fa fa-x"></i></span>
+                    </button>
+                </div>
+
+                <div class="modal-body" style="height:38.5vh; overflow-y: auto;">
+                    <div>
+                        <h2 style="color:white">Seleção de conquista</h2><br />
+                        <select class="form-select" id="id_slcGame" onchange="selectGame()">
+                            <option selected>Selecionar jogo</option>
+                            @foreach (var item in ViewBag.Games)
+                            {
+                                <option value="@item.id">@item.nome</option>
+                            }
+                        </select>
+                        <br />
+                    </div>
+                    <div id="id_partialDestaque">
+                        <!--Partial-->
+                    </div>
+                    <input type="hidden" id="id_DstqAch" />
+                </div>
+
+                <div class="modal-footer" style="background-color:#222222;border-color:black">
+                    <button type="button" class="btn btn-primary" onclick="selectAchv()"><b>Salvar</b></button>
+                    <button type="button" class="btn btn-secondary" onclick="$('#id_modalAchiev').modal('hide')" data-dismiss="modal"><b>Fechar</b></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    function newNote() {
+        document.querySelector("#id_plusTxt").remove();
+        document.querySelector("#id_newText").removeAttribute("readonly");
+        document.querySelector("#id_CheckTxt").style.display = "block";
+        document.querySelector("#id_AchievTxt").style.display = "block";
+        document.querySelector("#id_newText").style.resize = "block";
+    }
+    function openTitle() {
+        $("#id_modalNote").modal('show');
+    }
+    function openAchiev(){
+        $("#id_modalAchiev").modal('show');
+    }
+    function selectGame() {
+        var formData = new FormData();
+        formData.append("id", $("#id_slcGame").val());
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialDestaques", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $("#id_partialDestaque").html(result);
+                }
+            });
+    }
+    function selectAchv()
+    {
+        var formData = new FormData();
+        formData.append("id", $("#id_destaque").val());
+        formData.append("idGame", $("#id_slcGame").val());
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialAchievementNote", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    var textoAtual = $('#id_newText').val();
+                    $("#id_newText").val(textoAtual + result);
+                }
+            });
+    }
+    function SaveNote() {
+        var titulo = $("#id_titleItem").val();
+        var mensagem = $("#id_newText").val();
+
+        var formData = new FormData();
+        formData.append("titulo", titulo);
+        formData.append("mensagem", mensagem);
+        formData.append("idGame", "@ViewBag.id");
+
+        $.ajax(
+            {
+                url: '@Url.Action("SaveNoteGame", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    window.location.reload()
+                }
+            });
+    }
+    function removeNote(id) {
+        $("#modal_remover").modal('show');
+        $("#idRemoveItem").val(id);
+    }
+    function deleteitem() {
+        var formData = new FormData();
+        formData.append("id", $("#idRemoveItem").val());
+
+        $.ajax(
+            {
+                url: '@Url.Action("removeNoteGame", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    window.location.reload();
+                }
+            });
+    }
+    function EditNote(id){
+        var formData = new FormData();
+        formData.append("id", id);
+        formData.append("mensagem", $("#idEditNote_" + id + "").val());
+
+        $.ajax(
+            {
+                url: '@Url.Action("editNoteGame", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                }
+            });
+    }
+    function backHome() {
+        $("#id_NoteGame").css('margin-left', '0%').animate({ marginLeft: '500%' }, 200);
+        window.location.href = '@Url.Action("IndexNote", "Games")';
+    }
+</script>
+
+<style>
+    .fa-trash {
+        color: white;
+    }
+
+        .fa-trash:hover {
+            color: orangered
+        }
+
+    .fa-circle-chevron-left {
+        color: white;
+    }
+
+        .fa-circle-chevron-left:hover {
+            color: #8cb4ff;
+        }
+</style>

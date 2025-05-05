@@ -1,0 +1,78 @@
+﻿@model ProjectGames.DTO.GamesDTO
+<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="..."></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+
+@using DotNet.Highcharts
+@using DotNet.Highcharts.Helpers
+@using DotNet.Highcharts.Options
+@using DotNet.Highcharts.Enums
+@using DotNet.Highcharts.Attributes
+
+<body style="background-color:#222222;overflow-x: hidden;overflow-y: auto;">
+    <div id="id_partialBanner" style="z-index:-9999">
+    </div>
+    <div class="row justify-content-center">
+        <div class="row" style="width:100%;background-color:#22252C;width:100%;box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 45px;margin-top:15%;border-radius:6px">
+            <div style="margin-left:2%;margin-top:2%;margin-bottom:4%">
+                <div id="id_partialEstatistica">
+                    <!--_PartialEstatistica-->
+                </div>          
+            </div>
+        </div>
+    </div>
+
+</body>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js"></script>
+
+<script>
+    loadBanner();
+    function loadBanner(plataform) {
+        const anoAtual = new Date().getFullYear();
+        var formData = new FormData();
+        formData.append("identificador", anoAtual);
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialBanner", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $('#id_partialBanner').html(result)
+                }
+            });
+    }
+    loadEstatistica();
+    function loadEstatistica() {
+        var formData = new FormData();
+        // formData.append("", );
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialEstatistica", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $('#id_partialEstatistica').html(result)
+                }
+            });
+    }
+</script>
+
+<style>
+    .box:hover {
+        cursor: pointer;
+        -webkit - transform: scale(1.03);
+        -ms - transform: scale(1.03);
+        transform: scale(1.03);
+    }
+    .nameGame {
+        color: white;
+    }
+
+        .nameGame:hover {
+            color: #8cb4ff;
+        }
+</style>

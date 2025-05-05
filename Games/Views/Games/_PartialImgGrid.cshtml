@@ -1,0 +1,77 @@
+﻿@model ProjectGames.DTO.GridGames
+
+<div class="card-header" style="width:10rem;height:40px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;margin-top:3%;margin-left:2%"><h6 style="color:white;white-space:nowrap">Grid de imagens</h6></div>
+
+<div class="gap-3" style="margin-top:2%">
+    @foreach(var item in Model.listImgGrid)
+    {
+        string id = "id_img" + item.id;
+        @if (ViewBag.tipo == 0)
+        {
+            <img class="grid" id="@id" src="@item.imagem" title="@item.width x @item.height" onclick="selectGrid('@item.imagem',0,'@id')" width="143" height="250" style="margin-left:2%;margin-top:3%;" />
+            <input type="hidden" id="id_grid" />
+        }
+        @if (ViewBag.tipo == 1)
+        {
+            <img src="@item.banner" id="@id" title="@item.width x @item.height" onclick="selectGrid('@item.banner',1,'@id')" width="96%" height="230" style="margin-left:2%;margin-top:3%;object-fit:cover" />
+            <input type="hidden" id="id_grid" />
+        }
+        @if (ViewBag.tipo == 2)
+        {
+            <img src="@item.banner" id="@id" title="@item.width x @item.height" onclick="selectGrid('@item.banner',2,'@id')" style="width:300px;height:130px;margin-top:3%;margin-left:2%;" />
+            <input type="hidden" id="id_grid" />
+        }
+    }
+</div>
+
+<script>
+    let countGrid = 0;
+    let numeroGrid = 0;
+    var meuArrayGrid = [];
+    function selectGrid(img,tipo,id){
+        document.getElementById("id_grid").value = img;
+
+        if (numeroGrid % 2 === 0) {
+            meuArrayGrid.push(id);
+            document.querySelector("#" + meuArrayGrid[countGrid] + "").style.webkitFilter = "grayscale(0%)";
+            document.querySelector("#" + id + "").style.webkitFilter = "grayscale(100%)";
+            if (countGrid != 0) {
+                countGrid++;
+            }
+
+        } else {
+            meuArrayGrid.push(id);
+            document.querySelector("#" + meuArrayGrid[countGrid] + "").style.webkitFilter = "grayscale(0%)";
+            document.querySelector("#" + id + "").style.webkitFilter = "grayscale(100%)";
+            countGrid++;
+        }
+        numeroGrid++;
+    }
+    function saveGrid(){
+        var formData = new FormData();
+        formData.append("idGame", "@ViewBag.idGame");
+        formData.append("imagem", $("#id_grid").val());
+        formData.append("tipo", "@ViewBag.tipo");
+        formData.append("plataform", "@ViewBag.plataform");
+        $.ajax(
+            {
+                url: '@Url.Action("saveGridimagem", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $("#modalEditGridImg").modal('hide');
+                }
+            });
+    }
+</script>
+
+<style>
+    .grid:hover {
+        cursor: pointer;
+        -webkit - transform: scale(1.1);
+        -ms - transform: scale(1.1);
+        transform: scale(1.1);
+    }
+</style>

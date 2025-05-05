@@ -1,0 +1,527 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]HeartLeaf</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Games.styles.css" asp-append-version="true" />
+    <link href="~/css/animation.css" rel="stylesheet" />
+</head>
+<body>
+    <header style="background-color:#191919;z-index:9999;width:100%;height:57px;position:fixed">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light box-shadow mb-6" style="background-color:#191919;border-bottom:1px solid black">
+            <div class="container-fluid">
+                <img src="~/img/Games/img/logoFirst.png" id="id_logo" style="width:45px; height:40px" />
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1" style="margin-left:1%">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Games" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item" style="margin-left:1%">
+                            <a class="nav-link text-white" asp-controller="Games" asp-action="GamesCategoria">Categoria</a>
+                        </li>
+                        <li class="nav-item" style="margin-left:1%">
+                            <a class="nav-link text-white" asp-controller="Games" asp-action="GamesScreenshot">Screenshot</a>
+                        </li>
+                        <li class="nav-item" style="margin-left:1%">
+                            <a class="nav-link text-white" asp-controller="Games" asp-action="IndexNote">Anotações</a>
+                        </li>
+                        @* <li class="nav-item" style="margin-left:1%">
+                            <a class="nav-link text-white" asp-controller="Games" asp-action="IndexHistorico">Historico</a>
+                        </li>
+                        <li class="nav-item" style="margin-left:1%">
+                            <a class="nav-link text-white" asp-controller="Games" asp-action="GamesEstatisticas">Estatisticas</a>
+                        </li> *@
+                        <li class="containerConfig btn" style="">
+                            <i class="fa fa-sliders btn" onclick="configbutton()" style="color:white;height:27px;margin-top:-0.1rem;cursor:pointer;"></i>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div style="width:100%; height:70px; background-color: rgba(0,0,0,.5);  position:fixed; top:57px; left:0px;box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;z-index:9999;">
+        <div style="margin-left:40%;margin-top:0.5%;position:absolute;display:inline-flex;">
+            <div class="form-outline" style="" id="">
+                <input type="search" class="form-control" id="id_searchNewGames" placeholder="Pesquisar" style="height:50px;width:27rem;border-radius:9px;background-color:rgba(0,0,0,.9);border:none;box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 13px;color:white;" />
+                <label class="form-label" for="form1"></label>
+            </div>
+            <button type="button" class="btn " onclick="searchNewGame()" style="height:37px;width:37px;border-radius:50px;margin-left:-45px;margin-top:1.5%;background-color:#2c2c2c ">
+                <i class="fas fa-search" style="margin-left:-8.5%;color:rgba(255,255,255,0.2)"></i>
+            </button>
+        </div>
+        <div style="position:absolute; left:86%;background-color:#262c36; border-radius:5px; margin-top:10px; height:45px;">
+            <img src="data:image /png;base64,@ViewBag.Profile.avatar" width="47px" height="45;" />
+            <a asp-area="" asp-controller="Games" asp-action="Profile">
+                <button class="btn" style="background-color:#262c36;width:140px; height:36px; border-radius:3px;">
+                    <p style="color:white;margin-top:-3px;">@ViewBag.Profile.name</p>
+                </button>
+            </a>
+            <i class="fa fa-arrows-rotate" onclick="refreshStatsGames()" style="width:50px;margin-top:8px; left:0%; color:aquamarine; cursor:pointer"></i>
+        </div>
+        <div>
+        @* <div class="">
+        <i class="fa-regular fa-heart" onclick="listDesejos()" style="width:35px; height:35px; color:white;left:83%;position:absolute; margin-top:13px; cursor:pointer"></i>
+        </div> *@
+        </div>
+        <div class="row justify-content-center" id="id_loaded" style="z-index:99999;display:none;margin-left:90%;margin-top:41%">
+            <img src="~/img/Games/img/lupin.gif" style="width:8rem;height:7rem" />
+        </div>
+        <div class="row justify-content-center" id="id_loadedJ" style="z-index:99999;display:none;margin-left:90%;margin-top:41%">
+            <img src="~/img/Games/img/jigen.gif" style="width:8rem;height:7rem" />
+        </div>
+        <div class="row justify-content-center" id="id_loadedG" style="z-index:99999;display:none;margin-left:90%;margin-top:41%">
+            <img src="~/img/Games/img/goemon.gif" style="width:8rem;height:7rem" />
+        </div>
+
+        <div id="dsjDiv" style="background-color:#a2a2a2; position:absolute; max-height:394px; max-width:442px; left:75%; top:100%; display:block; border-bottom-left-radius:8px;border-bottom-right-radius:8px;overflow-x:hidden;overflow-y: auto;">
+            <div id="id_PartialList" onmouseleave="exitListDesejos()">
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <main role="main" class="pb-3 mainAll">
+            <div class="containerMusic">
+                <div class="music btn" id="idBtnMusic" onclick="musicTrack()">
+                    <i class="fa fa-headphones" style="color:white;height:800%; width:350%;margin-left:-7px"></i>
+                </div>
+            </div>
+            <div class="container" id="idContentHamburguer">
+                <div class="hamburger btn " onclick="hamburguer()">
+                    <i class="fa fa-bars" style="color:white;height:800%; width:350%;margin-left:-7px"></i>
+                </div>
+            </div>
+            @RenderBody()            
+        </main>
+    </div>
+
+    <aside class="sidebarConfig" id="id_sidebarConfig" style="z-index:100000;background-color:#292929;">
+        <nav>
+            <div id="id_sidebarSettings" style="margin-top:5%">
+                
+            </div>
+        </nav>
+    </aside>
+
+    <aside class="sidebar" id="id_sidebar" style="z-index:100000">
+
+    </aside>
+
+    <aside class="sidebarMusic" id="id_sidebarMusic" style="z-index:100000">
+        <nav>
+            <div id="id_sideBarMusic"></div>
+        </nav>
+    </aside>
+
+
+    <div class="modal" id="modal_remover" tabindex="-1" role="dialog" style="margin-top:7%">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#ececec">
+                    <label class="modal-title" style="text-align:center;"><i class="fa fa-trash"></i> <b>Remover</b></label>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="border:none;background-color:#ececec">
+                        <span aria-hidden="true" onclick="window.location.reload();" style="background-color:#ececec">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <b>Deseja remover item?</b>
+                    <input type="hidden" id="idRemoveItem" />
+                </div>
+                <div class="modal-footer">
+                    <div class="" style="margin-right:125px;">
+                        <button class="btn btn-success" onclick="deleteitem()" style="margin-right:15px;width:105px"><b style="color:white;">Sim</b></button>
+                        <button class="btn btn-danger" onclick="$('#modal_remover').modal('hide')" style="width:105px"><b style="color:white">Não</b></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="modalEditGame" role="dialog" data-backdrop="static" style="margin-top:8%;scrollbar-width: thin; scrollbar-color: #f1f1f1 #222222;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#222222; border-color:black">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                    <label class="modal-title" style="margin-left:-63%;"><b style="color:white">Personalizar jogo</b></label>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="border:none;background-color:#222222">
+                        <span aria-hidden="true" onclick="$('#modalEditGame').modal('hide')" style="background-color:transparent; color:white"><i class="fa fa-x"></i></span>
+                    </button>
+                </div>
+                <div class="modal-body" style="height:30.5vh; overflow-y: auto;background-color:#222222">
+                    <div id="id_partialEdit"></div>
+                </div>
+                <div class="modal-footer" style="background-color:#222222;border-color:black">
+                    <button type="button" class="btn btn-primary" onclick="saveEdit()"><b>Salvar</b></button>
+                    <button type="button" class="btn btn-secondary" onclick="$('#modalEditGame').modal('hide')" data-dismiss="modal"><b>Fechar</b></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer text-muted" style="background-color:#191919;border-top:1px solid black">
+        <div class="container">
+            &copy; 2024 - Games
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/all.min.js"></script>
+    <script src="~/js/fontawesome.min.js"></script>
+    <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.5.1/chosen.jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
+<script>
+    config();
+    function config() {
+        var formData = new FormData();
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialSetting", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $("#id_sidebarSettings").html(result);
+                }
+            });
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialSideBarMusic", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $("#id_sideBarMusic").html(result);
+                }
+            });
+        loadSidebar();
+    }
+    
+    function searchNewGame(){
+        var pesquisa = $("#id_searchNewGames").val();
+        window.location.href = '@Url.Action("GamesSearch", "Games")?pesquisa=' + pesquisa;
+    }
+    function GamesCompletism(porcent) {
+        window.location.href = '@Url.Action("GamesPercent", "Games")?porcent=' + porcent;
+    }
+    function RareAchiev() {
+        window.location.href = '@Url.Action("RareAchievements", "Games")';
+    }
+    function favoriteGame(id, tipo, plataform) {
+        var formData = new FormData();
+        formData.append("idGame", id);
+        formData.append("tipo", tipo);
+        formData.append("plataform", plataform);
+        $.ajax(
+            {
+                url: '@Url.Action("favoriteGame", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    if (tipo == 0) {
+                        document.querySelector("#idFav_" + id + "").classList.toggle("fa");
+                    } else {
+                        document.querySelector("#idFav_" + id + "").classList.toggle("fa-regular");
+                    }
+                }
+            });
+    }
+
+    function loadSidebar() {
+        var formData = new FormData();
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialSidebar", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $("#id_sidebar").html(result);
+                }
+            });
+    }
+
+    let numero = 0;
+    function hamburguer(screen) {
+        var tipo;
+        if(screen == null){
+            tipo = 0;
+        }else{
+            tipo = 1;
+        }
+        document.querySelector(".container").classList.toggle("show-menu");
+        if (numero % 2 === 0) {
+            document.querySelector("#id_sidebar").style.left = "0px";
+        } else {
+            document.querySelector("#id_sidebar").style.left = "-27rem";
+        }
+        numero++;
+        var formData = new FormData();
+        formData.append("search", $("#btnSearch").val());
+        formData.append("tipo", tipo);
+
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialGamesForSearch", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $("#searchGame").html(result);
+                }
+            });
+    }
+    let numMsc = 0
+    function musicTrack(){
+        document.querySelector(".containerMusic").classList.toggle("show-menus");
+        if (numMsc % 2 === 0) {
+            document.querySelector("#id_sidebarMusic").style.right = "0px";
+            document.querySelector("#id_sidebarMusic").style.boxShadow = "rgba(0, 0, 0, 0.9) 0px 0px 13px";
+            document.querySelector("#idBtnMusic").style.boxShadow = "rgba(0, 0, 0, 0.9) 0px 0px 13px";
+        } else {
+            document.querySelector("#id_sidebarMusic").style.right = "-13rem";
+        }
+        numMsc++;
+    }
+    function showHide() {
+        var div = document.querySelector("#searchGame");
+        if (div.style.display === "none") {
+            div.style.display = "inline-flex"
+        }
+        else {
+            div.style.display = "none"
+        }
+    }
+
+    function exitListDesejos() {
+        var div = document.querySelector("#dsjDiv");
+        if (div.style.display === "none") {
+            div.style.display = "inline-flex"
+        }
+        else {
+            div.style.display = "none"
+        }
+    }
+
+    function listDesejos() {
+        var div = document.querySelector("#dsjDiv");
+        if (div.style.display === "none") {
+            div.style.display = "inline-flex"
+        }
+
+        var formData = new FormData();
+
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialListaDesejo", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $("#id_PartialList").html(result);
+                }
+            });
+    }
+    function openModalEdit(id) {
+        $("#modalEditGame").modal('show');
+
+        var formData = new FormData();
+        formData.append("id", id);
+
+        $.ajax(
+            {
+                url: '@Url.Action("_PartialEditGames", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $("#id_partialEdit").html(result);
+                }
+            });
+    }
+    function saveEdit() {
+        var formData = new FormData();
+        formData.append("id", $("#id_editgame").val());
+        formData.append("plataform", $("#id_editplataform").val());
+        //formData.append("imagem", $("#file")[0].files[0]);
+        formData.append("categoria", $("#id_varCateg").val());
+        //formData.append("banner", $("#id_BannerGame")[0].files[0]);
+        formData.append("imgBox", $("#id_imgBox")[0].files[0]);
+        //formData.append("exclude", $("#id_removeGame").val());
+
+        $.ajax(
+            {
+                url: '@Url.Action("saveEdit", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    $("#modalEditGame").modal('hide');
+                    window.location.reload();
+                }
+            });
+    }
+    function PageGame(id) {
+
+        window.location.href = '@Url.Action("PageGame", "Games")?id=' + id;
+    }
+    let numIP = 0;
+    function configbutton() {
+        document.querySelector(".containerConfig").classList.toggle("show-menu");
+
+        if (numIP % 2 === 0) {
+            document.querySelector("#id_sidebarConfig").style.right = "0px";
+            document.querySelector(".mainAll").style.filter = 'blur(5px)';
+        } else {
+            document.querySelector("#id_sidebarConfig").style.right = "-20rem";
+            document.querySelector(".mainAll").style.filter = 'none';
+        }
+        numIP++;
+    }
+
+    function refreshStatsGames() {
+        var formData = new FormData();
+        $.ajax(
+            {
+                url: '/Games/refreshStatsSteam',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    window.location.reload()
+                }
+            });
+    }
+    var elemKey = document.getElementById("id_searchNewGames");
+    elemKey.onkeyup = function (e) {
+        if (e.keyCode == 13) {
+            searchNewGame();
+        }
+    }
+</script>
+
+<style>
+    .music{
+        width: 2rem;
+        height: 4rem;
+        position: fixed;
+        z-index: 5;
+        right: 0rem;
+        top: 9rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        cursor: pointer;
+        transition: all .8s;
+        background-color: #393e49;
+        border-top-left-radius:5px;
+        border-bottom-left-radius: 5px;
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
+    .hamburger {
+        width: 2rem;
+        height: 4rem;
+        position: fixed;
+        z-index: 5;
+        left: 0rem;
+        top: 27rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        cursor: pointer;
+        transition: all .8s;
+        background-color: #393e49;
+    }
+
+    .show-menus .music {
+        right: 13rem;
+        z-index: 10000000;
+    }
+    .show-menu .hamburger {
+        left: 27rem;
+        z-index:10000000;
+    }
+
+    .sidebar {
+        width: 27rem;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: -27rem;
+        z-index: 5;
+        overflow-x: hidden;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color:#f1f1f1 #222222;
+        transition: all .8s;
+        box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.582);
+        background-color: #222222;
+    }
+
+    .sidebarMusic{
+        width: 13rem;
+        height: 64px;
+        position: fixed;
+        top: 9rem;
+        right: -13rem;
+        z-index: 5;
+        transition: all .8s;
+        background-color: #222222;
+    }
+
+    .fa-sliders {
+        width: 2rem;
+        height: 4rem;
+        position: fixed;
+        z-index: 1000000;
+        right: 2rem;
+        top: 0.5rem;
+        flex-direction: column;
+        justify-content: space-between;
+        cursor: pointer;
+        transition: all .8s;
+    }
+
+    .show-menu .fa-sliders {
+        right: 19.3rem;
+        background-color: #292929;
+        border-top-right-radius:0px;
+        border-bottom-right-radius: 0px;
+    }
+
+    .sidebarConfig {
+        width: 20rem;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        right: -20rem;
+        z-index: 5;
+        overflow-x: hidden;
+        overflow-y: auto;
+        transition: all .8s;
+        box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.582);
+        background-color: #222222;
+    }
+</style>

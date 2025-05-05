@@ -1,0 +1,65 @@
+﻿@model ProjectGames.DTO.GamesDTO
+
+<body style="background-color:#222222">
+    <div class="row" style="margin-top:0%"></div>
+    <div class="card-header" style="width:14rem;height:50px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;position:absolute;margin-bottom:15%;margin-left:4rem;top:12rem"><h4 style="color:white">Resultados</h4></div>
+
+    <div class="row justify-content-center" style="width:90%;background-color:#141519;margin-top:21%;border-radius:9px;margin-left:5%">
+        <div class="row justify-content-center" style="margin-top:2%;">
+@*            <h3 style="color:white;text-align:center;margin-bottom:3%;">@ViewBag.Pesquisa</h3>
+*@            @foreach(var item in Model.listSearch)
+            {
+                <div style="width:95%;height:12rem;border-bottom:1px solid black;margin-top:15px;margin-bottom:0px;display:inline-flex">
+                    <div style="width:90%;height:9rem;margin-top:1.5%;display:inline-flex">
+                        <div style="width:28%;height:9rem;">
+                            <img src="@item.imagem" class="box" onclick="openNewGame('@item.id','@item.plataforma')" title="@item.id" style="width:282px;height:100%;object-fit:cover;border-right:2px solid aquamarine;box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 19px" />
+                        </div>
+                        <div style="display:block;margin-top:0.5%;margin-left:3%">
+                            <h5 class="nameGame" onclick="openNewGame('@item.id','@item.plataforma')">@item.nome</h5>
+                        </div>
+                    </div>
+                    <div style="margin-top:7rem;margin-left:18.5rem;position:absolute">
+                        <div class="btn btn-primary" style="width:6rem;height:2.5rem;">
+                            <div style="display:inline-flex">
+                                <img src="~/img/Games/img/steamBlack.png" style="width:25px;height:25px;margin-left:-0.5rem;margin-top:0px" />
+                                <p style="color:white;margin-left:0.5rem;font-weight:bold">@item.console</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <i class="fa-regular fa-heart" style="color:white;height:25px;margin-left:5rem"></i>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+</body>
+
+<script>
+    $(document).ready(function () {       
+        loadSidebar();
+    });
+
+    function openNewGame(id,plataform){
+        window.location.href = '@Url.Action("PageGame", "Games")?id=' + id + '&ativo=1' + '&plataformIndex=' + plataform;
+    }
+
+</script>
+
+<style>
+    .nameGame{
+        color:white;
+        cursor:pointer;
+    }
+    .nameGame:hover{
+        color:#8cb4ff;
+    }
+
+    .box:hover {
+        cursor: pointer;
+        -webkit - transform: scale(1.1);
+        -ms - transform: scale(1.1);
+        transform: scale(1.1);
+    }
+</style>

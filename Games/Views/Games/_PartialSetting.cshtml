@@ -1,0 +1,116 @@
+﻿<div>
+    <div class="card-header" style="width:50%;height:40px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;margin-left:3%;margin-top:10px"><p style="color:white;font-weight:bold;margin-left:-1%;position:absolute">Plataformas</p></div>
+    <div style="margin-top:10px;margin-left:3%">
+        <select class="form-select" id="id_plataformItem" onchange="slcPlataform()" style="width:94%;margin-top:5px;background-color:RGB(221,221,255)">
+            <option value="null">Selecionar</option>
+            <option value="null">Todas</option>
+            <option value="0">Steam</option>
+            <option value="1">Retro</option>
+        </select>
+    </div>
+</div>
+
+<div style="margin-top:10%">
+    <div style="display:inline-flex;margin-left:22%">
+        <div class="card-header" style="width:10.9rem;height:40px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;margin-left:3%;margin-top:10px"><p style="color:white;font-weight:bold;margin-left:-1%;position:absolute"><i class="fa fa-gear" style="color:white;transform:translate(-30%,0%);"></i>Configuração</p></div>
+        <i class="fa fa-chevron-down" style="color:white;height:17px;margin-left:10%;margin-top:10%"></i>
+    </div>  
+    <!--Index-->
+    <div style="margin-top:3%;margin-left:2%">
+        <div style="display:inline-flex">
+            <div class="card-header" style="width:7.5rem;height:30px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;margin-left:3%;margin-top:10px"><p style="color:white;font-weight:bold;margin-left:-1%;margin-top:-1.8%;position:absolute">Index</p></div>
+            <i class="fa fa-chevron-down" style="color:white;height:17px;margin-left:10%;margin-top:10%"></i>
+        </div>
+        <div>
+            <div class="card-header" style="width:6rem;height:30px;background-color:rgba(0,0,0,.2);border-left:5px solid green;margin-left:3%;margin-top:10px"><p style="color:white;font-weight:bold;margin-left:-1%;margin-top:-1.8%;position:absolute">Layout</p></div>
+            <div class="justify-content-center" style="display:inline-flex;padding:1rem;margin-left:15%">
+                <button class="btn bg-primary" onclick="openLayout(0)" style="color:white"><b>Normal</b></button>
+                <button class="btn bg-primary" onclick="openLayout(1)" style="color:white;margin-left:1rem"><b>Personalizado</b></button>
+            </div>
+        </div>
+    </div>
+    <!--Musicas-->
+    <div style="margin-top:3%;margin-left:2%">
+        <div style="display:inline-flex">
+            <div class="card-header" style="width:7.5rem;height:30px;background-color:rgba(0,0,0,.6);border-left:5px solid #8cb4ff;margin-left:3%;margin-top:10px"><p style="color:white;font-weight:bold;margin-left:-1%;margin-top:-1.8%;position:absolute">Musicas</p></div>
+            <i class="fa fa-chevron-down" style="color:white;height:17px;margin-left:10%;margin-top:10%"></i>
+        </div>
+        <div>
+            <div class="card-header" style="width:6rem;height:30px;background-color:rgba(0,0,0,.2);border-left:5px solid green;margin-left:3%;margin-top:10px"><p style="color:white;font-weight:bold;margin-left:-1%;margin-top:-1.8%;position:absolute">Upload</p></div>
+            <div class="justify-content-center" style="padding:1rem;margin-left:15%">
+                @*<input type="file" id="mp3File" name="mp3File" accept="audio/mpeg" />
+                <button type="button" onclick="uploadMp3()">Enviar MP3</button>*@
+
+                <label class="labelAudio" for="mp3File" style="">
+                    ENVIAR ARQUIVO
+                </label>
+                <input class="custom-file-input" type="file" id="mp3File" onchange="uploadMp3()" accept="audio/mpeg" style="display:none" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function slcPlataform() {
+        var formData = new FormData();
+        formData.append("plataform", $("#id_plataformItem").val());
+        $.ajax(
+            {
+                url: '@Url.Action("configPlataform", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    window.location.reload();
+
+                }
+            });
+    }
+    function openLayout(layout) {
+        var formData = new FormData();
+        formData.append("layout", layout);
+        $.ajax(
+            {
+                url: '@Url.Action("configLayoutIndex", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    window.location.reload();
+                }
+            });
+    }
+    function uploadMp3() {
+        var formData = new FormData();
+        var mp3File = $('#mp3File')[0].files[0];
+        formData.append("mp3File", mp3File);
+        $.ajax(
+            {
+                url: '@Url.Action("saveMp3", "Games")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (result) {
+                    window.location.reload();
+                }
+            });
+
+    }
+</script>
+
+<style>
+    .labelAudio {
+        padding: 12px 3px;
+        width: 200px;
+        background-color: #333;
+        color: RGB(221,221,255);
+        text-transform: uppercase;
+        text-align: center;
+        display: block;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+</style>
