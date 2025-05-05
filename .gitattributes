@@ -1,4 +1,10 @@
 ###############################################################################
+# Prioriza JavaScript e ignora HTML na detecção de linguagens
+###############################################################################
+*.js linguist-detectable=true
+*.html linguist-detectable=false
+
+###############################################################################
 # Set default behavior to automatically normalize line endings.
 ###############################################################################
 * text=auto
