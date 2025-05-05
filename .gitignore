@@ -365,3 +365,5 @@ FodyWeavers.xsd
 /Games/appsettings.Development.json
 /Games/appsettings.json
 /Games/wwwroot/css
+/Games/Program.cs
+/Games/Startup.cs
